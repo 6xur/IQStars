@@ -3,9 +3,13 @@
 #
 
 members:
-  - name:
-    uid:
-  - name:
-    uid:
-  - name:
-    uid:
+  - name: Hoa Nguyen
+    contact: 0413503616
+    uid: u4147512
+    
+  - name: Robert Xu
+    contact: 0479141808
+    uid: u7279920
+  - name: Shitong Xiao 
+    contact: 0435805480
+    uid: u7080308
