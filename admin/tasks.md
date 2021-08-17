@@ -1,11 +1,15 @@
 # COMP1110 Assignment 2 Group Tasks
 
-For each task or sub-task, record who is responsible, the deadline, and any dependencies.
-Use the entries below as an example.
+Weekly meeting time: 3 pm on Tuesday on Teams (except week 4)
+
 
 ## Week 4
+Meeting time: 4.30 pm on Teams 
 
-Everyone: create application skeleton - meeting 14:00 17 Aug
+
+(For each task or sub-task, record who is responsible, the deadline, and any dependencies.
+Use the entries below as an example.)
+
 
 ## Week 5
 
