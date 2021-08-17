@@ -9,11 +9,17 @@ Meeting time: 4.30 pm on Zoom as the sound was not so good in Teams.
 We agreed on the Design of the game 
 Robert will do the PDF Game Design and check with the tutor on whether or not it is sufficient tomorrow. Robert will let us know if there is any issue by Friday.  
 
+Hoa will check with the tutor on what the Javadoc means Tuesday night and keep the group informed. 
+
 We discussed the draft skeleton which includes five classes: Location, State, Objective, Piece and the Game 
 
-Shirley will draft this skeleton and upload it on the group repo by Wednesday if there is any issue. 
 
-Rule: we inform the group when we upload anything on the repo. 
+Shirley will work on the State and Piece classes; Robert on the Objective; Hoa on the Location. 
+
+Rule: 
+we inform the group when we upload anything on the repo. 
+
+We will cross check each other work. 
 
 ## Week 5
 
