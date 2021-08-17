@@ -7,7 +7,7 @@ public class Piece {
     // if both the color and the upper most star location are stored in
     // class Location, the orientationLabel is used to determine the
     // orientation of the piece
-    public Piece(int orientationLabel) { }
+    public Piece(int orientationLabel) {}
 
     /**
      * An array of length three or four storing the locations of all stars in
