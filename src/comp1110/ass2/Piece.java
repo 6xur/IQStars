@@ -2,7 +2,7 @@ package comp1110.ass2;
 
 public class Piece {
 
-    
+
     /** The location of star in the top left corner */
     private Location firstStar = new Location();
 
@@ -20,7 +20,8 @@ public class Piece {
      */
     private Location[] pieceStars;
 
-    public Location getLoc() {return null;}
+    public State getColour() {return null;}
+    public Location getPiece() {return null;}
     public Location[] getPieceStars() {return null;}
 
     /**
@@ -31,7 +32,7 @@ public class Piece {
     /**
      * set the locations of all the stars of a piece
      */
-    public void setPieceStars(Location newPieceStar) {}
+    public void setPieceStars(Location[] newPieceStars) {}
 
     /**
      * @return True if all the stars of the current piece are placed on board locations,
