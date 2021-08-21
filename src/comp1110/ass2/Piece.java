@@ -2,12 +2,15 @@ package comp1110.ass2;
 
 public class Piece {
 
-    private Location piece = new Location();
+    /** The location of star in the top left corner */
+    private Location firstStar = new Location();
 
-    // if both the color and the upper most star location are stored in
-    // class Location, the orientationLabel is used to determine the
-    // orientation of the piece
-    public Piece(int orientationLabel) {}
+    /** Each piece is defined by the location of the top-left star of the piece,
+     * the colour of the piece and the orientation number of the piece.
+     * @param orientationLabel an integer ranged from 0 to 5 which describes the orientation of the piece
+     */
+    public Piece(State colour, int orientationLabel) {
+    }
 
     /**
      * An array of length three or four storing the locations of all stars in
@@ -16,22 +19,21 @@ public class Piece {
      */
     private Location[] pieceStars;
 
-    public Location getRedLoc()  { return null; }
-    public Location getOrangeLoc() { return null; }
-    public Location getYellowLoc()  { return null; }
-    public Location getGreenLoc()  { return null; }
-    public Location getBlueLoc() { return null; }
-    public Location getIndigoLoc() { return null; }
-    public Location getPinkLoc() { return null; }
-
+    public Location getLoc() {return null;}
     public Location[] getPieceStars() {return null;}
 
+    /**
+     * set the location of a piece by setting the location of its top-left star
+     */
     public void setPiece(Location newPiece) {}
 
+    /**
+     * set the locations of all the stars of a piece
+     */
     public void setPieceStars(Location newPieceStar) {}
 
     /**
-     * @return True if all stars of the current piece is placed on board locations,
+     * @return True if all the stars of the current piece are placed on board locations,
      * and False otherwise
      */
     public boolean onBoard() { return true;}

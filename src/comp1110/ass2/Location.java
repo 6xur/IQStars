@@ -28,7 +28,7 @@ public class Location {
     }
 
     /**
-     * Given an interger from 0-25, construct the corresponding Location
+     * Given an integer from 0-25, construct the corresponding Location
      * defined as follows:
      *
      *             x
