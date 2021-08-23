@@ -15,16 +15,12 @@ public class Location {
      * @param y The y coordinate
      */
     public Location(int x, int y) {
-        this.x = x;
-        this.y = y;
     }
 
     /**
      * Construct an off board Location
      */
     public Location() {
-        this.x = OUT;
-        this.y = OUT;
     }
 
     /**
@@ -45,7 +41,6 @@ public class Location {
      */
 
     public Location(int position) {
-        // FIXME Task Location(a)
     }
 
     /**
@@ -59,22 +54,20 @@ public class Location {
      */
 
     public Location(String loc) {
-        assert (loc.length()==2);
-        // FIXME Task Location(b)
     }
 
     /**
      * @return The x coordinate of this Location
      */
     public int getX() {
-        return this.x;
+        return 0;
     }
 
     /**
      * @return the y coordinate of this Location
      */
     public int getY() {
-        return this.y;
+        return 0;
     }
 
     /**
@@ -82,7 +75,6 @@ public class Location {
      * @param x The x coordinate
      */
     public void setX(int x) {
-        this.x = x;
     }
 
     /**
@@ -90,7 +82,7 @@ public class Location {
      * @param y The y coordinate
      */
     public void setY(int y) {
-        this.y = y;
+
     }
 
     /**
@@ -101,13 +93,7 @@ public class Location {
      * @return The position corresponding to this Location
      *
      */
-    public int toPosition() {
-       int y = this.y;
-        if (y == 0 | y == 1) {
-            return y * 7 + this.x;
-        } else {
-            return y * 7 + this.x + (y - 1);
-        }
+    public int toPosition() { return 0;
     }
 
     /**
@@ -124,8 +110,7 @@ public class Location {
      */
 
     public boolean offBoard() {
-
-        return true; // FIXME Task Location(c)
+        return true;
     }
 
     /**
@@ -139,7 +124,7 @@ public class Location {
      * location, False otherwise.
      */
     public boolean equals(Location other) {
-        return false; // FIXME Task Location(d)
+        return false;
     }
 
     /**
@@ -150,8 +135,7 @@ public class Location {
      * @return the Manhattan distance between this and other
      */
 
-    public int manhanttanDistance(Location other) {
-        return  Math.abs(this.x - other.getX() ) + Math.abs(this.y - other.getY() );
+    public int manhanttanDistance(Location other) { return 0;
     }
 
     /**
@@ -166,7 +150,7 @@ public class Location {
      */
 
     public boolean isAdjacent(Location other) {
-        return false; // FIXME Task Location(e)
+        return false;
     }
 
     /**
@@ -174,7 +158,7 @@ public class Location {
      */
     @Override
     public String toString() {
-        return this.x + "" + this.y;
+        return null;
     }
 
 
