@@ -2,7 +2,7 @@ package comp1110.ass2;
 
 public class Piece {
 
-    
+
     /** The location of star in the top left corner */
     private Location firstStar = new Location();
 
