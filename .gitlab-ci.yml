@@ -36,46 +36,6 @@ build:
     paths:
       - src/comp1110/ass2/*.class
       - src/comp1110/ass2/*/*.class
-
-task2:
-  tags:
-    - comp1110
-  stage: test
-  script:
-    - $JUNIT -c=comp1110.ass2.PiecePlacementWellFormedTest
-  allow_failure: true
-
-task3:
-  tags:
-    - comp1110
-  stage: test
-  script:
-    - $JUNIT -c=comp1110.ass2.PlacementWellFormedTest
-  allow_failure: true
-
-task5:
-  tags:
-    - comp1110
-  stage: test
-  script:
-    - $JUNIT -c=comp1110.ass2.PlacementValidTest
-  allow_failure: true
-
-task6:
-  tags:
-    - comp1110
-  stage: test
-  script:
-    - $JUNIT -c=comp1110.ass2.ViablePlacementsTest
-  allow_failure: true
-
-task9:
-  tags:
-    - comp1110
-  stage: test
-  script:
-    - $JUNIT -c=comp1110.ass2.SolutionsTest
-  allow_failure: true
   
 ## Local Variables:
 ## mode: yaml
