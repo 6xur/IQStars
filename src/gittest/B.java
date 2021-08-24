@@ -2,6 +2,6 @@ package gittest;
 
 public class B {
     public String toString(){
-        return "b";
+        return "b and a";
     }
 }
