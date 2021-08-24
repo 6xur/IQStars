@@ -2,6 +2,7 @@ package gittest;
 
 public class B {
     public String toString(){
-        return "b";
+        B b = new B();
+        return "changed branch to master";
     }
 }
