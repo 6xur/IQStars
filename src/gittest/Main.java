@@ -5,6 +5,8 @@ public class Main {
 
     H h = new H();
 
+    B b =  new B();
+
 
     };
 
