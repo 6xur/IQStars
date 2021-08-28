@@ -164,10 +164,86 @@ For a piece placement to be valid, the following must be true:
 
 #### Encoding Game States
 
-We will update the assignment at the end of week 5.   When we do so, we will
-explain an encoding of game states that we will use for testing.   For now,
-we have omitted that to allow you to focus on the *internal* game design *without* 
-consideration to the *external* interface captured by this encoding.
+Game states are encoded as strings. 
+Your game will need to be able to initialize itself using these strings and some of
+your tasks relate directly to these strings.
+
+##### Game State Strings
+
+A game state string consists of a _piece placement_ comprising between zero and seven (inclusive) 
+piece strings, a 'W', and a _wizard placement_ comprising zero or more wizard strings.  
+
+For the sample game below, the game state string is `"r252y200g540Wr43o42i33"`.
+It consists of piece strings for the _red_ (`r252`), _yellow_ (`y200`) and _green_ (`g540`) pieces,
+and wizard strings for the _red_ (`r43`), _orange_ (`o42`) and _indigo_ (`i33`) pieces.
+These encodings are explained further below.
+
+<img src="assets/gameStateExample.png" width="400">
+
+##### Piece Strings
+
+A piece string consists of four characters describing the location and orientation of one particular piece on the board:
+
+* The first character identifies **which of the seven pieces** is being placed. 
+  The table above shows the letters used, with each letter corresponding to a colour.
+* The second character identifies **which orientation** the piece is in 
+  (an integer from `0` to `5`, or `0` to `2` in the case of the _red_ and _indigo_ pieces).
+* The third character identifies **which column** the top left of the piece is in 
+  (columns are labelled `0` to `6` in the `0th` and `2nd` rows, and `0` to `5` in the `1st` and `3rd` rows).
+* The fourth character identifies **which row** the top left star of the piece is
+  in (rows are labelled `0` to `3`).
+
+The table above shows the first and second characters for each of the
+pieces in each of their orientations.
+
+In the game state string above, `r252` describes the position of the _red_ piece, which is placed in orientation `2` at location (`5`, `2`),
+`y200` describes the position of the _yellow_ piece, which is placed in orientation `2` at location (`0`, `0`) and 
+`g540` describes the position of the _green_ piece, which is placed in orientation `5` at location (`4`, `0`).
+
+##### Piece Placements
+
+A piece placement consists of between zero and seven (inclusive) [piece strings](#piece-strings).
+The piece placement may not include any piece twice. 
+A completed game must include seven piece strings. 
+Pieces are always listed in rainbow order (the ordering of the rows in the figure above 
+(_red_, _orange_, _yellow_, _green_, _blue_, _indigo_, _pink_)).
+Each piece is encoded using four characters as above.
+For example, the piece placement of the completed game below is `"r252o541y200g540b312i121p420"`.
+Note that the piece placement is **ordered** (the _red_ piece (`r`) first, and _pink_ piece (`p`) last, following the ordering in the diagram above).
+Correct ordering is a requirement for valid piece placements.
+
+<img src="assets/wCompletedGame2.png" width="400">
+
+##### Wizard Strings
+
+A wizard string consists of three characters describing the location of one particular wizard on the board:
+
+* The first character identifies **which of the seven colours** the wizard is.
+  The table above shows the letters used, with each letter corresponding to a colour.
+* The second character identifies **which column** the wizard is in
+  (columns are labelled `0` to `6` in the `0th` and `2nd` rows, and `0` to `5` in the `1st` and `3rd` rows).
+* The third character identifies **which row** the wizard is in 
+  (rows are labelled `0` to `3`).
+
+In the game state string above, `r43` describes the position of the _red_ wizard, which is placed at location (`4`, `3`).
+Note that this wizard is covered by a piece in the above game, so it is not visible in the picture.
+`o42` describes the position of the _orange_ wizard, which is placed at location (`4`, `2`) and
+`i33` describes the position of the _indigo_ wizard, which is placed at location (`3`, `3`).
+
+##### Wizard Placements
+
+A wizard placement consists of some number of [wizard strings](#wizard-strings).
+Wizards are always listed in rainbow order (the ordering of the rows in the figure above
+(_red_, _orange_, _yellow_, _green_, _blue_, _indigo_, _pink_)).
+The wizard placement may include the same colour multiple times, as long as the wizards aren't placed on top of each other.
+In this case, the wizard strings are ordered first by row and then by column in ascending order.
+Each wizard is encoded using three characters as above.
+For example, the wizard placement of the game below is `"g11g32i00p43"`.
+Note that the wizard placement is **ordered** (the _green_ piece (`g`) first, and _pink_ piece (`p`) last, following the ordering in the diagram above).
+There are two green wizards, so the one in the higher row is listed first.
+Correct ordering is a requirement for valid wizard placements.
+
+<img src="assets/wExample.png" width="400">
 
 ## Legal and Ethical Issues
 
