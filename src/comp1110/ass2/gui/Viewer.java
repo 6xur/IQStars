@@ -215,7 +215,6 @@ public class Viewer extends Application {
         }
         root.getChildren().add(board);
 
-
         // FIXME Task 5 (CR): implement the simple game state viewer
     }
 
