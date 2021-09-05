@@ -2,6 +2,7 @@ package comp1110.ass2;
 
 import org.junit.jupiter.api.*;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static comp1110.ass2.Games.*;
@@ -13,7 +14,7 @@ public class GameStateValidTest {
 
     private void test(String in, String invalid, boolean expected) {
         boolean out = IQStars.isGameStateValid(in);
-        assertTrue(out == expected, "Input was '" + in + "', expected " + expected + " but got " + out + (invalid.equals("") ? "" : " (subsequence " + invalid + " is not valid)"));
+        assertEquals(expected, out, "Input was '" + in + "', expected " + expected + " but got " + out + (invalid.equals("") ? "" : " (subsequence " + invalid + " is not valid)"));
     }
 
     @Test

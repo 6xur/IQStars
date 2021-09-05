@@ -2,7 +2,7 @@ package comp1110.ass2;
 
 import org.junit.jupiter.api.*;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static comp1110.ass2.Games.*;
 import static comp1110.ass2.TestUtility.BAD_PIECES;
@@ -14,7 +14,7 @@ public class GameStateStringWellFormedTest {
 
     private void test(String in, boolean expected) {
         boolean out = IQStars.isGameStateStringWellFormed(in);
-        assertTrue(out == expected, "Input was '" + in + "', expected " + expected + " but got " + out);
+        assertEquals(expected, out, "Incorrect result for input '"+in+"'");
     }
 
     @Test

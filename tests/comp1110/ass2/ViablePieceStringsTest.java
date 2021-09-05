@@ -4,7 +4,7 @@ import org.junit.jupiter.api.*;
 
 import static comp1110.ass2.TestUtility.*;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -17,18 +17,17 @@ public class ViablePieceStringsTest {
         Set<String> outSet = IQStars.getViablePieceStrings(start, col, row);
         if (expected == null) {
             if (outSet != null)
-                assertTrue(outSet == null, "Expected null for game state " + start +
+                assertNull(outSet, "Expected null for game state " + start +
                         " at (" + col + ", " + row + ")," +
                         " but got " + outSet);
         } else {
             String expstr = expected.toString();
-            assertTrue(outSet != null, "Got null for game state " + start + " at (" + col + ", " + row + "), but expected " + expstr);
+            assertNotNull(outSet, "Got null for game state " + start + " at (" + col + ", " + row + "), but expected " + expstr);
             TreeSet<String> out = new TreeSet<>();
             out.addAll(outSet);
             String outstr = out.toString();
-            assertTrue(expstr.equals(outstr), "Incorrect viable piece strings for input " + start +
-                    " at (" + col + ", " + row + ")," +
-                    ".  Expected " + expstr + ", but got " + outstr);
+            assertEquals(expstr, outstr, "Incorrect viable piece strings for input " + start +
+                    " at (" + col + ", " + row + ")");
         }
     }
 

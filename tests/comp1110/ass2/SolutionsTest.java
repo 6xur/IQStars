@@ -2,6 +2,7 @@ package comp1110.ass2;
 
 import org.junit.jupiter.api.*;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static comp1110.ass2.Games.*;
@@ -12,7 +13,7 @@ public class SolutionsTest {
 
     private void test(String objective, String expected) {
         String out = IQStars.getSolution(objective);
-        assertTrue(out != null, "No solution returned for objective " + objective + ", expected " + expected);
+        assertNotNull(out, "No solution returned for objective " + objective + ", expected " + expected);
         assertTrue(out.equals(expected), "For objective " + objective + ", was expecting " + expected + ", but got " + out);
     }
 

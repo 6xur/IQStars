@@ -42,7 +42,7 @@ task3:
     - comp1110
   stage: test
   script:
-    - $JUNIT -c=comp1110.ass2.PiecePlacementWellFormedTest
+    - $JUNIT -c=comp1110.ass2.GameStringWellFormedTest
   allow_failure: true
 
 task4:
@@ -50,7 +50,7 @@ task4:
     - comp1110
   stage: test
   script:
-    - $JUNIT -c=comp1110.ass2.PlacementWellFormedTest
+    - $JUNIT -c=comp1110.ass2.GameStateStringWellFormedTest
   allow_failure: true
 
 task6:
@@ -58,7 +58,7 @@ task6:
     - comp1110
   stage: test
   script:
-    - $JUNIT -c=comp1110.ass2.PlacementValidTest
+    - $JUNIT -c=comp1110.ass2.GameStateValidTest
   allow_failure: true
 
 task7:
@@ -66,7 +66,7 @@ task7:
     - comp1110
   stage: test
   script:
-    - $JUNIT -c=comp1110.ass2.ViablePlacementsTest
+    - $JUNIT -c=comp1110.ass2.ViablePieceStringTest
   allow_failure: true
 
 task10:

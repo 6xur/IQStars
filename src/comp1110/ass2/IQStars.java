@@ -97,8 +97,16 @@ public class IQStars {
     }
 
     /**
-     * Return the solution to a particular challenge.
-     **
+     * Implement a solver for this game that can return the solution to a
+     * particular challenge.
+     *
+     * This task is at the heart of the assignment and requires you to write
+     * solver, similar to the boggle solver presented as part of the J14 lecture.
+     *
+     * NOTE: Simply looking up the provided answers does not constitute a general
+     * solver.  Such an implementation is not a solution to this task, and
+     * will not receive marks.
+     *
      * @param challenge A game state string describing the starting game state.
      * @return A game state string describing the encoding of the solution to
      * the challenge.
