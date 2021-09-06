@@ -15,12 +15,16 @@ public class Location {
      * @param y The y coordinate
      */
     public Location(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     /**
      * Construct an off board Location
      */
     public Location() {
+        this.x = OUT;
+        this.y = OUT;
     }
 
     /**
@@ -41,6 +45,25 @@ public class Location {
      */
 
     public Location(int position) {
+        if (position >= 0 && position <= 6) {
+            this.x = position;
+            this.y = 0;
+        } else {
+            if (position >= 7 && position <= 12) {
+                this.x = position - 7;
+                this.y = 1;
+            } else {
+                if (position >= 13 && position <= 19) {
+                    this.x = position - 13;
+                    this.y = 2;
+                } else {
+                    this.x = position - 20;
+                    this.y = 3;
+                }
+            }
+        }
+
+
     }
 
     /**
@@ -54,20 +77,29 @@ public class Location {
      */
 
     public Location(String loc) {
+        assert loc.length() == 2;
+        int z = Integer.parseInt(loc);
+        if (z < 10) {
+            this.x = 0;
+            this.y = z;
+        } else {
+            this.x = z / 10;
+            this.y = z - (z / 10) * 10;
+        }
     }
 
     /**
      * @return The x coordinate of this Location
      */
     public int getX() {
-        return 0;
+        return this.x;
     }
 
     /**
      * @return the y coordinate of this Location
      */
     public int getY() {
-        return 0;
+        return this.y;
     }
 
     /**
@@ -75,6 +107,7 @@ public class Location {
      * @param x The x coordinate
      */
     public void setX(int x) {
+        this.x = x;
     }
 
     /**
@@ -82,18 +115,18 @@ public class Location {
      * @param y The y coordinate
      */
     public void setY(int y) {
+        this.y = y;
 
     }
 
     /**
      * Return the position corresponding to this instance of Location on the
      * board (see the README.md for mapping specifications).
-     * Hoa_Note: README.md to be written.
      *
      * @return The position corresponding to this Location
-     *
      */
-    public int toPosition() { return 0;
+    public int toPosition() {
+        return (this.y == 0 || this.y == 1) ? (7 * this.y + this.x) : (7 * this.y + this.x - 1);
     }
 
     /**
@@ -110,7 +143,7 @@ public class Location {
      */
 
     public boolean offBoard() {
-        return true;
+        return (this.x >= 0 && ((this.y == 0 || this.y == 2) && this.x <= 6) || ((this.y == 1 || this.y == 3) & this.x <= 5));
     }
 
     /**
@@ -120,37 +153,31 @@ public class Location {
      * the other object.
      *
      * @param other The location to compare to.
-     * @retun True if this location occupies the same location as the other
+     * @return True if this location occupies the same location as the other
      * location, False otherwise.
      */
     public boolean equals(Location other) {
-        return false;
+        return (this.x == other.getX() & this.y == other.getY());
     }
 
-    /**
-     * Return the Manhattan distance between this location and a given other
-     * locations.
-     *
-     * @param other The location to calculate from.
-     * @return the Manhattan distance between this and other
-     */
-
-    public int manhanttanDistance(Location other) { return 0;
-    }
 
     /**
      * Returns whether or not the current instance of location is adjacent to a
      * given other location.
-     *
-     * Note that adjacent implies either directly above, below or to the left or
-     * right of this location, not diagonally.
+     * <p>
+     * Note that adjacent implies potential six positions: either above left, above right,
+     * below left, below right or to the left or right of this location.
      *
      * @param other The location to compare with
      * @return True if this location is adjacent to other, False otherwise
      */
 
     public boolean isAdjacent(Location other) {
-        return false;
+        if (this.y == other.getY() && (this.x == other.getX() + 1 || this.x == other.getX() - 1)) return true;
+        if (this.x == other.getX() && (this.y == other.getY() + 1 || this.y == other.getY() - 1)) return true;
+        if ((this.y == 0 || this.y == 2) && (this.x == other.getX() - 1) && (this.y == other.getY() + 1 || this.y == other.getY() - 1))
+            return true;
+        return ((this.y == 1 || this.y == 3) && (this.x == other.getX() + 1) && (this.y == other.getY() + 1 || this.y == other.getY() - 1));
     }
 
     /**
@@ -158,7 +185,7 @@ public class Location {
      */
     @Override
     public String toString() {
-        return null;
+        return this.x + "" + this.y;
     }
 
 

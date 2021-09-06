@@ -27,8 +27,49 @@ public class IQStars {
      *      @return True if the string is well-formed
      */
     static boolean isGameStringWellFormed(String gameString) {
+        try {
+            char[] text = gameString.toCharArray();
+            if (gameString.equals("") || gameString.length() > 4) return false;
+            boolean A = (gameString.charAt(0) == 'r' || gameString.charAt(0) == 'o' || gameString.charAt(0) == 'y' || gameString.charAt(0) == 'g' || gameString.charAt(0) == 'b' || gameString.charAt(0) == 'i' || gameString.charAt(0) == 'p');
+
+            // the case of Wizard
+            if (gameString.length() == 3 && A && (Integer.parseInt(String.valueOf(text[2])) >= 0 && Integer.parseInt(String.valueOf(text[2])) <= 3)) {
+                if ((Integer.parseInt(String.valueOf(text[2])) == 0 || Integer.parseInt(String.valueOf(text[2])) == 2) && Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 6)
+                    return true;
+                if ((Integer.parseInt(String.valueOf(text[2])) == 1 || Integer.parseInt(String.valueOf(text[2])) == 3) && Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 5)
+                    return true;
+            }
+
+            // the case of piece
+            if (gameString.length() == 4 && A && (Integer.parseInt(String.valueOf(text[3])) >= 0 && Integer.parseInt(String.valueOf(text[3])) <= 3)) {
+                boolean B1 = (gameString.charAt(0) == 'r' || gameString.charAt(0) == 'i');
+                boolean B2 = (Integer.parseInt(String.valueOf(text[3])) == 0 || Integer.parseInt(String.valueOf(text[3])) == 2);
+
+                if (B1) {
+                    if (B2) {
+                        if (Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 2 && Integer.parseInt(String.valueOf(text[2])) >= 0 && Integer.parseInt(String.valueOf(text[2])) <= 6)
+                            return true;
+                    } else {
+                        if (Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 2 && Integer.parseInt(String.valueOf(text[2])) >= 0 && Integer.parseInt(String.valueOf(text[2])) <= 5)
+                            return true;
+                    }
+                } else {
+                    if (B2) {
+                        if (Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 5 && Integer.parseInt(String.valueOf(text[2])) >= 0 && Integer.parseInt(String.valueOf(text[2])) <= 6)
+                            return true;
+                    } else {
+                        if (Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 5 && Integer.parseInt(String.valueOf(text[2])) >= 0 && Integer.parseInt(String.valueOf(text[2])) <= 5)
+                            return true;
+                    }
+                }
+            }
+
+        } catch (NumberFormatException e) {
+            return false;
+        }
         return false; // FIXME Task 3 (P): determine whether a wizard or piece string is well-formed
     }
+
 
     /**
      * Determine whether a game state string is well-formed:
