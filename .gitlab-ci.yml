@@ -66,7 +66,7 @@ task7:
     - comp1110
   stage: test
   script:
-    - $JUNIT -c=comp1110.ass2.ViablePieceStringTest
+    - $JUNIT -c=comp1110.ass2.ViablePieceStringsTest
   allow_failure: true
 
 task10:
