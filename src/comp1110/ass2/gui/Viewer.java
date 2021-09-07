@@ -60,20 +60,8 @@ public class Viewer extends Application {
         board.getChildren().add(blankBoard);
         blankBoard.toBack();
 
-        // Display images of pieces in the window
-        List<ImageView> pieces = new ArrayList<>();
         String[] colors = {"red","orange","yellow","green","blue","indigo","pink"};
         double[][] lengths = {{2,2.5},{2,2.5},{2,3},{3,3},{2,3},{1,3},{3,2.5}}; //first height, second width
-       for (int i = 0; i < 7; i++) {
-            ImageView image = new ImageView();
-            image.setImage(new Image("file:assets/"+colors[i]+"Piece.png"));
-            pieces.add(i,image);
-            image.setFitHeight(68.5/2*lengths[i][0]);
-            image.setFitWidth(78.5/2*lengths[i][1]);
-            image.setLayoutX(80*i);
-            image.setLayoutY(0);
-            board.getChildren().add(image);
-            image.toFront();}
 
        // Translate the positions of each piece
        String[] strings = gameStateString.split("W");
@@ -85,13 +73,16 @@ public class Viewer extends Application {
         }
         double startX = 60+320/14;
         double startY = 80+320/14;
-       for (int j = 0; j < piecePlacement.length(); j+=4) {
+        for (int j = 0; j < piecePlacement.length(); j+=4) {
            String piece = piecePlacement.substring(j,j+4);
            int colorIndex = colorList.indexOf(piece.substring(0,1));
            int orientation = Integer.parseInt(piece.substring(1,2));
-           ImageView iv = pieces.get(colorIndex);
+
+           ImageView iv = new ImageView();
+           iv.setImage(new Image("file:assets/"+colors[colorIndex]+"Piece.png"));
            iv.setFitHeight(68.5*lengths[colorIndex][0]);
            iv.setFitWidth(78.5*lengths[colorIndex][1]);
+
            int pieceX = Integer.parseInt(piece.substring(2,3));
            int pieceY = Integer.parseInt(piece.substring(3,4));
            double boardX = startX;
@@ -138,7 +129,7 @@ public class Viewer extends Application {
                    switch (orientation) {
                        case 3:
                            setX += 78.5 / 2;
-                           setY += 68.5 * 2;
+                           setY += 68.5;
                            break;
                        case 4:
                            setX += 78.5;
@@ -201,6 +192,8 @@ public class Viewer extends Application {
            }
            iv.setLayoutX(setX);
            iv.setLayoutY(setY);
+           board.getChildren().add(iv);
+           iv.toFront();
        }
 
        // Wizard strings
@@ -211,8 +204,26 @@ public class Viewer extends Application {
                 int colorIndex = colorList.indexOf(wizardPiece.substring(0,1));
                 int pieceX = Integer.parseInt(wizardPiece.substring(1,2));
                 int pieceY = Integer.parseInt(wizardPiece.substring(2,3));
+
+                ImageView image = new ImageView();
+                image.setImage(new Image("file:assets/"+colors[colorIndex]+"Wizard.png"));
+                image.setFitHeight(68.5);
+                image.setFitWidth(78.5);
+
+                double boardX = startX;
+                if (pieceY % 2 == 0) {
+                    boardX = startX + pieceX * 78.5;
+                }
+                else {
+                    boardX = startX + (pieceX+0.5) * 78.5;
+                }
+                double boardY = startY + pieceY * 68.5;
+                image.setLayoutX(boardX);
+                image.setLayoutY(boardY);
+                board.getChildren().add(image);
+                image.toFront();}
             }
-        }
+
         root.getChildren().add(board);
 
         // FIXME Task 5 (CR): implement the simple game state viewer
