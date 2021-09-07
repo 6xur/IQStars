@@ -143,7 +143,13 @@ public class Location {
      */
 
     public boolean offBoard() {
-        return (this.x >= 0 && ((this.y == 0 || this.y == 2) && this.x <= 6) || ((this.y == 1 || this.y == 3) & this.x <= 5));
+        if(this.y == 1 || this.y == 3){
+            return x < 0 || x > 5;
+        }
+        if (this.y == 0 || this.y == 2){
+            return x < 0 || x > 6;
+        }
+        return true;
     }
 
     /**

@@ -6,6 +6,7 @@ public enum State {
     YELLOW,
     GREEN,
     BLUE,
+    INDIGO,
     PINK,
     EMPTY
 }
