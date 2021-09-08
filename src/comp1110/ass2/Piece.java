@@ -1,16 +1,20 @@
 package comp1110.ass2;
+
 import java.util.ArrayList;
 
 public class Piece {
-
     private State colour;
     private int orientationLabel;
 
-    /** The location of star in the top left corner */
+    /**
+     * The location of star in the top left corner
+     */
     private Location firstStar = new Location();
 
-    /** Each piece is defined by the location of the top-left star of the piece,
+    /**
+     * Each piece is defined by the location of the top-left star of the piece,
      * the colour of the piece and the orientation number of the piece.
+     *
      * @param orientationLabel an integer ranged from 0 to 5 which describes the orientation of the piece
      */
     public Piece(State colour, int orientationLabel) {
@@ -25,9 +29,17 @@ public class Piece {
      */
     private ArrayList<Location> pieceStars = new ArrayList<>();
 
-    public State getColour() {return this.colour;}
-    public Location getPiece() {return this.firstStar;}
-    public Location[] getPieceStars() {return (this.pieceStars.toArray(new Location[0]));}
+    public State getColour() {
+        return this.colour;
+    }
+
+    public Location getPiece() {
+        return this.firstStar;
+    }
+
+    public Location[] getPieceStars() {
+        return (this.pieceStars.toArray(new Location[0]));
+    }
 
     /**
      * set the location of a piece by setting the location of its top-left star
@@ -38,193 +50,160 @@ public class Piece {
         int row = newPiece.getY();
 
         pieceStars.add(new Location(column, row));
-        if(this.colour == State.RED){
-            switch(this.orientationLabel){
+        if (this.colour == State.RED) {
+            switch (this.orientationLabel) {
                 case 0:
                     pieceStars.add(new Location((column + 1), row));
                     pieceStars.add(new Location((column + 1), (row + 1)));
-                    if(row == 1){
+                    if (row == 1) {
                         pieceStars.add(new Location((column + 2), (row + 1)));
-                    } else{
+                    } else {
                         pieceStars.add(new Location(column, (row + 1)));
                     }
                     break;
                 case 1:
                     pieceStars.add(new Location(column, (row + 1)));
                     pieceStars.add(new Location(column, (row + 2)));
-                    if(row == 0){
+                    if (row == 0) {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                    } else if(row == 1){
+                    } else {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 2:
                     pieceStars.add(new Location((column + 1), row));
                     pieceStars.add(new Location(column, (row + 1)));
-                    if(row == 1){
+                    if (row == 1) {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                    } else{
+                    } else {
                         pieceStars.add(new Location((column - 1), (row + 1)));
                     }
                     break;
             }
         }
 
-        if(this.colour == State.ORANGE){
-            switch(this.orientationLabel){
+        if (this.colour == State.ORANGE) {
+            switch (this.orientationLabel) {
                 case 0:
-                    if(row == 1){
-                        pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location((column + 1), row));
+                    if (row == 1) {
                         pieceStars.add(new Location((column + 2), (row + 1)));
-                    } else{
-                        pieceStars.add(new Location((column + 1), row));
+                    } else {
                         pieceStars.add(new Location((column + 1), (row + 1)));
                     }
                     break;
                 case 1:
-                    if(row == 0){
+                    pieceStars.add(new Location(column, (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                    } else if(row == 1){
+                    } else {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 2:
-                    if(row == 1){
+                    pieceStars.add(new Location((column - 1), (row + 1)));
+                    if (row == 1) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column - 1), (row + 1)));
                     } else {
-                        pieceStars.add(new Location((column - 1), (row + 1)));
                         pieceStars.add(new Location((column - 2), (row + 1)));
                     }
                     break;
                 case 3:
-                    if(row == 1){
-                        pieceStars.add(new Location((column + 1), (row + 1)));
+                    pieceStars.add(new Location((column + 1), (row + 1)));
+                    if (row == 1) {
                         pieceStars.add(new Location((column + 2), (row + 1)));
-                    } else{
+                    } else {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 1)));
                     }
                     break;
                 case 4:
-                    if(row == 0){
+                    pieceStars.add(new Location(column, (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                    } else if(row == 1){
+                    } else {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 5:
-                    if(row == 1){
+                    pieceStars.add(new Location((column + 1), row));
+                    if (row == 1) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), row));
-                    } else{
+                    } else {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location((column + 1), row));
                     }
                     break;
             }
         }
 
-        if(this.colour == State.YELLOW){
-            switch(this.orientationLabel){
+        if (this.colour == State.YELLOW) {
+            switch (this.orientationLabel) {
                 case 0:
                     pieceStars.add(new Location((column + 1), row));
                     pieceStars.add(new Location((column + 2), row));
-                    if(row == 1){
+                    if (row == 1) {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                    } else{
+                    } else {
                         pieceStars.add(new Location(column, (row + 1)));
                     }
                     break;
                 case 1:
-                    if(row == 0){
+                    pieceStars.add(new Location(column, (row + 1)));
+                    pieceStars.add(new Location((column + 1), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else if(row == 1){
-                        pieceStars.add(new Location(column, (row + 1)));
+                    } else {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 2:
-                    if(row == 0){
-                        pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location(column, (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                    } else if(row == 1){
-                        pieceStars.add(new Location((column + 1), row));
+
+                    } else {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 3:
-                    if(row == 1){
-                        pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 1)));
+                    pieceStars.add(new Location((column - 1), (row + 1)));
+                    pieceStars.add(new Location(column, (row + 1)));
+                    if (row == 1) {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                    } else{
+                    } else {
                         pieceStars.add(new Location((column - 2), (row + 1)));
-                        pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 1)));
                     }
                     break;
                 case 4:
-                    if(row == 0){
+                    pieceStars.add(new Location((column + 1), (row + 1)));
+                    pieceStars.add(new Location((column + 1), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else if(row == 1){
-                        pieceStars.add(new Location((column + 1), (row + 1)));
+                    } else {
                         pieceStars.add(new Location((column + 2), (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 5:
-                    if(row == 0){
+                    pieceStars.add(new Location((column - 1), (row + 2)));
+                    pieceStars.add(new Location(column, (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location((column - 1), (row + 2)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                    } else if(row == 1){
+                    } else {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column - 1), (row + 2)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
             }
         }
 
-        if(this.colour == State.GREEN){
-            switch(this.orientationLabel){
+        if (this.colour == State.GREEN) {
+            switch (this.orientationLabel) {
                 case 0:
-                    if(row == 0){
-                        pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location((column + 2), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location((column + 2), (row + 2)));
-                    } else if(row == 1){
-                        pieceStars.add(new Location((column + 1), row));
+                    } else {
                         pieceStars.add(new Location((column + 2), (row + 1)));
-                        pieceStars.add(new Location((column + 2), (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 1:
@@ -233,27 +212,21 @@ public class Piece {
                     pieceStars.add(new Location((column - 1), (row + 3)));
                     break;
                 case 2:
-                    if(row == 1){
+                    pieceStars.add(new Location((column - 1), (row + 1)));
+                    pieceStars.add(new Location((column - 2), (row + 1)));
+                    if (row == 1) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location((column - 2), (row + 1)));
-                    } else{
-                        pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location((column - 2), (row + 1)));
+                    } else {
                         pieceStars.add(new Location((column - 3), (row + 1)));
                     }
                     break;
                 case 3:
-                    if(row == 0){
+                    pieceStars.add(new Location((column + 1), (row + 2)));
+                    pieceStars.add(new Location((column + 2), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                        pieceStars.add(new Location((column + 2), (row + 2)));
-                    } else if(row == 1){
-                        pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                        pieceStars.add(new Location((column + 2), (row + 2)));
                     } else {
-                        pieceStars.add(new Location(-1, -1));
+                        pieceStars.add(new Location((column + 1), (row + 1)));
                     }
                     break;
                 case 4:
@@ -262,204 +235,155 @@ public class Piece {
                     pieceStars.add(new Location((column - 1), (row + 3)));
                     break;
                 case 5:
-                    if(row == 1){
+                    pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location((column + 2), row));
+                    if (row == 1) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), row));
-                        pieceStars.add(new Location((column + 2), row));
-                    } else{
+                    } else {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location((column + 1), row));
-                        pieceStars.add(new Location((column + 2), row));
                     }
                     break;
             }
-
         }
 
-        if(this.colour == State.BLUE){
-            switch(this.orientationLabel){
+        if (this.colour == State.BLUE) {
+            switch (this.orientationLabel) {
                 case 0:
-                    if(row == 1){
-                        pieceStars.add(new Location((column + 1), row));
-                        pieceStars.add(new Location((column + 2), row));
+                    pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location((column + 2), row));
+                    if (row == 1) {
                         pieceStars.add(new Location((column + 2), (row + 1)));
-                    } else{
-                        pieceStars.add(new Location((column + 1), row));
-                        pieceStars.add(new Location((column + 2), row));
+                    } else {
                         pieceStars.add(new Location((column + 1), (row + 1)));
                     }
                     break;
                 case 1:
-                    if(row == 0){
+                    pieceStars.add(new Location(column, (row + 2)));
+                    pieceStars.add(new Location((column + 1), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else if(row == 1){
+                    } else {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 2:
-                    if(row == 0){
-                        pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location((column - 1), (row + 2)));
+                    pieceStars.add(new Location((column - 1), (row + 1)));
+                    pieceStars.add(new Location((column - 1), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location((column - 2), (row + 1)));
-                    } else if (row == 1){
+                    } else {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column - 1), (row + 2)));
-                        pieceStars.add(new Location((column - 1), (row + 1)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 3:
-                    if(row == 1){
-                        pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 1)));
+                    pieceStars.add(new Location(column, (row + 1)));
+                    pieceStars.add(new Location((column + 1), (row + 1)));
+                    if (row == 1) {
                         pieceStars.add(new Location((column + 2), (row + 1)));
-                    } else{
+                    } else {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 1)));
                     }
                     break;
                 case 4:
-                    if(row == 0){
-                        pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location((column + 1), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else if(row == 1){
-                        pieceStars.add(new Location((column + 1), row));
+                    } else {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 5:
-                    if(row == 0){
+                    pieceStars.add(new Location(column, (row + 1)));
+                    pieceStars.add(new Location((column - 1), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column - 1), (row + 2)));
-                    } else if(row == 1){
-                        pieceStars.add(new Location(column, (row + 1)));
+                    } else {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location((column - 1), (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
             }
-
         }
 
-        if(this.colour == State.INDIGO){
-            switch(orientationLabel){
+        if (this.colour == State.INDIGO) {
+            switch (orientationLabel) {
                 case 0:
                     pieceStars.add(new Location((column + 1), row));
                     pieceStars.add(new Location((column + 2), row));
                     break;
                 case 1:
-                    if(row == 0){
+                    pieceStars.add(new Location((column + 1), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else if(row == 1){
+                    } else {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 2:
-                    if(row == 0){
+                    pieceStars.add(new Location((column - 1), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location((column - 1), (row + 2)));
-                    } else if(row == 1){
+                    } else {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column - 1), (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
             }
         }
 
-        if(this.colour == State.PINK){
-            switch(orientationLabel){
+        if (this.colour == State.PINK) {
+            switch (orientationLabel) {
                 case 0:
-                    if(row == 0){
-                        pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location((column + 1), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else if(row == 1){
-                        pieceStars.add(new Location((column + 1), row));
+                    } else {
                         pieceStars.add(new Location((column + 2), (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 1:
-                    if(row == 0){
+                    pieceStars.add(new Location(column, (row + 2)));
+                    pieceStars.add(new Location((column - 1), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                        pieceStars.add(new Location((column - 1), (row + 2)));
-                    } else if(row == 1){
+                    } else {
                         pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                        pieceStars.add(new Location((column - 1), (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 2:
-                    if(row == 1){
-                        pieceStars.add(new Location((column + 1), (row + 1)));
+                    pieceStars.add(new Location((column + 1), (row + 1)));
+                    pieceStars.add(new Location((column + 2), row));
+                    if (row == 1) {
                         pieceStars.add(new Location((column + 2), (row + 1)));
-                        pieceStars.add(new Location((column + 2), row));
-                    } else{
+                    } else {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), (row + 1)));
-                        pieceStars.add(new Location((column + 2), row));
                     }
                     break;
                 case 3:
-                    if(row == 0){
+                    pieceStars.add(new Location(column, (row + 2)));
+                    pieceStars.add(new Location((column + 1), (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else if(row == 1){
+                    } else {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                        pieceStars.add(new Location((column + 1), (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 4:
-                    if(row == 0){
-                        pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location((column + 1), row));
+                    pieceStars.add(new Location(column, (row + 2)));
+                    if (row == 0) {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                    } else if(row == 1){
-                        pieceStars.add(new Location((column + 1), row));
+                    } else {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location(column, (row + 2)));
-                    } else{
-                        pieceStars.add(new Location(-1, -1));
                     }
                     break;
                 case 5:
-                    if(row == 1){
+                    pieceStars.add(new Location((column + 1), row));
+                    if (row == 1) {
                         pieceStars.add(new Location(column, (row + 1)));
-                        pieceStars.add(new Location((column + 1), row));
                         pieceStars.add(new Location((column + 2), (row + 1)));
-                    } else{
+                    } else {
                         pieceStars.add(new Location((column - 1), (row + 1)));
-                        pieceStars.add(new Location((column + 1), row));
                         pieceStars.add(new Location((column + 1), (row + 1)));
                     }
                     break;
@@ -473,8 +397,8 @@ public class Piece {
      * and False otherwise
      */
     public boolean onBoard() {
-        for(Location loc : this.pieceStars){
-            if(loc.offBoard()){
+        for (Location star : this.pieceStars) {
+            if (star.offBoard()) {
                 return false;
             }
         }
@@ -484,11 +408,13 @@ public class Piece {
     /**
      * update the location of the current piece
      */
-    public void placePiece() {}
+    public void placePiece() {
+    }
 
     /**
      * remove the current piece from the board
      */
-    public void removePiece() {}
+    public void removePiece() {
+    }
 
 }
