@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import gittest.A;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
@@ -284,87 +286,107 @@ public class IQStars {
      * @return True if the game state represented by the string is valid
      */
     public static boolean isGameStateValid(String gameStateString) {
-        if(!(isGameStateStringWellFormed(gameStateString))){
+        if (!(isGameStateStringWellFormed(gameStateString))) {
             return false;
         }
 
         String[] strings = gameStateString.split("W");
         String piecePlacement = "";
-        if(strings.length > 0){
+        if (strings.length > 0) {
             piecePlacement = strings[0];
         }
 
         ArrayList<Location> seenPieces = new ArrayList<>();
-        for(int i = 0; i < piecePlacement.length(); i += 4){
-            String piece = piecePlacement.substring(i, i + 4);
-            State color;
-            if(piece.charAt(0) == 'r'){
-                color = State.RED;
-            } else if (piece.charAt(0) == 'o'){
-                color = State.ORANGE;
-            } else if (piece.charAt(0) == 'y'){
-                color = State.YELLOW;
-            } else if (piece.charAt(0) == 'g'){
-                color = State.GREEN;
-            } else if (piece.charAt(0) == 'b'){
-                color = State.BLUE;
-            } else if (piece.charAt(0) == 'i'){
-                color = State.INDIGO;
-            } else{
-                color = State.PINK;
-            }
-            int orientation = piece.charAt(1) - '0';
-            int column = piece.charAt(2) - '0';
-            int row = piece.charAt(3) - '0';
+        for (int i = 0; i < piecePlacement.length(); i += 4) {
+            String pieceString = piecePlacement.substring(i, i + 4);
+            ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
+            ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
+            State color = colorStates.get(colorChars.indexOf(pieceString.charAt(0)));
+            int orientation = pieceString.charAt(1) - '0';
+            int column = pieceString.charAt(2) - '0';
+            int row = pieceString.charAt(3) - '0';
 
-            Piece aPiece = new Piece(color, orientation);
-            Location loc = new Location(column, row);
-            aPiece.setPiece(loc);
+            Piece piece = new Piece(color, orientation);
+            Location pieceLoc = new Location(column, row);
+            piece.setPiece(pieceLoc);
 
             // checks if each piece is entirely on the board
-            if(!(aPiece.onBoard())){
+            if (!(piece.onBoard())) {
                 return false;
             }
 
-            // Concat the locations of the current piece to the arraylist of seen locations
-            seenPieces.addAll(new ArrayList<>(Arrays.asList(aPiece.getPieceStars())));
+            // concatenates the star locations of the current piece to the arraylist of seen locations
+            seenPieces.addAll(new ArrayList<>(Arrays.asList(piece.getPieceStars())));
         }
 
-        // checks for overlap
-        for(int i = 0; i < seenPieces.size(); i++){
-            for(int j = i + 1; j < seenPieces.size(); j++){
-                if((seenPieces.get(i).equals(seenPieces.get(j)))){
+        // checks for piece overlap
+        for (int i = 0; i < seenPieces.size(); i++) {
+            for (int j = i + 1; j < seenPieces.size(); j++) {
+                if ((seenPieces.get(i).equals(seenPieces.get(j)))) {
                     return false;
                 }
             }
         }
 
+
+        // Code for wizard
         String wizardPlacement = "";
-        if(strings.length == 2){
+        if (strings.length == 2) {
             wizardPlacement = strings[1];
         }
 
         ArrayList<Location> seenWizards = new ArrayList<>();
-        for(int i = 0; i < wizardPlacement.length(); i += 3){
-            String wizard = wizardPlacement.substring(i, i + 3);
+        for (int i = 0; i < wizardPlacement.length(); i += 3) {
+            String wizardString = wizardPlacement.substring(i, i + 3);
+            int wizardColumn = wizardString.charAt(1) - '0';
+            int wizardRow = wizardString.charAt(2) - '0';
+            Location wizardLoc = new Location(wizardColumn, wizardRow);
 
-            int column = wizard.charAt(1) - '0';
-            int row = wizard.charAt(2) - '0';
-
-            Location loc = new Location(column, row);
-
-            if(loc.offBoard()){
+            if (wizardLoc.offBoard()) {
                 return false;
             }
 
-            seenWizards.add(loc);
+            // returns false if the wizard color doesn't exist in the piece placement
+            if (piecePlacement.length() > 0 && piecePlacement.indexOf(wizardString.charAt(0)) == -1) {
+                return false;
+            }
 
+            seenWizards.add(wizardLoc);
+
+            for (int j = 0; j < piecePlacement.length(); j += 4) {
+                String pieceString = piecePlacement.substring(j, j + 4);
+                Location[] pieceStars;
+
+                // checks if wizard-covering piece has the same color as the wizard
+                if (wizardString.charAt(0) == pieceString.charAt(0)) {
+                    ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
+                    ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
+                    State pieceColor = colorStates.get(colorChars.indexOf(pieceString.charAt(0)));
+                    int orientationLabel = pieceString.charAt(1) - '0';
+                    int pieceColumn = pieceString.charAt(2) - '0';
+                    int pieceRow = pieceString.charAt(3) - '0';
+                    Location pieceLoc = new Location(pieceColumn, pieceRow);
+                    Piece matchingPiece = new Piece(pieceColor, orientationLabel);
+                    matchingPiece.setPiece(pieceLoc);
+                    pieceStars = matchingPiece.getPieceStars();
+
+                    boolean found = false;
+                    for (Location starLoc : pieceStars) {
+                        if (starLoc.equals(wizardLoc)) {
+                            found = true;
+                        }
+                    }
+                    if (!found) {
+                        return false;
+                    }
+                }
+            }
         }
 
         // check for wizard overlap
-        for(int i = 0; i < seenWizards.size(); i++){
-            for(int j = i + 1; j < seenWizards.size(); j++){
-                if((seenWizards.get(i).equals(seenWizards.get(j)))){
+        for (int i = 0; i < seenWizards.size(); i++) {
+            for (int j = i + 1; j < seenWizards.size(); j++) {
+                if ((seenWizards.get(i).equals(seenWizards.get(j)))) {
                     return false;
                 }
             }
@@ -372,90 +394,20 @@ public class IQStars {
 
         // checks for uncovered wizards
         int coveredCount = 0;
-        if(seenPieces.size() > 0 && seenWizards.size() > 0){
-            for(Location wLoc:seenWizards){
-                for(Location pLoc: seenPieces){
-                    if(pLoc.equals(wLoc)){
+        if (seenPieces.size() > 0 && seenWizards.size() > 0) {
+            for (Location wLoc : seenWizards) {
+                for (Location pLoc : seenPieces) {
+                    if (pLoc.equals(wLoc)) {
                         coveredCount++;
                     }
                 }
             }
 
-            if(coveredCount != seenWizards.size()){
-                return false;
-            }
-        }
-
-
-        // checks if wizards are covered by the right piece
-        for(int i = 0; i < wizardPlacement.length(); i += 3){
-            String wizard = wizardPlacement.substring(i, i + 3);
-
-            /*
-            int column = wizard.charAt(1);
-            int row = wizard.charAt(2);
-            Location wizardLoc = new Location(column, row);
-
-             */
-
-            if(piecePlacement.length() > 0 && piecePlacement.indexOf(wizard.charAt(0)) == -1){
+            if (coveredCount != seenWizards.size()) {
                 return false;
             }
 
-            for(int j = 0; j < piecePlacement.length(); j += 4){
-                String piece = piecePlacement.substring(j, j + 4);
-                State pieceColor;
-                if(piece.charAt(0) == 'r'){
-                    pieceColor = State.RED;
-                } else if (piece.charAt(0) == 'o'){
-                    pieceColor = State.ORANGE;
-                } else if (piece.charAt(0) == 'y'){
-                    pieceColor = State.YELLOW;
-                } else if (piece.charAt(0) == 'g'){
-                    pieceColor = State.GREEN;
-                } else if (piece.charAt(0) == 'b'){
-                    pieceColor = State.BLUE;
-                } else if (piece.charAt(0) == 'i'){
-                    pieceColor = State.INDIGO;
-                } else{
-                    pieceColor = State.PINK;
-                }
-                int orientationLabel = piece.charAt(1) - '0';
-                int pieceColumn = piece.charAt(2) - '0';
-                int pieceRow = piece.charAt(3) - '0';
-                Location pieceLoc = new Location(pieceColumn, pieceRow);
-
-
-                Location[] pieceStars;
-                if(wizard.charAt(0) == piece.charAt(0)){
-                    Piece matchingPiece = new Piece(pieceColor, orientationLabel);
-                    matchingPiece.setPiece(pieceLoc);
-                    pieceStars = matchingPiece.getPieceStars();
-
-                    int column = wizard.charAt(1) - '0';
-                    int row = wizard.charAt(2) - '0';
-                    Location wizardLoc = new Location(column, row);
-
-                    boolean found = false;
-
-                    System.out.println("Length of piece stars: " + pieceStars.length);
-                    System.out.println("Wizard " + wizardLoc);
-                    for(Location star:pieceStars){
-                        System.out.println(star);
-                        if(star.equals(wizardLoc)){
-                            found = true;
-                        }
-                    }
-                    if(!found){
-                        return false;
-                    }
-                }
-
-            }
-
-
         }
-
         return true;
     }
 
