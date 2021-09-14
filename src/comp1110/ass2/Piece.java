@@ -1,8 +1,14 @@
 package comp1110.ass2;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import gittest.A;
+
 import java.util.ArrayList;
 
 public class Piece {
+    public static void main(String[] args) {
+        System.out.println("lol");
+    }
     private State colour;
     private int orientationLabel;
 
@@ -39,6 +45,26 @@ public class Piece {
 
     public Location[] getPieceStars() {
         return (this.pieceStars.toArray(new Location[0]));
+    }
+
+    public boolean overlaps(Piece other){
+        for(Location star : this.getPieceStars()){
+            for(Location otherStar : other.getPieceStars()){
+                if(star.equals(otherStar)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean overlaps(Location location){
+        for(Location star : this.getPieceStars()){
+            if(star.equals(location)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -417,4 +443,7 @@ public class Piece {
     public void removePiece() {
     }
 
+    public String toString(){
+        return this.colour.toString() + this.orientationLabel + this.firstStar.toString();
+    }
 }

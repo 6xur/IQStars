@@ -1,9 +1,8 @@
 package comp1110.ass2;
 
-import gittest.A;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 public class IQStars {
@@ -430,7 +429,99 @@ public class IQStars {
      * @return A set of all viable piece strings, or null if there are none.
      */
     static Set<String> getViablePieceStrings(String gameStateString, int col, int row) {
-        return null;  // FIXME Task 7 (P): determine the set of all viable piece strings given an existing game state
+        String[] strings = gameStateString.split("W");
+        String piecePlacement = "";
+        if (strings.length > 0) {
+            piecePlacement = strings[0];
+        }
+
+        ArrayList<Piece> placedPieces = new ArrayList<>();
+        for (int i = 0; i < piecePlacement.length(); i += 4) {
+            String pieceString = piecePlacement.substring(i, i + 4);
+            ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
+            ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
+            State color = colorStates.get(colorChars.indexOf(pieceString.charAt(0)));
+            int o = pieceString.charAt(1) - '0';
+            int c = pieceString.charAt(2) - '0';
+            int r = pieceString.charAt(3) - '0';
+
+            Piece piece = new Piece(color, o);
+            Location pieceLoc = new Location(c, r);
+            piece.setPiece(pieceLoc);
+            placedPieces.add(piece);
+        }
+
+        String wizardPlacement = "";
+        if (strings.length == 2) {
+            wizardPlacement = strings[1];
+        }
+
+        ArrayList<String> placedWizards = new ArrayList<>();
+        for (int i = 0; i < wizardPlacement.length(); i += 3) {
+            String wizardString = wizardPlacement.substring(i, i + 3);
+            placedWizards.add(wizardString);
+        }
+
+
+        Location target = new Location(col, row);
+        Set<String> viablePieces = new HashSet<>();
+        ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
+        ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
+        for(int colorIndex = 0; colorIndex < 7; colorIndex++){
+            for(int orientation = 0; orientation < 6; orientation++){
+                for(int currCol = 0; currCol < 7; currCol++){
+                    outerloop:
+                    for(int currRow = 0; currRow < 4; currRow++){
+                        State color = colorStates.get(colorIndex);
+                        Piece piece = new Piece(color, orientation);
+                        piece.setPiece(new Location(currCol, currRow));
+                        System.out.println(orientation + "" + currCol + "" + currRow);
+                        String pieceString = Character.toString(colorChars.get(colorIndex)) + orientation + "" + currCol + "" + currRow;
+
+
+                        if(!(isGameStringWellFormed(pieceString))){
+                            continue;
+                        }
+                        if(!(piece.onBoard())){
+                            continue;
+                        }
+                        if(!(piece.overlaps(target))){
+                            continue;
+                        }
+                        for(Piece placedPiece : placedPieces){
+                            if(piece.overlaps(placedPiece)){
+                                continue outerloop;
+                            }
+                            if(piece.getColour().equals(placedPiece.getColour())){
+                                continue outerloop;
+                            }
+                        }
+
+                        for(String wizard : placedWizards){
+                            Location wizardLoc = new Location(wizard.charAt(1) - '0', wizard.charAt(2) - '0');
+                            if(pieceString.charAt(0) == wizard.charAt(0)){
+                                if(!(piece.overlaps(wizardLoc))){
+                                    continue outerloop;
+                                }
+                            }
+                            if(pieceString.charAt(0) != wizard.charAt(0)){
+                                if(piece.overlaps(wizardLoc)){
+                                    continue outerloop;
+                                }
+                            }
+                        }
+
+                        viablePieces.add(pieceString);
+
+                    }
+                }
+            }
+        }
+
+        if(viablePieces.size() == 0){
+            return null;
+        }
+        return viablePieces;  // FIXME Task 7 (P): determine the set of all viable piece strings given an existing game state
     }
 
     /**
