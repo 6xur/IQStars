@@ -478,7 +478,6 @@ public class IQStars {
                         System.out.println(orientation + "" + currCol + "" + currRow);
                         String pieceString = Character.toString(colorChars.get(colorIndex)) + orientation + "" + currCol + "" + currRow;
 
-
                         if(!(isGameStringWellFormed(pieceString))){
                             continue;
                         }

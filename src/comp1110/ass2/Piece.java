@@ -6,9 +6,7 @@ import gittest.A;
 import java.util.ArrayList;
 
 public class Piece {
-    public static void main(String[] args) {
-        System.out.println("lol");
-    }
+
     private State colour;
     private int orientationLabel;
 
@@ -47,6 +45,9 @@ public class Piece {
         return (this.pieceStars.toArray(new Location[0]));
     }
 
+    /**
+     * Returns whether the current piece overlaps with another piece
+     */
     public boolean overlaps(Piece other){
         for(Location star : this.getPieceStars()){
             for(Location otherStar : other.getPieceStars()){
@@ -58,6 +59,9 @@ public class Piece {
         return false;
     }
 
+    /**
+     * Returns whether the current piece overlaps with another location
+     */
     public boolean overlaps(Location location){
         for(Location star : this.getPieceStars()){
             if(star.equals(location)){
@@ -443,6 +447,7 @@ public class Piece {
     public void removePiece() {
     }
 
+    @Override
     public String toString(){
         return this.colour.toString() + this.orientationLabel + this.firstStar.toString();
     }
