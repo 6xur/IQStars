@@ -340,8 +340,8 @@ public class IQStars {
         }
 
         ArrayList<Piece> placedPieces = getPlacedPieces(gameStateString);
-        for(int i = 0; i < placedPieces.size(); i++){
-            if(!(placedPieces.get(i).onBoard())){
+        for (Piece placedPiece : placedPieces) {
+            if (!(placedPiece.onBoard())) {
                 return false;
             }
         }
@@ -376,25 +376,17 @@ public class IQStars {
                 return false;
             }
 
-            placedWizards.add(wizardLoc);
-
             // checks if wizard-covering piece has the same color as the wizard
-            for (int j = 0; j < piecePlacement.length(); j += 4) {
-                String pieceString = piecePlacement.substring(j, j + 4);
-                if (wizardString.charAt(0) == pieceString.charAt(0)) {
-                    ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
-                    ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
-                    Piece matchingPiece = new Piece(colorStates.get(colorChars.indexOf(pieceString.charAt(0))), pieceString.charAt(1) - '0');
-                    matchingPiece.setPiece(new Location(pieceString.charAt(2) - '0', pieceString.charAt(3) - '0'));
-                    boolean covered = false;
-                    if(matchingPiece.overlaps(wizardLoc)){
-                        covered = true;
-                    }
-                    if (!covered) {
+            for (Piece placedPiece : placedPieces) {
+                ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
+                ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
+                if (colorStates.indexOf(placedPiece.getColour()) == colorChars.indexOf(wizardString.charAt(0))) {
+                    if (!(placedPiece.overlaps(wizardLoc))) {
                         return false;
                     }
                 }
             }
+            placedWizards.add(wizardLoc);
         }
 
         // checks for wizard overlap
@@ -410,15 +402,13 @@ public class IQStars {
         int coveredWizards = 0;
         if (placedPieces.size() > 0 && placedWizards.size() > 0) {
             for (Location wizardLoc : placedWizards) {
-                for (int i = 0; i < placedPieces.size(); i++) {
-                    if (placedPieces.get(i).overlaps(wizardLoc)) {
+                for (Piece placedPiece : placedPieces) {
+                    if (placedPiece.overlaps(wizardLoc)) {
                         coveredWizards++;
                     }
                 }
             }
-            if (coveredWizards != placedWizards.size()) {
-                return false;
-            }
+            return coveredWizards == placedWizards.size();
         }
         return true;
     }
@@ -455,10 +445,8 @@ public class IQStars {
                     for(int currRow = 0; currRow < 4; currRow++){
                         ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
                         ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
-                        State color = colorStates.get(colorIndex);
-                        Piece piece = new Piece(color, currOrient);
+                        Piece piece = new Piece(colorStates.get(colorIndex), currOrient);
                         piece.setPiece(new Location(currCol, currRow));
-                        System.out.println(currOrient + "" + currCol + "" + currRow);
                         String pieceString = Character.toString(colorChars.get(colorIndex)) + currOrient + "" + currCol + "" + currRow;
 
                         if(!(isGameStringWellFormed(pieceString))){
