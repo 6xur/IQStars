@@ -6,9 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class IQStars {
-    public static void main(String[] args) {
-        isGameStateValid("r001o302y040g330b121i000p151Wr22o13b21");
-    }
+
     /**
      * Determine whether a game string describing either a wizard or a piece
      * is well-formed according to the following criteria:
@@ -410,6 +408,41 @@ public class IQStars {
         return true;
     }
 
+    static ArrayList<Piece> getPlacedPieces(String gameStateString){
+        String[] strings = gameStateString.split("W");
+        String piecePlacement = "";
+        if (strings.length > 0) {
+            piecePlacement = strings[0];
+        }
+
+        ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
+        ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
+        ArrayList<Piece> placedPieces = new ArrayList<>();
+        for (int i = 0; i < piecePlacement.length(); i += 4) {
+            String pieceString = piecePlacement.substring(i, i + 4);
+            State color = colorStates.get(colorChars.indexOf(pieceString.charAt(0)));
+            Piece piece = new Piece(color, pieceString.charAt(1) - '0');
+            piece.setPiece(new Location(pieceString.charAt(2) - '0', pieceString.charAt(3) - '0'));
+            placedPieces.add(piece);
+        }
+        return placedPieces;
+    }
+
+    static ArrayList<String> getPlacedWizards(String gameStateString){
+        String[] strings = gameStateString.split("W");
+        String wizardPlacement = "";
+        if (strings.length == 2) {
+            wizardPlacement = strings[1];
+        }
+
+        ArrayList<String> placedWizards = new ArrayList<>();
+        for (int i = 0; i < wizardPlacement.length(); i += 3) {
+            String wizardString = wizardPlacement.substring(i, i + 3);
+            placedWizards.add(wizardString);
+        }
+        return placedWizards;
+    }
+
     /**
      * Given a string describing a game state, and a location
      * that must be covered by the next move, return a set of all
@@ -429,54 +462,23 @@ public class IQStars {
      * @return A set of all viable piece strings, or null if there are none.
      */
     static Set<String> getViablePieceStrings(String gameStateString, int col, int row) {
-        String[] strings = gameStateString.split("W");
-        String piecePlacement = "";
-        if (strings.length > 0) {
-            piecePlacement = strings[0];
-        }
-
-        ArrayList<Piece> placedPieces = new ArrayList<>();
-        for (int i = 0; i < piecePlacement.length(); i += 4) {
-            String pieceString = piecePlacement.substring(i, i + 4);
-            ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
-            ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
-            State color = colorStates.get(colorChars.indexOf(pieceString.charAt(0)));
-            int o = pieceString.charAt(1) - '0';
-            int c = pieceString.charAt(2) - '0';
-            int r = pieceString.charAt(3) - '0';
-
-            Piece piece = new Piece(color, o);
-            Location pieceLoc = new Location(c, r);
-            piece.setPiece(pieceLoc);
-            placedPieces.add(piece);
-        }
-
-        String wizardPlacement = "";
-        if (strings.length == 2) {
-            wizardPlacement = strings[1];
-        }
-
-        ArrayList<String> placedWizards = new ArrayList<>();
-        for (int i = 0; i < wizardPlacement.length(); i += 3) {
-            String wizardString = wizardPlacement.substring(i, i + 3);
-            placedWizards.add(wizardString);
-        }
-
-
-        Location target = new Location(col, row);
+        ArrayList<Piece> placedPieces = getPlacedPieces(gameStateString);
+        ArrayList<String> placedWizards = getPlacedWizards(gameStateString);
         Set<String> viablePieces = new HashSet<>();
-        ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
-        ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
+
+        // Generates all possible pieces
         for(int colorIndex = 0; colorIndex < 7; colorIndex++){
-            for(int orientation = 0; orientation < 6; orientation++){
+            for(int currOrient = 0; currOrient < 6; currOrient++){
                 for(int currCol = 0; currCol < 7; currCol++){
                     outerloop:
                     for(int currRow = 0; currRow < 4; currRow++){
+                        ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
+                        ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
                         State color = colorStates.get(colorIndex);
-                        Piece piece = new Piece(color, orientation);
+                        Piece piece = new Piece(color, currOrient);
                         piece.setPiece(new Location(currCol, currRow));
-                        System.out.println(orientation + "" + currCol + "" + currRow);
-                        String pieceString = Character.toString(colorChars.get(colorIndex)) + orientation + "" + currCol + "" + currRow;
+                        System.out.println(currOrient + "" + currCol + "" + currRow);
+                        String pieceString = Character.toString(colorChars.get(colorIndex)) + currOrient + "" + currCol + "" + currRow;
 
                         if(!(isGameStringWellFormed(pieceString))){
                             continue;
@@ -484,9 +486,10 @@ public class IQStars {
                         if(!(piece.onBoard())){
                             continue;
                         }
-                        if(!(piece.overlaps(target))){
+                        if(!(piece.overlaps(new Location(col, row)))){
                             continue;
                         }
+
                         for(Piece placedPiece : placedPieces){
                             if(piece.overlaps(placedPiece)){
                                 continue outerloop;
@@ -498,20 +501,20 @@ public class IQStars {
 
                         for(String wizard : placedWizards){
                             Location wizardLoc = new Location(wizard.charAt(1) - '0', wizard.charAt(2) - '0');
+                            // checks if the current piece covers all wizards of the same color
                             if(pieceString.charAt(0) == wizard.charAt(0)){
                                 if(!(piece.overlaps(wizardLoc))){
                                     continue outerloop;
                                 }
                             }
+                            // checks if the current piece incorrectly covers any wizard of a different color
                             if(pieceString.charAt(0) != wizard.charAt(0)){
                                 if(piece.overlaps(wizardLoc)){
                                     continue outerloop;
                                 }
                             }
                         }
-
                         viablePieces.add(pieceString);
-
                     }
                 }
             }
@@ -520,6 +523,7 @@ public class IQStars {
         if(viablePieces.size() == 0){
             return null;
         }
+
         return viablePieces;  // FIXME Task 7 (P): determine the set of all viable piece strings given an existing game state
     }
 
