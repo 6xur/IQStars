@@ -14,9 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -68,9 +67,7 @@ public class Viewer extends Application {
        String piecePlacement = strings[0];
        String[] colorsLetter = {"r","o","y","g","b","i","p"};
         List<String> colorList = new ArrayList<>();
-        for (String s : colorsLetter) {
-            colorList.add(s);
-        }
+        colorList.addAll(Arrays.asList(colorsLetter));
         double startX = 60+320/14;
         double startY = 80+320/14;
         for (int j = 0; j < piecePlacement.length(); j+=4) {
@@ -85,7 +82,7 @@ public class Viewer extends Application {
 
            int pieceX = Integer.parseInt(piece.substring(2,3));
            int pieceY = Integer.parseInt(piece.substring(3,4));
-           double boardX = startX;
+           double boardX;
            if (pieceY % 2 == 0) {
                boardX = startX + pieceX * 78.5;
            }
@@ -112,80 +109,76 @@ public class Viewer extends Application {
            switch (colorIndex) {
                case 1:
                    switch (orientation) {
-                       case 3:
+                       case 3 -> {
                            setX += 78.5 * 1.5;
                            setY += 68.5;
-                           break;
-                       case 4:
-                           setY += 68.5 * 2;
-                           break;
-                       case 5:
+                       }
+                       case 4 -> setY += 68.5 * 2;
+                       case 5 -> {
                            setX -= 78.5 * 0.5;
                            setY += 68.5;
-                           break;
+                       }
                    }
                    break;
                case 2:
                    switch (orientation) {
-                       case 3:
+                       case 3 -> {
                            setX += 78.5 / 2;
                            setY += 68.5;
-                           break;
-                       case 4:
+                       }
+                       case 4 -> {
                            setX += 78.5;
                            setY += 68.5 * 2;
-                           break;
-                       case 5:
+                       }
+                       case 5 -> {
                            setX -= 78.5;
                            setY += 68.5 * 2;
-                           break;
+                       }
                    }
                    break;
                case 3:
                    switch (orientation) {
-                       case 3:
+                       case 3 -> {
                            setX += 78.5 * 2;
                            setY += 68.5 * 2;
-                           break;
-                       case 4:
+                       }
+                       case 4 -> {
                            setX -= 78.5 / 2;
                            setY += 68.5 * 3;
-                           break;
-                       case 5:
+                       }
+                       case 5 -> {
                            setX -= 78.5 / 2;
                            setY += 68.5;
-                           break;
+                       }
                    }
                    break;
                case 4:
                    switch (orientation) {
-                       case 3:
+                       case 3 -> {
                            setX += 78.5 * 1.5;
                            setY += 68.5;
-                           break;
-                       case 4:
-                           setX += 78.5 ;
+                       }
+                       case 4 -> {
+                           setX += 78.5;
                            setY += 68.5 * 2;
-                           break;
-                       case 5:
-                           setX -= 78.5 ;
+                       }
+                       case 5 -> {
+                           setX -= 78.5;
                            setY += 68.5 * 2;
-                           break;
+                       }
                    }
                    break;
                case 6:
                    switch (orientation) {
-                       case 3:
-                           setX += 78.5 ;
+                       case 3 -> {
+                           setX += 78.5;
                            setY += 68.5 * 2;
-                           break;
-                       case 4:
-                           setY += 68.5 * 2;
-                           break;
-                       case 5:
+                       }
+                       case 4 -> setY += 68.5 * 2;
+                       case 5 -> {
                            setX -= 78.5 / 2;
                            setY += 68.5;
-                           break;
+                       }
                    }
                    break;
 
@@ -210,7 +203,7 @@ public class Viewer extends Application {
                 image.setFitHeight(68.5);
                 image.setFitWidth(78.5);
 
-                double boardX = startX;
+                double boardX;
                 if (pieceY % 2 == 0) {
                     boardX = startX + pieceX * 78.5;
                 }
@@ -226,7 +219,6 @@ public class Viewer extends Application {
 
         root.getChildren().add(board);
 
-        // FIXME Task 5 (CR): implement the simple game state viewer
     }
 
     /**
