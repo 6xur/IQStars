@@ -23,19 +23,27 @@ We will cross check each other work.
 
 ## Week 5
 
-Zhang San: Task 3 isPiecePlacementWellFormed - 21 Aug
-
-Jane Bloggs: Task 4 getNeighbours - 23 Aug
-
-Erika Mustermann: Task 6 getViablePiecePlacements - 24 Aug (depends on Task 3)
+We prepared for the exam, and had a good discusssion about the design of the game before its release.
 
 ## Week 6
 
-...
+We discussed the best approaches for task 3 - 6 and helped each other with the questions
+
+Hoa: Task 3, 4
+
+Shirley: Task 5
+
+Robert: Task 6
 
 ## Mid-Semester Break
 
 ## Week 7
+
+Hoa: Task 10
+
+Shirley: Task 8 and 10
+
+Robert: Task 9
 
 ## Week 8
 
