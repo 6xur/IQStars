@@ -168,8 +168,20 @@ public class Location {
      * @return True if this location occupies the same location as the other
      * location, False otherwise.
      */
-    public boolean equals(Location other) {
-        return (this.x == other.getX() & this.y == other.getY());
+    @Override
+    public boolean equals(Object other) {
+        if(other == null){
+            return false;
+        }
+        if(!getClass().equals(other.getClass())){
+            return false;
+        }
+        return (this.x == ((Location)other).getX() & this.y == ((Location)other).getY());
+    }
+
+    @Override
+    public int hashCode(){
+        return Integer.parseInt(Integer.toString(this.getX()) + Integer.toString(this.getY()));
     }
 
 
