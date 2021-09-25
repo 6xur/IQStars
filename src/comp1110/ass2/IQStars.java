@@ -29,49 +29,27 @@ public class IQStars {
      *      @param gameString A string describing either a piece or a wizard
      *      @return True if the string is well-formed
      */
+
     static boolean isGameStringWellFormed(String gameString) {
-        try {
-            char[] text = gameString.toCharArray();
-            if (gameString.equals("") || gameString.length() > 4) return false;
-            boolean A = (gameString.charAt(0) == 'r' || gameString.charAt(0) == 'o' || gameString.charAt(0) == 'y' || gameString.charAt(0) == 'g' || gameString.charAt(0) == 'b' || gameString.charAt(0) == 'i' || gameString.charAt(0) == 'p');
 
-            // the case of Wizard
-            if (gameString.length() == 3 && A && (Integer.parseInt(String.valueOf(text[2])) >= 0 && Integer.parseInt(String.valueOf(text[2])) <= 3)) {
-                if ((Integer.parseInt(String.valueOf(text[2])) == 0 || Integer.parseInt(String.valueOf(text[2])) == 2) && Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 6)
-                    return true;
-                if ((Integer.parseInt(String.valueOf(text[2])) == 1 || Integer.parseInt(String.valueOf(text[2])) == 3) && Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 5)
-                    return true;
-            }
+        if (gameString.length() > 4 || gameString.length() < 3)  return false;
 
-            // the case of piece
-            if (gameString.length() == 4 && A && (Integer.parseInt(String.valueOf(text[3])) >= 0 && Integer.parseInt(String.valueOf(text[3])) <= 3)) {
-                boolean B1 = (gameString.charAt(0) == 'r' || gameString.charAt(0) == 'i');
-                boolean B2 = (Integer.parseInt(String.valueOf(text[3])) == 0 || Integer.parseInt(String.valueOf(text[3])) == 2);
+        char color      = gameString.charAt(0);
+        char rot        = gameString.charAt(gameString.length()-3);
+        int rotint      = Character.getNumericValue(rot);
+        char col        = gameString.charAt(gameString.length()-2);
+        int colint      = Character.getNumericValue(col);
+        char row        = gameString.charAt(gameString.length()-1);
+        int rowint      = Character.getNumericValue(row);
 
-                if (B1) {
-                    if (B2) {
-                        if (Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 2 && Integer.parseInt(String.valueOf(text[2])) >= 0 && Integer.parseInt(String.valueOf(text[2])) <= 6)
-                            return true;
-                    } else {
-                        if (Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 2 && Integer.parseInt(String.valueOf(text[2])) >= 0 && Integer.parseInt(String.valueOf(text[2])) <= 5)
-                            return true;
-                    }
-                } else {
-                    if (B2) {
-                        if (Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 5 && Integer.parseInt(String.valueOf(text[2])) >= 0 && Integer.parseInt(String.valueOf(text[2])) <= 6)
-                            return true;
-                    } else {
-                        if (Integer.parseInt(String.valueOf(text[1])) >= 0 && Integer.parseInt(String.valueOf(text[1])) <= 5 && Integer.parseInt(String.valueOf(text[2])) >= 0 && Integer.parseInt(String.valueOf(text[2])) <= 5)
-                            return true;
-                    }
-                }
-            }
+        boolean C1 = ("roygbip".contains(String.valueOf(color)) &&  "0123".contains(String.valueOf(row)));
+        boolean C2 = ((( rowint == 0 || rowint == 2 ) &  colint >= 0 && colint <= 6)  || (( rowint == 1 || rowint == 3 ) &  colint >= 0 && colint <= 5));
+        boolean C3 = (("ri".contains(String.valueOf(color)) && rotint >= 0 && rotint <=2) || ( "oygbp".contains(String.valueOf(color)) && rotint >= 0 && rotint <=5));
 
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        return false; // FIXME Task 3 (P): determine whether a wizard or piece string is well-formed
+        return ((gameString.length() == 3 && C1 && C2) || (gameString.length() == 4  && C1 && C2 &&  C3) );
+        // FIXME Task 3 (P): determine whether a wizard or piece string is well-formed
     }
+
 
 
     /**
@@ -512,6 +490,19 @@ public class IQStars {
      * the challenge.
      */
     public static String getSolution(String challenge) {
+    /**    ArrayList<Location> placedLocations = Location.placedLocation(challenge);
+        for (int i = 0; i < 26; i++) {
+            Location location = new Location(i);
+            if (!placedLocations.contains(location)) {
+                String solution = challenge;
+                Location.findSubString(solution, i);
+                if (Location.finalSolution != "") {
+                    return Location.finalSolution;
+                }
+            }
+        }
+     */
         return null;  // FIXME Task 10 (CR): determine the solution to the game, given a particular challenge
     }
+
 }

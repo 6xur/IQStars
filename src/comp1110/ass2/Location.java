@@ -1,5 +1,11 @@
 package comp1110.ass2;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static comp1110.ass2.IQStars.*;
+
 public class Location {
     private int x;
     private int y;
@@ -185,6 +191,63 @@ public class Location {
             return true;
         return ((this.y == 1 || this.y == 3) && (this.x == other.getX() + 1) && (this.y == other.getY() + 1 || this.y == other.getY() - 1));
     }
+
+
+    /**
+     * @return an ArrayList of locations that have been placed given game state string
+     */
+    public static ArrayList<Location> placedLocation(String gameStateString) {
+        ArrayList<Piece> pieces = IQStars.getPlacedPieces(gameStateString);
+        ArrayList<String> wizards = IQStars.getPlacedWizards(gameStateString);
+        ArrayList<Location> placedL = new ArrayList<>();
+        for (Piece p : pieces) {
+            Location l = p.getPiece();
+            placedL.add(l);
+        }
+        for (String w : wizards) {
+            Location l = new Location(w.substring(1,3));
+            placedL.add(l);
+        }
+        return placedL;
+    }
+
+
+    static String finalSolution = "";
+
+    /**
+     * The method takes the current game state and a starting point as input, and tries to find any possible
+     * pieces that can be added to the state. If the final state is a solution, it will be recorded in the field
+     * named finalSolution.
+     * @param solution the string representing current game state
+     * @param start the integer representing the starting location
+     */
+    public static void findSubString(String solution, int start) {
+        ArrayList<Location> placedLocation = Location.placedLocation(solution);
+        for (int location = start; location < 26; location++) {
+            String track1 = solution;
+            Location l = new Location(location);
+            if (!placedLocation.contains(l)) {
+                Set<String> next = IQStars.getViablePieceStrings(solution, l.getX(), l.getY());
+                if (next != null) {
+                    for (String s : next) {
+                        String track2 = solution;
+                        solution = Piece.placePiece(s, solution);
+                        if (IQStars.isGameStateValid(solution)) {
+                        findSubString(solution, start + 1);
+                        String[] strings = solution.split("W");
+                        if (strings[0].length() == 28 && isGameStateValid(solution)) {
+                            finalSolution = solution;
+                            break;
+                        }
+                        solution = track2;
+                    }
+                }
+            }
+            }
+            solution = track1;
+        }
+    }
+
 
     /**
      * @return The string encoding of this Location.
