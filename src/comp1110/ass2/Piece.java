@@ -462,25 +462,30 @@ public class Piece {
         if (newPieceString.length()!= 4 || !IQStars.isGameStringWellFormed(newPieceString) || !IQStars.isGameStateStringWellFormed(currentStateString)) {return "invalid input";}
         String[] strings = currentStateString.split("W");
         String placedPieceString = strings[0];
+
+        // store all the pieces in the current state and map their color to each piece
         ArrayList<Piece> placedPieces= IQStars.getPlacedPieces(placedPieceString);
-        Map<State, Piece> allPieces = new HashMap<>(); // store all the pieces in the current state and map their color to each piece
+        Map<State, Piece> allPieces = new HashMap<>();
         for (Piece p : placedPieces) {
             State color = p.getColour();
             allPieces.put(color,p);
         }
 
+        // create the new piece using its string and add the new piece to the board
         State[] colorInOrder = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, PINK};
         ArrayList<String> colorString = new ArrayList<>();
         colorString.addAll(Arrays.asList("r", "o","y","g","b","i","p"));
         State colorOfNewPiece = colorInOrder[colorString.indexOf(newPieceString.substring(0,1))];
         Piece newPiece = new Piece(colorOfNewPiece,Integer.parseInt(newPieceString.substring(1,2)));
         Location locationOfNewPiece = new Location(newPieceString.substring(2,4));
-        newPiece.setPiece(locationOfNewPiece); // create the new piece using its string
-        allPieces.put(colorOfNewPiece,newPiece); // add the new piece to the board
+        newPiece.setPiece(locationOfNewPiece);
+        allPieces.put(colorOfNewPiece,newPiece);
+
+        // reorder the pieces in the state string
         String updatedStateString = "";
         for (State c : colorInOrder) {
             if (allPieces.containsKey(c)) {
-            updatedStateString += allPieces.get(c).toString();} // reorder the pieces in the state string
+            updatedStateString += allPieces.get(c).toString();}
         }
         updatedStateString += "W";
         if (!IQStars.isGameStateValid(updatedStateString)) {return "invalid input";}
