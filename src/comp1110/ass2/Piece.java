@@ -75,6 +75,7 @@ public class Piece {
      * set the location of a piece by setting the location of its top-left star
      */
     public void setPiece(Location newPiece) {
+        pieceStars.clear();
         this.firstStar = newPiece;
         int column = newPiece.getX();
         int row = newPiece.getY();
