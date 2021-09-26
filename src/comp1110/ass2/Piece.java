@@ -1,9 +1,11 @@
 package comp1110.ass2;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-import gittest.A;
-
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static comp1110.ass2.State.*;
 
 public class Piece {
 
@@ -26,6 +28,7 @@ public class Piece {
         this.orientationLabel = orientationLabel;
     }
 
+
     /**
      * An array of length three or four storing the locations of all stars in
      * the piece, ordered from the left-top to the right-bottom of the piece
@@ -43,6 +46,14 @@ public class Piece {
 
     public Location[] getPieceStars() {
         return (this.pieceStars.toArray(new Location[0]));
+    }
+
+    public void setColour(State colour){
+        this.colour = colour;
+    }
+
+    public void setOrientationLabel(int orientationLabel){
+        this.orientationLabel = orientationLabel;
     }
 
     /**
@@ -75,6 +86,7 @@ public class Piece {
      * set the location of a piece by setting the location of its top-left star
      */
     public void setPiece(Location newPiece) {
+        pieceStars.clear();
         this.firstStar = newPiece;
         int column = newPiece.getX();
         int row = newPiece.getY();
@@ -165,7 +177,7 @@ public class Piece {
             }
         }
 
-        if (this.colour == State.YELLOW) {
+        if (this.colour == YELLOW) {
             switch (this.orientationLabel) {
                 case 0:
                     pieceStars.add(new Location((column + 1), row));
@@ -225,7 +237,7 @@ public class Piece {
             }
         }
 
-        if (this.colour == State.GREEN) {
+        if (this.colour == GREEN) {
             switch (this.orientationLabel) {
                 case 0:
                     pieceStars.add(new Location((column + 1), row));
@@ -276,7 +288,7 @@ public class Piece {
             }
         }
 
-        if (this.colour == State.BLUE) {
+        if (this.colour == BLUE) {
             switch (this.orientationLabel) {
                 case 0:
                     pieceStars.add(new Location((column + 1), row));
@@ -447,8 +459,56 @@ public class Piece {
     public void removePiece() {
     }
 
+
+    /**
+     * Add a new piece to the current board state and adjust the order of piece strings.
+     * @param newPieceString the string of the piece to be added (eg. "r012")
+     * @param currentStateString the string of the current state
+     * @return the ordered string of the state after the new piece is added; return the message "invalid input" if the new
+     * piece string is not well-formed or the current state string is not well-formed or the new piece cannot be added to the current state
+     */
+    public static String placePiece (String newPieceString, String currentStateString) {
+        if (newPieceString.length()!= 4 || !IQStars.isGameStringWellFormed(newPieceString) || !IQStars.isGameStateStringWellFormed(currentStateString)) {return "invalid input";}
+        String[] strings = currentStateString.split("W");
+        String placedPieceString = strings[0];
+
+        // store all the pieces in the current state and map their color to each piece
+        ArrayList<Piece> placedPieces= IQStars.getPlacedPieces(placedPieceString);
+        Map<State, Piece> allPieces = new HashMap<>();
+        for (Piece p : placedPieces) {
+            State color = p.getColour();
+            allPieces.put(color,p);
+        }
+
+        // create the new piece using its string and add the new piece to the board
+        State[] colorInOrder = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, PINK};
+        ArrayList<String> colorString = new ArrayList<>();
+        colorString.addAll(Arrays.asList("r", "o","y","g","b","i","p"));
+        State colorOfNewPiece = colorInOrder[colorString.indexOf(newPieceString.substring(0,1))];
+        Piece newPiece = new Piece(colorOfNewPiece,Integer.parseInt(newPieceString.substring(1,2)));
+        Location locationOfNewPiece = new Location(newPieceString.substring(2,4));
+        newPiece.setPiece(locationOfNewPiece);
+        allPieces.put(colorOfNewPiece,newPiece);
+
+        // reorder the pieces in the state string
+        String updatedStateString = "";
+        for (State c : colorInOrder) {
+            if (allPieces.containsKey(c)) {
+            updatedStateString += allPieces.get(c).toString();}
+        }
+        updatedStateString += "W";
+        if (!IQStars.isGameStateValid(updatedStateString)) {return "invalid input";}
+        if (strings.length == 2) {
+            updatedStateString += strings[1];
+        }
+        return updatedStateString;
+    }
+
+
     @Override
     public String toString(){
-        return this.colour.toString() + this.orientationLabel + this.firstStar.toString();
+        String firstColorLetter = this.colour.toString().substring(0,1).toLowerCase();
+        return firstColorLetter + this.orientationLabel + this.firstStar.toString();
     }
 }
+

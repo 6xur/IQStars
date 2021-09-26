@@ -365,6 +365,19 @@ public class IQStars {
      * the challenge.
      */
     public static String getSolution(String challenge) {
+    /**    ArrayList<Location> placedLocations = Location.placedLocation(challenge);
+        for (int i = 0; i < 26; i++) {
+            Location location = new Location(i);
+            if (!placedLocations.contains(location)) {
+                String solution = challenge;
+                Location.findSubString(solution, i);
+                if (Location.finalSolution != "") {
+                    return Location.finalSolution;
+                }
+            }
+        }
+     */
         return null;  // FIXME Task 10 (CR): determine the solution to the game, given a particular challenge
     }
+
 }
