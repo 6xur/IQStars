@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+
 public class IQStars {
 
     /**
@@ -51,198 +52,72 @@ public class IQStars {
     }
 
 
-
-    /**
-     * Determine whether a game state string is well-formed:
-     * - The string is of the form [piecePlacement]W[wizardPlacement],
-     *      where [piecePlacement] and [wizardPlacement] are replaced by the
-     *      corresponding strings below
-     * - [piecePlacement] string specification:
-     *      - it consists of exactly n four-character piece strings (where n = 0 .. 7);
-     *      - each piece string is well-formed
-     *      - no piece appears more than once in the string
-     *      - the pieces are ordered correctly within the string (r,o,y,g,b,i,p)
-     * - [wizardPlacement] string specification:
-     *      - it consists of exactly n three-character wizard strings (where n is some non-negative integer)
-     *      - each wizard string is well-formed
-     *      - the strings are ordered correctly within the string (r,o,y,g,b,i,p)
-     *      - if there is more than one wizard of a single colour these wizards are ordered first by
-     *          row and then by column in ascending order (note that this does not prevent two
-     *          wizards of the same colour being placed in the same location - we will check for this
-     *          in a later task).
-     * @param gameStateString A string describing a game state
-     * @return True if the game state string is well-formed
-     */
     public static boolean isGameStateStringWellFormed(String gameStateString) {
-        int q = gameStateString.length();
-        int qW = gameStateString.indexOf('W');
-        String sW = gameStateString.substring(qW + 1, q);
-        String sP = gameStateString.substring(0, qW);
-        if (sW.length() % 3 != 0 || sP.length() > 28 || sP.length() % 4 != 0) return false;
 
+        String sW = gameStateString.substring(gameStateString.indexOf('W') + 1);
+        String sP = gameStateString.substring(0, gameStateString.indexOf('W'));
+        long countW = gameStateString.chars().filter(ch -> ch == 'W').count();
 
-        //Code for Piece:
-        int[] pkc = new int[]{0, 0, 0, 0, 0, 0, 0}; //Piece kind count
-        int[] order = new int[]{-1, -1, -1, -1, -1, -1, -1}; //Piece order check
+        if (sW.length() % 3 != 0 || sP.length() > 28 || sP.length() % 4 != 0 || countW != 1) return false;
+
         for (int i = 0; i < sP.length(); i = i + 4) {
             String sP1 = sP.substring(i, i + 4);
             if (!isGameStringWellFormed(sP1)) return false;
-
-            //check duplicates -- a bit too lengthy
-            if (sP1.charAt(0) == 'r') {
-                if (pkc[0] == 1) return false;
-                else {
-                    pkc[0] = pkc[1] + 1;
-                    order[0] = gameStateString.indexOf('r');
-                }
-            }
-            if (sP1.charAt(0) == 'o') {
-                if (pkc[1] == 1) return false;
-                else {
-                    pkc[1] = pkc[1] + 1;
-                    order[1] = gameStateString.indexOf('o');
-                }
-            }
-            if (sP1.charAt(0) == 'y') {
-                if (pkc[2] == 1) return false;
-                else {
-                    pkc[2] = pkc[2] + 1;
-                    order[2] = gameStateString.indexOf('y');
-                }
-            }
-            if (sP1.charAt(0) == 'g') {
-                if (pkc[3] == 1) return false;
-                else {
-                    pkc[3] = pkc[3] + 1;
-                    order[3] = gameStateString.indexOf('g');
-                }
-            }
-            if (sP1.charAt(0) == 'b') {
-                if (pkc[4] == 1) return false;
-                else {
-                    pkc[4] = pkc[4] + 1;
-                    order[4] = gameStateString.indexOf('b');
-                }
-            }
-            if (sP1.charAt(0) == 'i') {
-                if (pkc[5] == 1) return false;
-                else {
-                    pkc[5] = pkc[5] + 1;
-                    order[5] = gameStateString.indexOf('i');
-                }
-            }
-            if (sP1.charAt(0) == 'p') {
-                if (pkc[6] == 1) return false;
-                else {
-                    pkc[6] = pkc[6] + 1;
-                    order[6] = gameStateString.indexOf('p');
-                }
-            }
         }
 
-        for (int i = 0; i < order.length; i++) {
-            for (int j = i + 1; j < order.length; j++) {
-                if (order[i] >= 0 && order[j] >= 0 && order[i] > order[j]) return false;
-            }
-        }
-
-        //Code for Wizard:
-        int[] pkcW = new int[]{0, 0, 0, 0, 0, 0, 0}; //Wizard kind count
-        int[] orderW = new int[]{-1, -1, -1, -1, -1, -1, -1}; //Wizard order check
-        char[] text = sW.toCharArray();
         for (int i = 0; i < sW.length(); i = i + 3) {
             String sW1 = sW.substring(i, i + 3);
             if (!isGameStringWellFormed(sW1)) return false;
+        }
 
-            // check order
-            if (sW1.charAt(0) == 'r') {
-                if (pkcW[0] > 0) {
-                    boolean a = (orderW[0] + 3 == i);
-                    boolean b = (Integer.parseInt(String.valueOf(text[i + 2])) > Integer.parseInt(String.valueOf(text[orderW[0] + 2])));
-                    boolean b1 = (Integer.parseInt(String.valueOf(text[i + 2])) == Integer.parseInt(String.valueOf(text[orderW[0] + 2])));
-                    boolean c = (Integer.parseInt(String.valueOf(text[i + 1])) >= Integer.parseInt(String.valueOf(text[orderW[0] + 1])));
-                    if (!(a && b || a && b1 && c)) return false;
-                }
-                pkcW[0]++;
-                orderW[0] = i;
-            }
-            if (sW1.charAt(0) == 'o') {
-                if (pkcW[1] > 0) {
-                    boolean a = (orderW[1] + 3 == i);
-                    boolean b = (Integer.parseInt(String.valueOf(text[i + 2])) > Integer.parseInt(String.valueOf(text[orderW[1] + 2])));
-                    boolean b1 = (Integer.parseInt(String.valueOf(text[i + 2])) == Integer.parseInt(String.valueOf(text[orderW[1] + 2])));
-                    boolean c = (Integer.parseInt(String.valueOf(text[i + 1])) >= Integer.parseInt(String.valueOf(text[orderW[1] + 1])));
-                    if (!(a && b || a && b1 && c)) return false;
-                }
-                pkcW[1]++;
-                orderW[1] = i;
-            }
-            if (sW1.charAt(0) == 'y') {
-                if (pkcW[2] > 0) {
-                    boolean a = (orderW[2] + 3 == i);
-                    boolean b = (Integer.parseInt(String.valueOf(text[i + 2])) > Integer.parseInt(String.valueOf(text[orderW[2] + 2])));
-                    boolean b1 = (Integer.parseInt(String.valueOf(text[i + 2])) == Integer.parseInt(String.valueOf(text[orderW[2] + 2])));
-                    boolean c = (Integer.parseInt(String.valueOf(text[i + 1])) >= Integer.parseInt(String.valueOf(text[orderW[2] + 1])));
-                    if (!(a && b || a && b1 && c)) return false;
-                }
-                pkcW[2]++;
-                orderW[2] = i;
-            }
-            if (sW1.charAt(0) == 'g') {
-                if (pkcW[3] > 0) {
-                    boolean a = (orderW[3] + 3 == i);
-                    boolean b = (Integer.parseInt(String.valueOf(text[i + 2])) > Integer.parseInt(String.valueOf(text[orderW[3] + 2])));
-                    boolean b1 = (Integer.parseInt(String.valueOf(text[i + 2])) == Integer.parseInt(String.valueOf(text[orderW[3] + 2])));
-                    boolean c = (Integer.parseInt(String.valueOf(text[i + 1])) >= Integer.parseInt(String.valueOf(text[orderW[3] + 1])));
-                    if (!(a && b || a && b1 && c)) return false;
-                }
-                pkcW[3]++;
-                orderW[3] = i;
-            }
-            if (sW1.charAt(0) == 'b') {
-                if (pkcW[4] > 0) {
-                    boolean a = (orderW[4] + 3 == i);
-                    boolean b = (Integer.parseInt(String.valueOf(text[i + 2])) > Integer.parseInt(String.valueOf(text[orderW[4] + 2])));
-                    boolean b1 = (Integer.parseInt(String.valueOf(text[i + 2])) == Integer.parseInt(String.valueOf(text[orderW[4] + 2])));
-                    boolean c = (Integer.parseInt(String.valueOf(text[i + 1])) >= Integer.parseInt(String.valueOf(text[orderW[4] + 1])));
-                    if (!(a && b || a && b1 && c)) return false;
-                }
-                pkcW[4]++;
-                orderW[4] = i;
-            }
-            if (sW1.charAt(0) == 'i') {
-                if (pkcW[5] > 0) {
-                    boolean a = (orderW[5] + 3 == i);
-                    boolean b = (Integer.parseInt(String.valueOf(text[i + 2])) > Integer.parseInt(String.valueOf(text[orderW[5] + 2])));
-                    boolean b1 = (Integer.parseInt(String.valueOf(text[i + 2])) == Integer.parseInt(String.valueOf(text[orderW[5] + 2])));
-                    boolean c = (Integer.parseInt(String.valueOf(text[i + 1])) >= Integer.parseInt(String.valueOf(text[orderW[5] + 1])));
-                    if (!(a && b || a && b1 && c)) return false;
-                }
-                pkcW[5]++;
-                orderW[5] = i;
-            }
-            if (sW1.charAt(0) == 'p') {
-                if (pkcW[6] > 0) {
-                    boolean a = (orderW[6] + 3 == i);
-                    boolean b = (Integer.parseInt(String.valueOf(text[i + 2])) > Integer.parseInt(String.valueOf(text[orderW[6] + 2])));
-                    boolean b1 = (Integer.parseInt(String.valueOf(text[i + 2])) == Integer.parseInt(String.valueOf(text[orderW[6] + 2])));
-                    boolean c = (Integer.parseInt(String.valueOf(text[i + 1])) >= Integer.parseInt(String.valueOf(text[orderW[6] + 1])));
-                    if (!(a && b || a && b1 && c)) return false;
-                }
-                pkcW[6]++;
-                orderW[6] = i;
+        //check duplicates in piece
+        char[] list = "roygbip".toCharArray();
+        for (char c : list) {
+            if (sP.chars().filter(ch -> ch == c).count() > 1 )  return false;
+        }
+
+        //check order:
+        String sPcolor = sP.replaceAll("[0123456789]|[W]", "");
+        sPcolor = sPcolor.replace('r', '1')
+                .replace('o', '2')
+                .replace('y', '3')
+                .replace('g', '4')
+                .replace('b', '5')
+                .replace('i', '6')
+                .replace('p', '7');
+        char[] sPArr = sPcolor.toCharArray();
+        for (int i = 0; i < sPArr.length; i++) {
+            for (int j = i + 1; j < sPArr.length; j++) {
+                if (!(sPArr[i] < sPArr[j])) return false;
             }
         }
 
-        for (int i = 0; i < orderW.length; i++) {
-            for (int j = i + 1; j < orderW.length; j++) {
-                if (orderW[i] >= 0 && orderW[j] >= 0 && orderW[i] > orderW[j]) return false;
+        if (sW.length() > 0) {
+            String sWcolor = sW.replaceAll("[0123456789]|[W]", "");
+            sWcolor = sWcolor.replace('r', '1')
+                    .replace('o', '2')
+                    .replace('y', '3')
+                    .replace('g', '4')
+                    .replace('b', '5')
+                    .replace('i', '6')
+                    .replace('p', '7');
+
+            String sW1 = sW.replaceAll("[W]", "");
+            char[] sWarrL = sW1.toCharArray();
+            char[] sWarrS = sWcolor.toCharArray();
+
+            for (int i = 0; i < sWarrS.length; i++) {
+                for (int j = i + 1; j < sWarrS.length; j++) {
+
+                    if (sWarrS[i] > sWarrS[j]) return false;
+                    if ((sWarrS[i] ==   sWarrS[j]) && (sWarrL[j*3 + 2] < sWarrL[i*3 + 2])) return false;
+                    if ((sWarrS[i] ==   sWarrS[j]) && ((sWarrL[j*3 + 2] == sWarrL[i*3 + 2]) && (sWarrL[j*3 + 1] <  sWarrL[i*3 + 1]) )) return false;
+                }
             }
         }
-
-
         return true; // FIXME Task 4 (P): determine whether a game state string is well-formed
     }
+
 
     /**
      *
