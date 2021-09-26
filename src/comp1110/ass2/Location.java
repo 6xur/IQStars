@@ -179,7 +179,7 @@ public class Location {
         return (this.x == ((Location)other).getX() & this.y == ((Location)other).getY());
     }
 
-    // Overridden hashCode to allow calling removeAll() on a hashSet
+    // Overridden hashCode to allow calling removeAll() on a hashSet of Location objects
     @Override
     public int hashCode(){
         return Integer.parseInt(Integer.toString(this.getX()) + Integer.toString(this.getY()));
