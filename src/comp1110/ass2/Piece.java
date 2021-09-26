@@ -60,6 +60,9 @@ public class Piece {
      * Returns whether the current piece overlaps with another piece
      */
     public boolean overlaps(Piece other){
+        if(other == null){
+            return false;
+        }
         for(Location star : this.getPieceStars()){
             for(Location otherStar : other.getPieceStars()){
                 if(star.equals(otherStar)){

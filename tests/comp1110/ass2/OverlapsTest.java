@@ -24,6 +24,10 @@ public class OverlapsTest {
         Piece redPiece = new Piece(State.RED, 0);
         redPiece.setPiece(new Location(2, 1));
 
+        // A piece doesn't overlap with null
+        test(redPiece, (Location) null, false);
+        test(redPiece, (Piece) null, false);
+
         // Red piece overlaps with these locations
         test(redPiece, new Location(2, 1), true);
         test(redPiece, new Location(3, 1), true);
