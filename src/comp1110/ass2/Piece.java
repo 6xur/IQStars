@@ -48,6 +48,14 @@ public class Piece {
         return (this.pieceStars.toArray(new Location[0]));
     }
 
+    public void setColour(State colour){
+        this.colour = colour;
+    }
+
+    public void setOrientationLabel(int orientationLabel){
+        this.orientationLabel = orientationLabel;
+    }
+
     /**
      * Returns whether the current piece overlaps with another piece
      */
