@@ -1,8 +1,10 @@
 package comp1110.ass2;
 
+import javax.crypto.spec.PSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 
 import static comp1110.ass2.IQStars.*;
 
@@ -68,9 +70,8 @@ public class Location {
                 }
             }
         }
-
-
     }
+
 
     /**
      * Given a two-character string representing a location on the board,
