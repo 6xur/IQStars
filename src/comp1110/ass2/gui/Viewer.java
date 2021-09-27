@@ -33,7 +33,7 @@ public class Viewer extends Application {
     private static final int VIEWER_HEIGHT = 480;
     public static final double sizeHeight = 68.5;
 
-    private final Group root = new Group();
+    private static final Group root = new Group();
     private final Group controls = new Group();
     private TextField textField;
 
@@ -43,7 +43,7 @@ public class Viewer extends Application {
      *
      * @param gameStateString A valid game state string
      */
-    void makeGameState(String gameStateString) {
+    static void makeGameState(String gameStateString) {
 
         Group board = new Group();
 
@@ -256,6 +256,8 @@ public class Viewer extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        Board.slider(root);
     }}
 
 

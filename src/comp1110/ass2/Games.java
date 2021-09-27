@@ -1,5 +1,8 @@
 package comp1110.ass2;
 
+import java.util.Arrays;
+import java.util.Random;
+
 public class Games {
 
     /**
@@ -261,4 +264,24 @@ public class Games {
             "r030o042y111g321b450i000p301Wr30y23",
             "r002o540y000g262b260i111p330Wo40y20"
     };
+
+    /**
+     *
+     * @param difficulty The difficulty of the game(0 - Starter, 1 - Junior, 2 - Expert, 3 - Master, 4 - Wizard)
+     * @return a game string that's at the appropriate difficulty
+     */
+    public static String newChallenge(int difficulty){
+        assert difficulty >= 0 && difficulty <= 4;
+        int from = 0;
+        int to = 23;
+
+        for(int i = 0; i < difficulty; i++){
+            from += 24;
+            to += 24;
+        }
+
+        String[] newChallenges = Arrays.copyOfRange(Games.ALL_CHALLENGES, from, to);
+        String challenge = newChallenges[new Random().nextInt(newChallenges.length)];
+        return challenge;
+    }
 }
