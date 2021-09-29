@@ -1,9 +1,7 @@
 package comp1110.ass2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+
 
 
 public class IQStars {
@@ -365,19 +363,45 @@ public class IQStars {
      * the challenge.
      */
     public static String getSolution(String challenge) {
-    /**    ArrayList<Location> placedLocations = Location.placedLocation(challenge);
-        for (int i = 0; i < 26; i++) {
+       ArrayList<Piece> placedPiece = getPlacedPieces(challenge);
+       Set<String> placedPieceString = new HashSet<>();
+       Set<State> placedColor = new HashSet<>();
+       Set<String> candidates = new HashSet<>();
+
+       // find all the pieces already on board
+       for (Piece p : placedPiece) {
+           String s = p.toString();
+           State c = p.getColour();
+           placedPieceString.add(s);
+           placedColor.add(c);
+       }
+
+       // find all the potential pieces to be placed
+        for (int i = 0; i < 26; i ++) {
             Location location = new Location(i);
-            if (!placedLocations.contains(location)) {
-                String solution = challenge;
-                Location.findSubString(solution, i);
-                if (Location.finalSolution != "") {
-                    return Location.finalSolution;
+            Set<String> viableStrings = getViablePieceStrings(challenge, location.getX(), location.getY());
+            if (viableStrings != null) {
+                candidates.addAll(viableStrings);
+            }
+        }
+
+        for (String s : candidates) {
+            Piece p = new Piece(s);
+            // if there is a piece of the same color on board already, we will not consider the candidate
+            if (!placedColor.contains(p.getColour())) {
+                String currentChallenge = challenge;
+                String addPiece = Piece.placePiece(s, challenge);
+                if (isGameStateValid(addPiece)) {
+                    challenge = addPiece;
+                    placedPieceString.add(s);
+                    Piece.getSubPart(placedPieceString, challenge, candidates);
+                    challenge = currentChallenge;
+                    placedPieceString.remove(s);
                 }
             }
         }
-     */
-        return null;  // FIXME Task 10 (CR): determine the solution to the game, given a particular challenge
+
+        return Piece.finalSolution;  // FIXME Task 10 (CR): determine the solution to the game, given a particular challenge
     }
 
 }

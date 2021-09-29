@@ -27,11 +27,12 @@ import java.util.List;
  */
 public class Viewer extends Application {
 
-    public static final double sizeWidth = 78.5;
+
     /* board layout */
     private static final int VIEWER_WIDTH = 720;
     private static final int VIEWER_HEIGHT = 480;
-    public static final double sizeHeight = 68.5;
+    public static final double SIZE_HEIGHT = 68.5;
+    public static final double SIZE_WIDTH = 78.5;
 
     private final Group root = new Group();
     private final Group controls = new Group();
@@ -78,107 +79,107 @@ public class Viewer extends Application {
 
            ImageView iv = new ImageView();
            iv.setImage(new Image("file:assets/"+colors[colorIndex]+"Piece.png"));
-           iv.setFitHeight(sizeHeight *lengths[colorIndex][0]);
-           iv.setFitWidth(sizeWidth *lengths[colorIndex][1]);
+           iv.setFitHeight(SIZE_HEIGHT *lengths[colorIndex][0]);
+           iv.setFitWidth(SIZE_WIDTH *lengths[colorIndex][1]);
 
            int pieceX = Integer.parseInt(piece.substring(2,3));
            int pieceY = Integer.parseInt(piece.substring(3,4));
            double boardX;
            if (pieceY % 2 == 0) {
-               boardX = startX + pieceX * sizeWidth;
+               boardX = startX + pieceX * SIZE_WIDTH;
            }
            else {
-               boardX = startX + (pieceX+0.5) * sizeWidth;
+               boardX = startX + (pieceX+0.5) * SIZE_WIDTH;
            }
-           double boardY = startY + pieceY * sizeHeight;
+           double boardY = startY + pieceY * SIZE_HEIGHT;
            iv.setLayoutX(boardX);
            iv.setLayoutY(boardY);
 
            // Set orientation
            Rotate r = new Rotate();
            if (colorIndex == 0 || colorIndex == 5) {orientation = orientation % 3;}
-           r.setPivotX(sizeWidth/2);
-           r.setPivotY(sizeHeight /2);
+           r.setPivotX(SIZE_WIDTH /2);
+           r.setPivotY(SIZE_HEIGHT /2);
            r.setAngle(orientation * 60);
            iv.getTransforms().add(r);
            double setX = iv.getLayoutX();
            double setY = iv.getLayoutY();
            if (orientation == 2 && (colorIndex == 0 || colorIndex == 2 || colorIndex == 6)) {
-               if (colorIndex == 6) { setX += sizeWidth*2; }
-               else {setX += sizeWidth;}
+               if (colorIndex == 6) { setX += SIZE_WIDTH *2; }
+               else {setX += SIZE_WIDTH;}
            }
            switch (colorIndex) {
                case 1:
                    switch (orientation) {
                        case 3 -> {
-                           setX += sizeWidth * 1.5;
-                           setY += sizeHeight;
+                           setX += SIZE_WIDTH * 1.5;
+                           setY += SIZE_HEIGHT;
                        }
-                       case 4 -> setY += sizeHeight * 2;
+                       case 4 -> setY += SIZE_HEIGHT * 2;
                        case 5 -> {
-                           setX -= sizeWidth * 0.5;
-                           setY += sizeHeight;
+                           setX -= SIZE_WIDTH * 0.5;
+                           setY += SIZE_HEIGHT;
                        }
                    }
                    break;
                case 2:
                    switch (orientation) {
                        case 3 -> {
-                           setX += sizeWidth / 2;
-                           setY += sizeHeight;
+                           setX += SIZE_WIDTH / 2;
+                           setY += SIZE_HEIGHT;
                        }
                        case 4 -> {
-                           setX += sizeWidth;
-                           setY += sizeHeight * 2;
+                           setX += SIZE_WIDTH;
+                           setY += SIZE_HEIGHT * 2;
                        }
                        case 5 -> {
-                           setX -= sizeWidth;
-                           setY += sizeHeight * 2;
+                           setX -= SIZE_WIDTH;
+                           setY += SIZE_HEIGHT * 2;
                        }
                    }
                    break;
                case 3:
                    switch (orientation) {
                        case 3 -> {
-                           setX += sizeWidth * 2;
-                           setY += sizeHeight * 2;
+                           setX += SIZE_WIDTH * 2;
+                           setY += SIZE_HEIGHT * 2;
                        }
                        case 4 -> {
-                           setX -= sizeWidth / 2;
-                           setY += sizeHeight * 3;
+                           setX -= SIZE_WIDTH / 2;
+                           setY += SIZE_HEIGHT * 3;
                        }
                        case 5 -> {
-                           setX -= sizeWidth / 2;
-                           setY += sizeHeight;
+                           setX -= SIZE_WIDTH / 2;
+                           setY += SIZE_HEIGHT;
                        }
                    }
                    break;
                case 4:
                    switch (orientation) {
                        case 3 -> {
-                           setX += sizeWidth * 1.5;
-                           setY += sizeHeight;
+                           setX += SIZE_WIDTH * 1.5;
+                           setY += SIZE_HEIGHT;
                        }
                        case 4 -> {
-                           setX += sizeWidth;
-                           setY += sizeHeight * 2;
+                           setX += SIZE_WIDTH;
+                           setY += SIZE_HEIGHT * 2;
                        }
                        case 5 -> {
-                           setX -= sizeWidth;
-                           setY += sizeHeight * 2;
+                           setX -= SIZE_WIDTH;
+                           setY += SIZE_HEIGHT * 2;
                        }
                    }
                    break;
                case 6:
                    switch (orientation) {
                        case 3 -> {
-                           setX += sizeWidth;
-                           setY += sizeHeight * 2;
+                           setX += SIZE_WIDTH;
+                           setY += SIZE_HEIGHT * 2;
                        }
-                       case 4 -> setY += sizeHeight * 2;
+                       case 4 -> setY += SIZE_HEIGHT * 2;
                        case 5 -> {
-                           setX -= sizeWidth / 2;
-                           setY += sizeHeight;
+                           setX -= SIZE_WIDTH / 2;
+                           setY += SIZE_HEIGHT;
                        }
                    }
                    break;
@@ -201,17 +202,17 @@ public class Viewer extends Application {
 
                 ImageView image = new ImageView();
                 image.setImage(new Image("file:assets/"+colors[colorIndex]+"Wizard.png"));
-                image.setFitHeight(sizeHeight);
-                image.setFitWidth(sizeWidth);
+                image.setFitHeight(SIZE_HEIGHT);
+                image.setFitWidth(SIZE_WIDTH);
 
                 double boardX;
                 if (pieceY % 2 == 0) {
-                    boardX = startX + pieceX * sizeWidth;
+                    boardX = startX + pieceX * SIZE_WIDTH;
                 }
                 else {
-                    boardX = startX + (pieceX+0.5) * sizeWidth;
+                    boardX = startX + (pieceX+0.5) * SIZE_WIDTH;
                 }
-                double boardY = startY + pieceY * sizeHeight;
+                double boardY = startY + pieceY * SIZE_HEIGHT;
                 image.setLayoutX(boardX);
                 image.setLayoutY(boardY);
                 board.getChildren().add(image);
