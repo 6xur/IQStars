@@ -1,13 +1,20 @@
 package comp1110.ass2.gui;
 
+import comp1110.ass2.Games;
 import comp1110.ass2.IQStars;
 import comp1110.ass2.Location;
 import comp1110.ass2.Piece;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -439,7 +446,36 @@ public class Board extends Application {
             root.getChildren().add(board);
         }
         // FIXME Task 9 (D): Implement challenges (you may use the set of challenges in the Games class)
+        public static void slider(Group group){
+            Text text = new Text("Difficulty");
+            TextField textField = new TextField();
+            textField.setPrefWidth(50);
+            Button button = new Button("Click me");
+            button.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    int difficulty;
+                    String challenge = "";
+                    try{
+                        difficulty = Integer.parseInt(textField.getText());
+                        challenge = Games.newGame(difficulty);
+                    } catch(Exception a){
+                        System.out.println("Difficulty not valid");
+                    }
 
+                    Viewer.makeGameState(challenge);
+                    textField.clear();
+                }
+            });
+
+            HBox hb = new HBox();
+            hb.getChildren().addAll(text, textField, button);
+            hb.setSpacing(10);
+            hb.setLayoutX(50);
+            hb.setLayoutY(25);
+
+            group.getChildren().add(hb);
+        }
         // FIXME Task 11 (HD): Implement hints (should become visible when the user presses '/' -- see gitlab issue for details)
 
         // FIXME Task 12 (HD): Generate interesting challenges (each challenge must have exactly one solution)
@@ -453,6 +489,8 @@ public class Board extends Application {
             displayPiece();
             primaryStage.setScene(scene);
             primaryStage.show();
+
+            slider(root);
         }
 
     }
