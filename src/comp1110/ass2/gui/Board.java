@@ -28,18 +28,22 @@ public class Board extends Application {
 
     // FIXME Task 9 (D): Implement challenges (you may use the set of challenges in the Games class)
     public static void slider(Group group){
-
-        Text text = new Text();
-        text.setText("Difficulty:");
-
+        Text text = new Text("Difficulty");
         TextField textField = new TextField();
-        textField.setPrefWidth(300);
-        Button button = new Button("new difficulty");
+        textField.setPrefWidth(50);
+        Button button = new Button("Click me");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                int difficulty = Integer.parseInt(textField.getText());
-                String challenge = Games.newChallenge(difficulty);
+                int difficulty;
+                String challenge = "";
+                try{
+                    difficulty = Integer.parseInt(textField.getText());
+                    challenge = Games.newGame(difficulty);
+                } catch(Exception a){
+                    System.out.println("Difficulty not valid");
+                }
+
                 Viewer.makeGameState(challenge);
                 textField.clear();
             }
@@ -49,7 +53,7 @@ public class Board extends Application {
         hb.getChildren().addAll(text, textField, button);
         hb.setSpacing(10);
         hb.setLayoutX(50);
-        hb.setLayoutY(50);
+        hb.setLayoutY(25);
 
         group.getChildren().add(hb);
     }

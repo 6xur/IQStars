@@ -267,21 +267,21 @@ public class Games {
 
     /**
      *
-     * @param difficulty The difficulty of the game(0 - Starter, 1 - Junior, 2 - Expert, 3 - Master, 4 - Wizard)
-     * @return a game string that's at the appropriate difficulty
+     * @param difficulty The difficulty of the game (0 - Starter, 1 - Junior, 2 - Expert, 3 - Master, 4 - Wizard)
+     * @return a game string that matches the selected difficulty
      */
-    public static String newChallenge(int difficulty){
-        assert difficulty >= 0 && difficulty <= 4;
+    public static String newGame(int difficulty){
         int from = 0;
         int to = 23;
-
-        for(int i = 0; i < difficulty; i++){
-            from += 24;
-            to += 24;
+        String game = "";
+        if(0 <= difficulty && difficulty <= 4){
+            for(int i = 0; i < difficulty; i++){
+                from += 24;
+                to += 24;
+            }
+            String[] newGames = Arrays.copyOfRange(Games.ALL_CHALLENGES, from, to);
+            game = newGames[new Random().nextInt(newGames.length)];
         }
-
-        String[] newChallenges = Arrays.copyOfRange(Games.ALL_CHALLENGES, from, to);
-        String challenge = newChallenges[new Random().nextInt(newChallenges.length)];
-        return challenge;
+        return game;
     }
 }
