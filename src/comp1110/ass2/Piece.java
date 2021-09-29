@@ -1,9 +1,6 @@
 package comp1110.ass2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static comp1110.ass2.State.*;
 
@@ -26,6 +23,16 @@ public class Piece {
     public Piece(State colour, int orientationLabel) {
         this.colour = colour;
         this.orientationLabel = orientationLabel;
+    }
+
+
+    public Piece(String pieceString) {
+        State[] colorInOrder = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, PINK};
+        ArrayList<String> colorString = new ArrayList<>();
+        colorString.addAll(Arrays.asList("r", "o","y","g","b","i","p"));
+        this.colour = colorInOrder[colorString.indexOf(pieceString.substring(0,1))];
+        this.orientationLabel = Integer.parseInt(pieceString.substring(1,2));
+        this.firstStar = new Location(pieceString.substring(2,4));
     }
 
 
@@ -468,7 +475,7 @@ public class Piece {
      * @param newPieceString the string of the piece to be added (eg. "r012")
      * @param currentStateString the string of the current state
      * @return the ordered string of the state after the new piece is added; return the message "invalid input" if the new
-     * piece string is not well-formed or the current state string is not well-formed or the new piece cannot be added to the current state
+     * piece string is not well-formed or the current state string is not well-formed; return "WW" if the new piece cannot be added to the current state
      */
     public static String placePiece (String newPieceString, String currentStateString) {
         if (newPieceString.length()!= 4 || !IQStars.isGameStringWellFormed(newPieceString) || !IQStars.isGameStateStringWellFormed(currentStateString)) {return "invalid input";}
@@ -485,28 +492,58 @@ public class Piece {
 
         // create the new piece using its string and add the new piece to the board
         State[] colorInOrder = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, PINK};
-        ArrayList<String> colorString = new ArrayList<>();
-        colorString.addAll(Arrays.asList("r", "o","y","g","b","i","p"));
-        State colorOfNewPiece = colorInOrder[colorString.indexOf(newPieceString.substring(0,1))];
-        Piece newPiece = new Piece(colorOfNewPiece,Integer.parseInt(newPieceString.substring(1,2)));
-        Location locationOfNewPiece = new Location(newPieceString.substring(2,4));
-        newPiece.setPiece(locationOfNewPiece);
-        allPieces.put(colorOfNewPiece,newPiece);
+        Piece newPiece = new Piece(newPieceString);
+        allPieces.put(newPiece.colour, newPiece);
 
         // reorder the pieces in the state string
         String updatedStateString = "";
         for (State c : colorInOrder) {
             if (allPieces.containsKey(c)) {
-            updatedStateString += allPieces.get(c).toString();}
+                updatedStateString += allPieces.get(c).toString();}
         }
         updatedStateString += "W";
-        if (!IQStars.isGameStateValid(updatedStateString)) {return "invalid input";}
+
+        // return "WW" if the piece cannot be added to the current state
+        if (!IQStars.isGameStateValid(updatedStateString)) {return "WW";}
+
         if (strings.length == 2) {
             updatedStateString += strings[1];
         }
         return updatedStateString;
     }
 
+    static String finalSolution = new String();
+
+    /**
+     * Recursive method to find the solution given a challenge
+     *
+     * @param placedPieceString the set of placed piece strings on board
+     * @param challenge the string of current challenge state (i.e. the current state string)
+     * @param candidates a set of strings containing strings of piece candidates
+     */
+    public static void getSubPart(Set<String> placedPieceString, String challenge, Set<String> candidates) {
+
+        // if the challenge string is valid and the piece placement includes exactly 7 pieces, we find the solution and
+        // store it in the field finalSolution.
+        String[] strings = challenge.split("W");
+        if (strings[0].length() == 28 && IQStars.isGameStateValid(challenge)) {
+            finalSolution = challenge;
+        }
+
+        for (String s : candidates) {
+            if (!placedPieceString.contains(s)) {
+                String addPiece = Piece.placePiece(s, challenge);
+                if (IQStars.isGameStateValid(addPiece)) {
+                    String currentChallenge = challenge;
+                    challenge = addPiece;
+                    placedPieceString.add(s);
+                    getSubPart(placedPieceString, challenge, candidates);
+                    challenge = currentChallenge;
+                    placedPieceString.remove(s);
+                }
+            }
+        }
+    }
 
     @Override
     public String toString(){
