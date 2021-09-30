@@ -4,7 +4,7 @@ Reviewed by: Shitong Xiao, u7080308
 
 Reviewing code written by: Robert Xu u7279920
 
-Component: [getViablePieceStrings()](https://gitlab.cecs.anu.edu.au/u4147512/comp1110-ass2-tue09c/-/blob/master/src/comp1110/ass2/IQStars.java)
+Component: [getViablePieceStrings()](https://gitlab.cecs.anu.edu.au/u4147512/comp1110-ass2-tue09c/-/blob/master/src/comp1110/ass2/IQStars.java#L286-348)
 
 ### Comments 
 
