@@ -50,6 +50,30 @@ public class IQStars {
     }
 
 
+    /**
+     * Determine whether a game state string is well-formed:
+     * - The string is of the form [piecePlacement]W[wizardPlacement],
+     *      where [piecePlacement] and [wizardPlacement] are replaced by the
+     *      corresponding strings below
+     * - [piecePlacement] string specification:
+     *      - it consists of exactly n four-character piece strings (where n = 0 .. 7);
+     *      - each piece string is well-formed
+     *      - no piece appears more than once in the string
+     *      - the pieces are ordered correctly within the string (r,o,y,g,b,i,p)
+     * - [wizardPlacement] string specification:
+     *      - it consists of exactly n three-character wizard strings (where n is some non-negative integer)
+     *      - each wizard string is well-formed
+     *      - the strings are ordered correctly within the string (r,o,y,g,b,i,p)
+     *      - if there is more than one wizard of a single colour these wizards are ordered first by
+     *          row and then by column in ascending order (note that this does not prevent two
+     *          wizards of the same colour being placed in the same location - we will check for this
+     *          in a later task).
+     * @param gameStateString A string describing a game state
+     * @return True if the game state string is well-formed
+     */
+
+
+
     public static boolean isGameStateStringWellFormed(String gameStateString) {
 
         String sW = gameStateString.substring(gameStateString.indexOf('W') + 1);
