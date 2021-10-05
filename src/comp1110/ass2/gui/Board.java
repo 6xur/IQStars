@@ -1,5 +1,6 @@
 package comp1110.ass2.gui;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import comp1110.ass2.Games;
 import comp1110.ass2.IQStars;
 import comp1110.ass2.Location;
@@ -18,9 +19,7 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Board extends Application {
 
@@ -108,6 +107,7 @@ public class Board extends Application {
             });
 
         }
+
 
         /**
          * the method will check if the current state on board is valid or not
@@ -446,7 +446,144 @@ public class Board extends Application {
             root.getChildren().add(board);
         }
         // FIXME Task 9 (D): Implement challenges (you may use the set of challenges in the Games class)
-        public static void slider(Group group){
+        public void makeGameState(String gameStateString){
+            root.getChildren().clear();
+            placedPiece.clear();
+            makeBoard();
+            displayPiece();
+            slider(root);
+
+            String pieceString = gameStateString.substring(0, gameStateString.indexOf('W'));
+            String wizardString = gameStateString.substring(gameStateString.indexOf('W') + 1);
+
+            String[] colorsLetter = {"r","o","y","g","b","i","p"};
+            List<String> colorList = new ArrayList<>(Arrays.asList(colorsLetter));
+            for(int i = 0; i < pieceString.length(); i += 4){
+                String piece = pieceString.substring(i, i + 4);
+                int colorIndex = colorList.indexOf(piece.substring(0, 1));
+                int orientation = Integer.parseInt(piece.substring(1, 2));
+                int pieceX = Integer.parseInt(piece.substring(2,3));
+                int pieceY = Integer.parseInt(piece.substring(3,4));
+                GUIPiece testPiece = new GUIPiece(colorIndex, 70, 500);
+
+                root.getChildren().add(testPiece);
+
+                for(int o = 0; o < orientation; o++){
+                    testPiece.rotate();
+                }
+
+                testPiece.updateLocation();
+
+
+                double startX = 12.5 + 320 / 14;
+                int startY = 180 + 320 / 14;
+                double boardX;
+                if (pieceY % 2 == 0) {
+                    boardX = startX + pieceX * STAR_WIDTH;
+                }
+                else {
+                    boardX = startX + (pieceX+0.5) * STAR_WIDTH;
+                }
+                double boardY = startY + pieceY * STAR_HEIGHT;
+                testPiece.setLayoutX(boardX);
+                testPiece.setLayoutY(boardY);
+
+                double setX = testPiece.getLayoutX();
+                double setY = testPiece.getLayoutY();
+                switch (colorIndex) {
+                    case 1:
+                        switch (orientation) {
+                            case 3 -> {
+                                setX += STAR_WIDTH * 1.5;
+                                setY += STAR_HEIGHT;
+                            }
+                            case 4 -> setY += STAR_HEIGHT * 2;
+                            case 5 -> {
+                                setX -= STAR_WIDTH * 0.5;
+                                setY += STAR_HEIGHT;
+                            }
+                        }
+                        break;
+                    case 2:
+                        switch (orientation) {
+
+                            case 3 -> {
+                                setX += STAR_WIDTH / 2;
+                                setY += STAR_HEIGHT;
+                            }
+                            case 4 -> {
+                                setX += STAR_WIDTH;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                            case 5 -> {
+                                setX -= STAR_WIDTH;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                        }
+                        break;
+                    case 3:
+                        switch (orientation) {
+                            case 3 -> {
+                                setX += STAR_WIDTH * 2;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                            case 4 -> {
+                                setX -= STAR_WIDTH / 2;
+                                setY += STAR_HEIGHT * 3;
+                            }
+                            case 5 -> {
+                                setX -= STAR_WIDTH / 2;
+                                setY += STAR_HEIGHT;
+                            }
+                        }
+                        break;
+                    case 4:
+                        switch (orientation) {
+                            case 3 -> {
+                                setX += STAR_WIDTH * 1.5;
+                                setY += STAR_HEIGHT;
+                            }
+                            case 4 -> {
+                                setX += STAR_WIDTH;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                            case 5 -> {
+                                setX -= STAR_WIDTH;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                        }
+                        break;
+                    case 6:
+                        switch (orientation) {
+                            case 3 -> {
+                                setX += STAR_WIDTH;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                            case 4 -> setY += STAR_HEIGHT * 2;
+                            case 5 -> {
+                                setX -= STAR_WIDTH / 2;
+                                setY += STAR_HEIGHT;
+                            }
+                        }
+                        break;
+
+                }
+                testPiece.setLayoutX(setX);
+                testPiece.setLayoutY(setY);
+
+
+            }
+
+
+            System.out.println("piece string: " + pieceString);
+            System.out.println("wizard String: " + wizardString);
+
+
+
+        }
+
+
+        public void slider(Group group){
             Text text = new Text("Difficulty");
             TextField textField = new TextField();
             textField.setPrefWidth(50);
@@ -463,7 +600,7 @@ public class Board extends Application {
                         System.out.println("Difficulty not valid");
                     }
 
-                    Viewer.makeGameState(challenge);
+                    makeGameState(challenge);
                     textField.clear();
                 }
             });
@@ -472,7 +609,7 @@ public class Board extends Application {
             hb.getChildren().addAll(text, textField, button);
             hb.setSpacing(10);
             hb.setLayoutX(50);
-            hb.setLayoutY(25);
+            hb.setLayoutY(125);
 
             group.getChildren().add(hb);
         }
@@ -490,6 +627,7 @@ public class Board extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
 
+            slider(root);
         }
 
     }
