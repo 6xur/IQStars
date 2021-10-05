@@ -491,6 +491,13 @@ public class Board extends Application {
                 double setX = testPiece.getLayoutX();
                 double setY = testPiece.getLayoutY();
                 switch (colorIndex) {
+                    case 0:
+                        switch (orientation){
+                            case 2 -> {
+                                setX += STAR_WIDTH;
+                            }
+                        }
+                        break;
                     case 1:
                         switch (orientation) {
                             case 3 -> {
@@ -506,6 +513,9 @@ public class Board extends Application {
                         break;
                     case 2:
                         switch (orientation) {
+                            case 2 -> {
+                                setX += STAR_WIDTH;
+                            }
 
                             case 3 -> {
                                 setX += STAR_WIDTH / 2;
@@ -555,6 +565,9 @@ public class Board extends Application {
                         break;
                     case 6:
                         switch (orientation) {
+                            case 2 -> {
+                                setX += STAR_WIDTH * 2;
+                            }
                             case 3 -> {
                                 setX += STAR_WIDTH;
                                 setY += STAR_HEIGHT * 2;
