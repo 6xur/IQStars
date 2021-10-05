@@ -49,6 +49,7 @@ public class IQStars {
         // FIXME Task 3 (P): determine whether a wizard or piece string is well-formed
     }
 
+
     /**
      * Determine whether a game state string is well-formed:
      * - The string is of the form [piecePlacement]W[wizardPlacement],
