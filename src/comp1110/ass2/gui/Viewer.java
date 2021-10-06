@@ -40,6 +40,8 @@ public class Viewer extends Application {
 
 
     /**
+     * Shitong Xiao
+     *
      * Draw a game state in the window, removing any previously drawn one
      *
      * @param gameStateString A valid game state string
@@ -104,88 +106,89 @@ public class Viewer extends Application {
            iv.getTransforms().add(r);
            double setX = iv.getLayoutX();
            double setY = iv.getLayoutY();
-           if (orientation == 2 && (colorIndex == 0 || colorIndex == 2 || colorIndex == 6)) {
-               if (colorIndex == 6) { setX += SIZE_WIDTH *2; }
-               else {setX += SIZE_WIDTH;}
-           }
-           switch (colorIndex) {
-               case 1:
-                   switch (orientation) {
-                       case 3 -> {
-                           setX += SIZE_WIDTH * 1.5;
-                           setY += SIZE_HEIGHT;
-                       }
-                       case 4 -> setY += SIZE_HEIGHT * 2;
-                       case 5 -> {
-                           setX -= SIZE_WIDTH * 0.5;
-                           setY += SIZE_HEIGHT;
-                       }
-                   }
-                   break;
-               case 2:
-                   switch (orientation) {
-                       case 3 -> {
-                           setX += SIZE_WIDTH / 2;
-                           setY += SIZE_HEIGHT;
-                       }
-                       case 4 -> {
-                           setX += SIZE_WIDTH;
-                           setY += SIZE_HEIGHT * 2;
-                       }
-                       case 5 -> {
-                           setX -= SIZE_WIDTH;
-                           setY += SIZE_HEIGHT * 2;
-                       }
-                   }
-                   break;
-               case 3:
-                   switch (orientation) {
-                       case 3 -> {
-                           setX += SIZE_WIDTH * 2;
-                           setY += SIZE_HEIGHT * 2;
-                       }
-                       case 4 -> {
-                           setX -= SIZE_WIDTH / 2;
-                           setY += SIZE_HEIGHT * 3;
-                       }
-                       case 5 -> {
-                           setX -= SIZE_WIDTH / 2;
-                           setY += SIZE_HEIGHT;
-                       }
-                   }
-                   break;
-               case 4:
-                   switch (orientation) {
-                       case 3 -> {
-                           setX += SIZE_WIDTH * 1.5;
-                           setY += SIZE_HEIGHT;
-                       }
-                       case 4 -> {
-                           setX += SIZE_WIDTH;
-                           setY += SIZE_HEIGHT * 2;
-                       }
-                       case 5 -> {
-                           setX -= SIZE_WIDTH;
-                           setY += SIZE_HEIGHT * 2;
-                       }
-                   }
-                   break;
-               case 6:
-                   switch (orientation) {
-                       case 3 -> {
-                           setX += SIZE_WIDTH;
-                           setY += SIZE_HEIGHT * 2;
-                       }
-                       case 4 -> setY += SIZE_HEIGHT * 2;
-                       case 5 -> {
-                           setX -= SIZE_WIDTH / 2;
-                           setY += SIZE_HEIGHT;
-                       }
-                   }
-                   break;
+           //locationAfterRotate(orientation,colorIndex,setX,setY,SIZE_WIDTH,SIZE_HEIGHT);
+            if (orientation == 2 && (colorIndex == 0 || colorIndex == 2 || colorIndex == 6)) {
+                if (colorIndex == 6) { setX += SIZE_WIDTH *2; }
+                else {setX += SIZE_WIDTH;}
+            }
+            switch (colorIndex) {
+                case 1:
+                    switch (orientation) {
+                        case 3 -> {
+                            setX += SIZE_WIDTH * 1.5;
+                            setY += SIZE_HEIGHT;
+                        }
+                        case 4 -> setY += SIZE_HEIGHT * 2;
+                        case 5 -> {
+                            setX -= SIZE_WIDTH * 0.5;
+                            setY += SIZE_HEIGHT;
+                        }
+                    }
+                    break;
+                case 2:
+                    switch (orientation) {
+                        case 3 -> {
+                            setX += SIZE_WIDTH / 2;
+                            setY += SIZE_HEIGHT;
+                        }
+                        case 4 -> {
+                            setX += SIZE_WIDTH;
+                            setY += SIZE_HEIGHT * 2;
+                        }
+                        case 5 -> {
+                            setX -= SIZE_WIDTH;
+                            setY += SIZE_HEIGHT * 2;
+                        }
+                    }
+                    break;
+                case 3:
+                    switch (orientation) {
+                        case 3 -> {
+                            setX += SIZE_WIDTH * 2;
+                            setY += SIZE_HEIGHT * 2;
+                        }
+                        case 4 -> {
+                            setX -= SIZE_WIDTH / 2;
+                            setY += SIZE_HEIGHT * 3;
+                        }
+                        case 5 -> {
+                            setX -= SIZE_WIDTH / 2;
+                            setY += SIZE_HEIGHT;
+                        }
+                    }
+                    break;
+                case 4:
+                    switch (orientation) {
+                        case 3 -> {
+                            setX += SIZE_WIDTH * 1.5;
+                            setY += SIZE_HEIGHT;
+                        }
+                        case 4 -> {
+                            setX += SIZE_WIDTH;
+                            setY += SIZE_HEIGHT * 2;
+                        }
+                        case 5 -> {
+                            setX -= SIZE_WIDTH;
+                            setY += SIZE_HEIGHT * 2;
+                        }
+                    }
+                    break;
+                case 6:
+                    switch (orientation) {
+                        case 3 -> {
+                            setX += SIZE_WIDTH;
+                            setY += SIZE_HEIGHT * 2;
+                        }
+                        case 4 -> setY += SIZE_HEIGHT * 2;
+                        case 5 -> {
+                            setX -= SIZE_WIDTH / 2;
+                            setY += SIZE_HEIGHT;
+                        }
+                    }
+                    break;
 
-           }
-           iv.setLayoutX(setX);
+            }
+            iv.setLayoutX(setX);
            iv.setLayoutY(setY);
            board.getChildren().add(iv);
            iv.toFront();
@@ -221,6 +224,90 @@ public class Viewer extends Application {
 
         root.getChildren().add(board);
 
+    }
+
+    public static void locationAfterRotate(int orientation, int colorIndex, double setX, double setY, double sizeWidth, double sizeHeight) {
+        if (orientation == 2 && (colorIndex == 0 || colorIndex == 2 || colorIndex == 6)) {
+            if (colorIndex == 6) { setX += sizeWidth *2; }
+            else {setX += sizeWidth;}
+        }
+        switch (colorIndex) {
+            case 1:
+                switch (orientation) {
+                    case 3 -> {
+                        setX += sizeWidth * 1.5;
+                        setY += sizeHeight;
+                    }
+                    case 4 -> setY += sizeHeight * 2;
+                    case 5 -> {
+                        setX -= sizeWidth * 0.5;
+                        setY += sizeHeight;
+                    }
+                }
+                break;
+            case 2:
+                switch (orientation) {
+                    case 3 -> {
+                        setX += sizeWidth / 2;
+                        setY += sizeHeight;
+                    }
+                    case 4 -> {
+                        setX += sizeWidth;
+                        setY += sizeHeight * 2;
+                    }
+                    case 5 -> {
+                        setX -= sizeWidth;
+                        setY += sizeHeight * 2;
+                    }
+                }
+                break;
+            case 3:
+                switch (orientation) {
+                    case 3 -> {
+                        setX += sizeWidth * 2;
+                        setY +=sizeHeight * 2;
+                    }
+                    case 4 -> {
+                        setX -= sizeWidth / 2;
+                        setY += sizeHeight * 3;
+                    }
+                    case 5 -> {
+                        setX -= sizeWidth / 2;
+                        setY += sizeHeight;
+                    }
+                }
+                break;
+            case 4:
+                switch (orientation) {
+                    case 3 -> {
+                        setX += sizeWidth * 1.5;
+                        setY += sizeHeight;
+                    }
+                    case 4 -> {
+                        setX += sizeWidth;
+                        setY += sizeHeight * 2;
+                    }
+                    case 5 -> {
+                        setX -= sizeWidth;
+                        setY += sizeHeight * 2;
+                    }
+                }
+                break;
+            case 6:
+                switch (orientation) {
+                    case 3 -> {
+                        setX +=sizeWidth;
+                        setY += sizeHeight * 2;
+                    }
+                    case 4 -> setY += sizeHeight * 2;
+                    case 5 -> {
+                        setX -= sizeWidth / 2;
+                        setY += sizeHeight;
+                    }
+                }
+                break;
+
+        }
     }
 
     /**
