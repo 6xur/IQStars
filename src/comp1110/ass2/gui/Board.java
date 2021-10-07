@@ -108,6 +108,13 @@ public class Board extends Application {
 
         }
 
+        public void setOrientation(int orientation){
+            this.orientation = orientation;
+        }
+
+        public int getColorIndex(){
+            return this.colorIndex;
+        }
 
         /**
          * the method will check if the current state on board is valid or not
@@ -419,13 +426,18 @@ public class Board extends Application {
                     homeX = MARGIN + BLANK_BOARD_WIDTH;
                     homeY = MARGIN + STAR_HEIGHT * 6;
                     break;
-
             }
-            GUIPiece piece = new GUIPiece(i, homeX, homeY);
-            System.out.println(piece);
-            root.getChildren().add(piece);
-        }
 
+            ArrayList<Integer> placedColourIndex = new ArrayList<>();
+            for(GUIPiece p:placedPiece){
+                placedColourIndex.add(p.getColorIndex());
+            }
+
+            if(!(placedColourIndex.contains(i))){
+                GUIPiece piece = new GUIPiece(i, homeX, homeY);
+                root.getChildren().add(piece);
+            }
+        }
     }
 
     /**
@@ -450,7 +462,6 @@ public class Board extends Application {
             root.getChildren().clear();
             placedPiece.clear();
             makeBoard();
-            displayPiece();
             slider(root);
 
             String pieceString = gameStateString.substring(0, gameStateString.indexOf('W'));
@@ -458,24 +469,24 @@ public class Board extends Application {
 
             String[] colorsLetter = {"r","o","y","g","b","i","p"};
             List<String> colorList = new ArrayList<>(Arrays.asList(colorsLetter));
+            double startX = 12.5 + 320 / 14;
+            int startY = 180 + 320 / 14;
+
             for(int i = 0; i < pieceString.length(); i += 4){
                 String piece = pieceString.substring(i, i + 4);
                 int colorIndex = colorList.indexOf(piece.substring(0, 1));
                 int orientation = Integer.parseInt(piece.substring(1, 2));
                 int pieceX = Integer.parseInt(piece.substring(2,3));
                 int pieceY = Integer.parseInt(piece.substring(3,4));
-                GUIPiece testPiece = new GUIPiece(colorIndex, 70, 500);
-
-                root.getChildren().add(testPiece);
+                GUIPiece guiPiece = new GUIPiece(colorIndex, 70, 500);
+                guiPiece.setOrientation(orientation);
+                root.getChildren().add(guiPiece);
 
                 for(int o = 0; o < orientation; o++){
-                    testPiece.rotate();
+                    guiPiece.rotate();
                 }
 
-
-
-                double startX = 12.5 + 320 / 14;
-                int startY = 180 + 320 / 14;
+                // Translate the pieces to the board
                 double boardX;
                 if (pieceY % 2 == 0) {
                     boardX = startX + pieceX * STAR_WIDTH;
@@ -484,11 +495,11 @@ public class Board extends Application {
                     boardX = startX + (pieceX+0.5) * STAR_WIDTH;
                 }
                 double boardY = startY + pieceY * STAR_HEIGHT;
-                testPiece.setLayoutX(boardX);
-                testPiece.setLayoutY(boardY);
+                guiPiece.setLayoutX(boardX);
+                guiPiece.setLayoutY(boardY);
 
-                double setX = testPiece.getLayoutX();
-                double setY = testPiece.getLayoutY();
+                double setX = guiPiece.getLayoutX();
+                double setY = guiPiece.getLayoutY();
                 switch (colorIndex) {
                     case 0:
                         switch (orientation){
@@ -578,29 +589,48 @@ public class Board extends Application {
                             }
                         }
                         break;
-
                 }
-                testPiece.setLayoutX(setX);
-                testPiece.setLayoutY(setY);
+                guiPiece.setLayoutX(setX);
+                guiPiece.setLayoutY(setY);
 
-                double[] star = testPiece.findNearestStar(testPiece.getLayoutX(), testPiece.getLayoutY());
-                testPiece.setLayoutX(star[0]);
-                testPiece.setLayoutY(star[1]);
+                double[] star = guiPiece.findNearestStar(guiPiece.getLayoutX(), guiPiece.getLayoutY());
+                guiPiece.setLayoutX(star[0]);
+                guiPiece.setLayoutY(star[1]);
 
-                placedPiece.add(testPiece);
-
-
+                placedPiece.add(guiPiece);
             }
 
+            displayPiece();
+
+            // wizard string
+            for(int j = 0; j < wizardString.length(); j += 3){
+                String wizard = wizardString.substring(j, j + 3);
+                int colorIndex = colorList.indexOf(wizard.substring(0, 1));
+                int wizardX = Integer.parseInt(wizard.substring(1, 2));
+                int wizardY = Integer.parseInt(wizard.substring(2, 3));
+
+                ImageView image = new ImageView();
+                String[] colors = {"red", "orange", "yellow", "green", "blue", "indigo", "pink"};
+                image.setImage(new Image("file:assets/" + colors[colorIndex] + "Wizard.png"));
+                image.setFitHeight(STAR_HEIGHT);
+                image.setFitWidth(STAR_WIDTH);
+                image.setOpacity(0.25);
+
+                double boardX;
+                if(wizardY % 2 == 0){
+                    boardX = startX + wizardX * STAR_WIDTH;
+                } else{
+                    boardX = startX + (wizardX + 0.5) * STAR_WIDTH;
+                }
+                double boardY = startY + wizardY * STAR_HEIGHT;
+                image.setLayoutX(boardX);
+                image.setLayoutY(boardY);
+                root.getChildren().add(image);
+                image.toFront();
+            }
 
             System.out.println("piece string: " + pieceString);
-            System.out.println("wizard String: " + wizardString);
-            for(GUIPiece p:placedPiece) {
-                System.out.println("piece: " + p);
-            }
-
-
-
+            System.out.println("wizard String: " + wizardString + "\n");
         }
 
 
@@ -621,7 +651,10 @@ public class Board extends Application {
                         System.out.println("Difficulty not valid");
                     }
 
-                    makeGameState(challenge);
+                    if(!(challenge.equals(""))){
+                        makeGameState(challenge);
+                    }
+
                     textField.clear();
                 }
             });
