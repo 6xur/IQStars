@@ -122,7 +122,7 @@ public class Board extends Application {
                 if (stateString == "W") {
                     stateString = pieceString + "W";
                 } else {
-                    String test = Piece.placePiece(pieceString, stateString);
+                        String test = Piece.placePiece(pieceString, stateString);
                     System.out.println(p);
                     System.out.println("current state: " + test);
                     if (test == "invalid input") {
@@ -472,7 +472,6 @@ public class Board extends Application {
                     testPiece.rotate();
                 }
 
-                testPiece.updateLocation();
 
 
                 double startX = 12.5 + 320 / 14;
@@ -584,12 +583,21 @@ public class Board extends Application {
                 testPiece.setLayoutX(setX);
                 testPiece.setLayoutY(setY);
 
+                double[] star = testPiece.findNearestStar(testPiece.getLayoutX(), testPiece.getLayoutY());
+                testPiece.setLayoutX(star[0]);
+                testPiece.setLayoutY(star[1]);
+
+                placedPiece.add(testPiece);
+
 
             }
 
 
             System.out.println("piece string: " + pieceString);
             System.out.println("wizard String: " + wizardString);
+            for(GUIPiece p:placedPiece) {
+                System.out.println("piece: " + p);
+            }
 
 
 
