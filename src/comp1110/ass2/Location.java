@@ -208,6 +208,8 @@ public class Location {
 
 
     /**
+     * Shitong Xiao
+     *
      * @return an ArrayList of locations that have been placed given game state string
      */
     public static ArrayList<Location> placedLocation(String gameStateString) {

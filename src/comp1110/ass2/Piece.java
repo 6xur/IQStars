@@ -26,6 +26,7 @@ public class Piece {
     }
 
 
+    // Shitong Xiao
     public Piece(String pieceString) {
         State[] colorInOrder = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, PINK};
         ArrayList<String> colorString = new ArrayList<>();
@@ -471,7 +472,10 @@ public class Piece {
 
 
     /**
+     * Shitong Xiao
+     *
      * Add a new piece to the current board state and adjust the order of piece strings.
+     *
      * @param newPieceString the string of the piece to be added (eg. "r012")
      * @param currentStateString the string of the current state
      * @return the ordered string of the state after the new piece is added; return the message "invalid input" if the new
@@ -515,13 +519,15 @@ public class Piece {
     static String finalSolution = new String();
 
     /**
+     * Shitong Xiao
+     *
      * Recursive method to find the solution given a challenge
      *
      * @param placedPieceString the set of placed piece strings on board
      * @param challenge the string of current challenge state (i.e. the current state string)
      * @param candidates a set of strings containing strings of piece candidates
      */
-    public static void getSubPart(Set<String> placedPieceString, String challenge, Set<String> candidates) {
+    public static void getRecursiveSolution(Set<String> placedPieceString, String challenge, Set<String> candidates) {
 
         // if the challenge string is valid and the piece placement includes exactly 7 pieces, we find the solution and
         // store it in the field finalSolution.
@@ -537,7 +543,7 @@ public class Piece {
                     String currentChallenge = challenge;
                     challenge = addPiece;
                     placedPieceString.add(s);
-                    getSubPart(placedPieceString, challenge, candidates);
+                    getRecursiveSolution(placedPieceString, challenge, candidates);
                     challenge = currentChallenge;
                     placedPieceString.remove(s);
                 }

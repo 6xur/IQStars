@@ -146,7 +146,7 @@ public class IQStars {
      * @param gameStateString A game state string
      * @return An arraylist of placed pieces
      */
-    static ArrayList<Piece> getPlacedPieces(String gameStateString){
+    public static ArrayList<Piece> getPlacedPieces(String gameStateString){
         String[] strings = gameStateString.split("W");
         String piecePlacement = "";
         if (strings.length > 0) {
@@ -372,6 +372,8 @@ public class IQStars {
     }
 
     /**
+     * Shitong Xiao
+     *
      * Implement a solver for this game that can return the solution to a
      * particular challenge.
      *
@@ -418,7 +420,7 @@ public class IQStars {
                 if (isGameStateValid(addPiece)) {
                     challenge = addPiece;
                     placedPieceString.add(s);
-                    Piece.getSubPart(placedPieceString, challenge, candidates);
+                    Piece.getRecursiveSolution(placedPieceString, challenge, candidates);
                     challenge = currentChallenge;
                     placedPieceString.remove(s);
                 }
