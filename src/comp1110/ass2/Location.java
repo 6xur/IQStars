@@ -8,6 +8,7 @@ import java.util.Set;
 
 import static comp1110.ass2.IQStars.*;
 
+//Hoa Nguyen
 public class Location {
     private int x;
     private int y;

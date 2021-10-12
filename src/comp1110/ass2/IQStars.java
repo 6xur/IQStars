@@ -29,6 +29,8 @@ public class IQStars {
      *      @return True if the string is well-formed
      */
 
+    //Hoa Nguyen
+
     static boolean isGameStringWellFormed(String gameString) {
 
         if (gameString.length() > 4 || gameString.length() < 3)  return false;
@@ -73,7 +75,7 @@ public class IQStars {
      */
 
 
-
+    //Hoa Nguyen
     public static boolean isGameStateStringWellFormed(String gameStateString) {
 
         String sW = gameStateString.substring(gameStateString.indexOf('W') + 1);
