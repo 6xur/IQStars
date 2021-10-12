@@ -650,6 +650,7 @@ public class Board extends Application {
         Text text = new Text("Difficulty");
         TextField textField = new TextField();
         textField.setPrefWidth(50);
+        textField.setFocusTraversable(false);
         Button button = new Button("Click me");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
