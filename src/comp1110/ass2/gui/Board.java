@@ -79,6 +79,11 @@ public class Board extends Application {
                 toFront();
             });
             this.setOnMouseReleased(event -> {
+                if (getLayoutX() < MARGIN || getLayoutX() > 4 * MARGIN + STAR_WIDTH * 7 || getLayoutY() < BOARD_HEIGHT/4 || getLayoutY() > BOARD_HEIGHT/4*3){
+                    setLayoutX(homeX);
+                    setLayoutY(homeY);
+                }
+                else {
                 double[] star = findNearestStar(getLayoutX(), getLayoutY());
                 setLayoutX(star[0]);
                 setLayoutY(star[1]);
@@ -92,14 +97,14 @@ public class Board extends Application {
                     this.setLayoutY(this.homeY);
                     placedPiece.remove(this);
                 }
-            });
+            }}
+            );
 
             // rotate the piece by scrolling the mouse
             setOnScroll(event -> {
                 if (event.getDeltaY() != 0.0) {
-                    orientation += Math.abs((int) (event.getDeltaY()));
+                    orientation += Math.abs((int) (event.getDeltaY())/40);
                     orientation = orientation % 6;
-                    //System.out.println(orientation);
                     rotate();
                 }
             });
@@ -122,10 +127,13 @@ public class Board extends Application {
         private boolean isStateValid() {
             for (GUIPiece p : placedPiece) {
                 String pieceString = p.toString();
+                System.out.println("piece: "+pieceString);
                 if (stateString == "W") {
                     stateString = pieceString + "W";
                 } else {
+                    System.out.println("stateString: "+stateString);
                     String test = Piece.placePiece(pieceString, stateString);
+                    System.out.println("test: "+test);
                     if (test == "invalid input") {
                         return false;
                     }
@@ -375,7 +383,9 @@ public class Board extends Application {
             else {
                 x = (int) ((setX-77.5)/85);
             }
-            String location = x + Integer.toString(y);
+            String s1 = Integer.toString(x);
+            String s2 = Integer.toString(y);
+            String location = s1 + s2;
             String pieceString = "";
             if (colorIndex == 0 || colorIndex == 5) {
                 pieceString = c + (orientation%3) + location;
@@ -456,6 +466,10 @@ public class Board extends Application {
         // FIXME Task 9 (D): Implement challenges (you may use the set of challenges in the Games class)
         public void makeGameState(String gameStateString){
             root.getChildren().clear();
+            for (GUIPiece p : placedPiece) {
+                p.orientation = 0;
+            }
+            stateString = "";
             placedPiece.clear();
             makeBoard();
             slider(root);
@@ -625,6 +639,8 @@ public class Board extends Application {
                 image.toFront();
             }
 
+            stateString = pieceString+"W"+wizardString;
+            System.out.println("original statestring: " + stateString);
             System.out.println("piece string: " + pieceString);
             System.out.println("wizard String: " + wizardString + "\n");
         }
@@ -884,14 +900,14 @@ public class Board extends Application {
             Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
 
 
-            scene.setOnKeyTyped(keyEvent -> {
+            scene.setOnKeyPressed(keyEvent -> {
                 if (keyEvent.getCharacter().equals("/")) {
                     hints();
                 }
             });
 
             makeBoard();
-            displayPiece();
+            //displayPiece();
             primaryStage.setScene(scene);
             primaryStage.show();
 
