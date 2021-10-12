@@ -458,18 +458,6 @@ public class Piece {
         return true;
     }
 
-    /**
-     * update the location of the current piece
-     */
-    public void placePiece() {
-    }
-
-    /**
-     * remove the current piece from the board
-     */
-    public void removePiece() {
-    }
-
 
     /**
      * Shitong Xiao
