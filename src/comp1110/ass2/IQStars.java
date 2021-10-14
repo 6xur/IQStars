@@ -144,6 +144,7 @@ public class IQStars {
 
 
     /**
+     * Robert Xu
      *
      * @param gameStateString A game state string
      * @return An arraylist of placed pieces
@@ -170,6 +171,7 @@ public class IQStars {
 
 
     /**
+     * Robert Xu
      *
      * @param gameStateString A game state string
      * @return An arraylist of placed wizards
@@ -191,6 +193,8 @@ public class IQStars {
 
 
     /**
+     * Robert Xu
+     *
      * Determine whether a game state is valid.
      *
      * To be valid, the game state must satisfy the following requirements:
@@ -292,6 +296,8 @@ public class IQStars {
 
 
     /**
+     * Robert Xu
+     *
      * Given a string describing a game state, and a location
      * that must be covered by the next move, return a set of all
      * possible viable piece strings which cover the location.

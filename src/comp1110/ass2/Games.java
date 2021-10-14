@@ -266,6 +266,7 @@ public class Games {
     };
 
     /**
+     * Robert Xu
      *
      * @param difficulty The difficulty of the game (0 - Starter, 1 - Junior, 2 - Expert, 3 - Master, 4 - Wizard)
      * @return a game string that matches the selected difficulty

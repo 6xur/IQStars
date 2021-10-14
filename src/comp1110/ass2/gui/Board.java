@@ -463,189 +463,196 @@ public class Board extends Application {
             blankBoard.toBack();
             root.getChildren().add(board);
         }
-        // FIXME Task 9 (D): Implement challenges (you may use the set of challenges in the Games class)
-        public void makeGameState(String gameStateString){
-            root.getChildren().clear();
-            for (GUIPiece p : placedPiece) {
-                p.orientation = 0;
-            }
-            stateString = "";
-            placedPiece.clear();
-            makeBoard();
-            slider(root);
 
-            String pieceString = gameStateString.substring(0, gameStateString.indexOf('W'));
-            String wizardString = gameStateString.substring(gameStateString.indexOf('W') + 1);
+    /**
+     * Robert Xu
+     *
+     * Translates all pieces to the board given a game state string
+     *
+     * @param gameStateString a valid game state string
+     */
+    public void makeGameState(String gameStateString){
+        root.getChildren().clear();
+        for (GUIPiece p : placedPiece) {
+            p.orientation = 0;
+        }
+        stateString = "";
+        placedPiece.clear();
+        makeBoard();
+        slider(root);
 
-            String[] colorsLetter = {"r","o","y","g","b","i","p"};
-            List<String> colorList = new ArrayList<>(Arrays.asList(colorsLetter));
-            double startX = 12.5 + 320 / 14;
-            int startY = 180 + 320 / 14;
+        String pieceString = gameStateString.substring(0, gameStateString.indexOf('W'));
+        String wizardString = gameStateString.substring(gameStateString.indexOf('W') + 1);
 
-            for(int i = 0; i < pieceString.length(); i += 4){
-                String piece = pieceString.substring(i, i + 4);
-                int colorIndex = colorList.indexOf(piece.substring(0, 1));
-                int orientation = Integer.parseInt(piece.substring(1, 2));
-                int pieceX = Integer.parseInt(piece.substring(2,3));
-                int pieceY = Integer.parseInt(piece.substring(3,4));
-                GUIPiece guiPiece = new GUIPiece(colorIndex, 70, 500);
-                guiPiece.setOrientation(orientation);
-                root.getChildren().add(guiPiece);
+        String[] colorsLetter = {"r","o","y","g","b","i","p"};
+        List<String> colorList = new ArrayList<>(Arrays.asList(colorsLetter));
+        double startX = 12.5 + 320 / 14;
+        int startY = 180 + 320 / 14;
 
-                for(int o = 0; o < orientation; o++){
-                    guiPiece.rotate();
-                }
+        for(int i = 0; i < pieceString.length(); i += 4){
+            String piece = pieceString.substring(i, i + 4);
+            int colorIndex = colorList.indexOf(piece.substring(0, 1));
+            int orientation = Integer.parseInt(piece.substring(1, 2));
+            int pieceX = Integer.parseInt(piece.substring(2,3));
+            int pieceY = Integer.parseInt(piece.substring(3,4));
+            GUIPiece guiPiece = new GUIPiece(colorIndex, 70, 500);
+            guiPiece.setOrientation(orientation);
+            root.getChildren().add(guiPiece);
 
-                // Translate the pieces to the board
-                double boardX;
-                if (pieceY % 2 == 0) {
-                    boardX = startX + pieceX * STAR_WIDTH;
-                }
-                else {
-                    boardX = startX + (pieceX+0.5) * STAR_WIDTH;
-                }
-                double boardY = startY + pieceY * STAR_HEIGHT;
-                guiPiece.setLayoutX(boardX);
-                guiPiece.setLayoutY(boardY);
-
-                double setX = guiPiece.getLayoutX();
-                double setY = guiPiece.getLayoutY();
-                switch (colorIndex) {
-                    case 0:
-                        switch (orientation){
-                            case 2 -> {
-                                setX += STAR_WIDTH;
-                            }
-                        }
-                        break;
-                    case 1:
-                        switch (orientation) {
-                            case 3 -> {
-                                setX += STAR_WIDTH * 1.5;
-                                setY += STAR_HEIGHT;
-                            }
-                            case 4 -> setY += STAR_HEIGHT * 2;
-                            case 5 -> {
-                                setX -= STAR_WIDTH * 0.5;
-                                setY += STAR_HEIGHT;
-                            }
-                        }
-                        break;
-                    case 2:
-                        switch (orientation) {
-                            case 2 -> {
-                                setX += STAR_WIDTH;
-                            }
-
-                            case 3 -> {
-                                setX += STAR_WIDTH / 2;
-                                setY += STAR_HEIGHT;
-                            }
-                            case 4 -> {
-                                setX += STAR_WIDTH;
-                                setY += STAR_HEIGHT * 2;
-                            }
-                            case 5 -> {
-                                setX -= STAR_WIDTH;
-                                setY += STAR_HEIGHT * 2;
-                            }
-                        }
-                        break;
-                    case 3:
-                        switch (orientation) {
-                            case 3 -> {
-                                setX += STAR_WIDTH * 2;
-                                setY += STAR_HEIGHT * 2;
-                            }
-                            case 4 -> {
-                                setX -= STAR_WIDTH / 2;
-                                setY += STAR_HEIGHT * 3;
-                            }
-                            case 5 -> {
-                                setX -= STAR_WIDTH / 2;
-                                setY += STAR_HEIGHT;
-                            }
-                        }
-                        break;
-                    case 4:
-                        switch (orientation) {
-                            case 3 -> {
-                                setX += STAR_WIDTH * 1.5;
-                                setY += STAR_HEIGHT;
-                            }
-                            case 4 -> {
-                                setX += STAR_WIDTH;
-                                setY += STAR_HEIGHT * 2;
-                            }
-                            case 5 -> {
-                                setX -= STAR_WIDTH;
-                                setY += STAR_HEIGHT * 2;
-                            }
-                        }
-                        break;
-                    case 6:
-                        switch (orientation) {
-                            case 2 -> {
-                                setX += STAR_WIDTH * 2;
-                            }
-                            case 3 -> {
-                                setX += STAR_WIDTH;
-                                setY += STAR_HEIGHT * 2;
-                            }
-                            case 4 -> setY += STAR_HEIGHT * 2;
-                            case 5 -> {
-                                setX -= STAR_WIDTH / 2;
-                                setY += STAR_HEIGHT;
-                            }
-                        }
-                        break;
-                }
-                guiPiece.setLayoutX(setX);
-                guiPiece.setLayoutY(setY);
-
-                double[] star = guiPiece.findNearestStar(guiPiece.getLayoutX(), guiPiece.getLayoutY());
-                guiPiece.setLayoutX(star[0]);
-                guiPiece.setLayoutY(star[1]);
-
-                placedPiece.add(guiPiece);
+            for(int o = 0; o < orientation; o++){
+                guiPiece.rotate();
             }
 
-            displayPiece();
-
-            // wizard string
-            for(int j = 0; j < wizardString.length(); j += 3){
-                String wizard = wizardString.substring(j, j + 3);
-                int colorIndex = colorList.indexOf(wizard.substring(0, 1));
-                int wizardX = Integer.parseInt(wizard.substring(1, 2));
-                int wizardY = Integer.parseInt(wizard.substring(2, 3));
-
-                ImageView image = new ImageView();
-                String[] colors = {"red", "orange", "yellow", "green", "blue", "indigo", "pink"};
-                image.setImage(new Image("file:assets/" + colors[colorIndex] + "Wizard.png"));
-                image.setFitHeight(STAR_HEIGHT);
-                image.setFitWidth(STAR_WIDTH);
-                image.setOpacity(0.25);
-
-                double boardX;
-                if(wizardY % 2 == 0){
-                    boardX = startX + wizardX * STAR_WIDTH;
-                } else{
-                    boardX = startX + (wizardX + 0.5) * STAR_WIDTH;
-                }
-                double boardY = startY + wizardY * STAR_HEIGHT;
-                image.setLayoutX(boardX);
-                image.setLayoutY(boardY);
-                root.getChildren().add(image);
-                image.toFront();
+            // Translate the pieces to the board
+            double boardX;
+            if (pieceY % 2 == 0) {
+                boardX = startX + pieceX * STAR_WIDTH;
             }
+            else {
+                boardX = startX + (pieceX+0.5) * STAR_WIDTH;
+            }
+            double boardY = startY + pieceY * STAR_HEIGHT;
+            guiPiece.setLayoutX(boardX);
+            guiPiece.setLayoutY(boardY);
 
-            stateString = pieceString+"W"+wizardString;
-            System.out.println("original statestring: " + stateString);
-            System.out.println("piece string: " + pieceString);
-            System.out.println("wizard String: " + wizardString + "\n");
+            double setX = guiPiece.getLayoutX();
+            double setY = guiPiece.getLayoutY();
+            switch (colorIndex) {
+                case 0:
+                    switch (orientation){
+                        case 2 -> {
+                            setX += STAR_WIDTH;
+                        }
+                    }
+                    break;
+                case 1:
+                    switch (orientation) {
+                        case 3 -> {
+                            setX += STAR_WIDTH * 1.5;
+                            setY += STAR_HEIGHT;
+                        }
+                        case 4 -> setY += STAR_HEIGHT * 2;
+                        case 5 -> {
+                            setX -= STAR_WIDTH * 0.5;
+                            setY += STAR_HEIGHT;
+                        }
+                    }
+                    break;
+                case 2:
+                    switch (orientation) {
+                        case 2 -> {
+                            setX += STAR_WIDTH;
+                        }
+
+                        case 3 -> {
+                            setX += STAR_WIDTH / 2;
+                            setY += STAR_HEIGHT;
+                        }
+                        case 4 -> {
+                            setX += STAR_WIDTH;
+                            setY += STAR_HEIGHT * 2;
+                        }
+                        case 5 -> {
+                            setX -= STAR_WIDTH;
+                            setY += STAR_HEIGHT * 2;
+                        }
+                    }
+                    break;
+                case 3:
+                    switch (orientation) {
+                        case 3 -> {
+                            setX += STAR_WIDTH * 2;
+                            setY += STAR_HEIGHT * 2;
+                        }
+                        case 4 -> {
+                            setX -= STAR_WIDTH / 2;
+                            setY += STAR_HEIGHT * 3;
+                        }
+                        case 5 -> {
+                            setX -= STAR_WIDTH / 2;
+                            setY += STAR_HEIGHT;
+                        }
+                    }
+                    break;
+                case 4:
+                    switch (orientation) {
+                        case 3 -> {
+                            setX += STAR_WIDTH * 1.5;
+                            setY += STAR_HEIGHT;
+                        }
+                        case 4 -> {
+                            setX += STAR_WIDTH;
+                            setY += STAR_HEIGHT * 2;
+                        }
+                        case 5 -> {
+                            setX -= STAR_WIDTH;
+                            setY += STAR_HEIGHT * 2;
+                        }
+                    }
+                    break;
+                case 6:
+                    switch (orientation) {
+                        case 2 -> {
+                            setX += STAR_WIDTH * 2;
+                        }
+                        case 3 -> {
+                            setX += STAR_WIDTH;
+                            setY += STAR_HEIGHT * 2;
+                        }
+                        case 4 -> setY += STAR_HEIGHT * 2;
+                        case 5 -> {
+                            setX -= STAR_WIDTH / 2;
+                            setY += STAR_HEIGHT;
+                        }
+                    }
+                    break;
+            }
+            guiPiece.setLayoutX(setX);
+            guiPiece.setLayoutY(setY);
+
+            double[] star = guiPiece.findNearestStar(guiPiece.getLayoutX(), guiPiece.getLayoutY());
+            guiPiece.setLayoutX(star[0]);
+            guiPiece.setLayoutY(star[1]);
+
+            placedPiece.add(guiPiece);
         }
 
+        displayPiece();
 
+        // wizard string
+        for(int j = 0; j < wizardString.length(); j += 3){
+            String wizard = wizardString.substring(j, j + 3);
+            int colorIndex = colorList.indexOf(wizard.substring(0, 1));
+            int wizardX = Integer.parseInt(wizard.substring(1, 2));
+            int wizardY = Integer.parseInt(wizard.substring(2, 3));
+
+            ImageView image = new ImageView();
+            String[] colors = {"red", "orange", "yellow", "green", "blue", "indigo", "pink"};
+            image.setImage(new Image("file:assets/" + colors[colorIndex] + "Wizard.png"));
+            image.setFitHeight(STAR_HEIGHT);
+            image.setFitWidth(STAR_WIDTH);
+            image.setOpacity(0.25);
+
+            double boardX;
+            if(wizardY % 2 == 0){
+                boardX = startX + wizardX * STAR_WIDTH;
+            } else{
+                boardX = startX + (wizardX + 0.5) * STAR_WIDTH;
+            }
+            double boardY = startY + wizardY * STAR_HEIGHT;
+            image.setLayoutX(boardX);
+            image.setLayoutY(boardY);
+            root.getChildren().add(image);
+            image.toFront();
+        }
+
+        stateString = pieceString+"W"+wizardString;
+        System.out.println("original statestring: " + stateString);
+        System.out.println("piece string: " + pieceString);
+        System.out.println("wizard String: " + wizardString + "\n");
+    }
+
+    // Robert Xu
     public void slider(Group group){
         Text text = new Text("Difficulty");
         TextField textField = new TextField();
