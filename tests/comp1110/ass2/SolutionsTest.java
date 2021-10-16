@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static comp1110.ass2.Games.*;
 
-@Timeout(value = 1000, unit = MILLISECONDS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SolutionsTest {
 
@@ -18,6 +17,8 @@ public class SolutionsTest {
     }
 
     @Test
+    @Timeout(value = 10000, unit = MILLISECONDS)
+    @Order(1)
     public void testStarter() {
         for (int i = 0; i < 24; i++) {
             test(ALL_CHALLENGES[i], ALL_CHALLENGES_SOLUTIONS[i]);
@@ -25,6 +26,8 @@ public class SolutionsTest {
     }
 
     @Test
+    @Timeout(value = 10000, unit = MILLISECONDS)
+    @Order(2)
     public void testJunior() {
         for (int i = 24; i < 24*2; i++) {
             test(ALL_CHALLENGES[i], ALL_CHALLENGES_SOLUTIONS[i]);
@@ -32,6 +35,8 @@ public class SolutionsTest {
     }
 
     @Test
+    @Timeout(value = 5000, unit = MILLISECONDS)
+    @Order(3)
     public void testExpert() {
         for (int i = 24*2; i < 24*3; i++) {
             test(ALL_CHALLENGES[i], ALL_CHALLENGES_SOLUTIONS[i]);
@@ -39,6 +44,8 @@ public class SolutionsTest {
     }
 
     @Test
+    @Timeout(value = 5000, unit = MILLISECONDS)
+    @Order(4)
     public void testMaster() {
         for (int i = 24*3; i < 24*4; i++) {
             test(ALL_CHALLENGES[i], ALL_CHALLENGES_SOLUTIONS[i]);
@@ -46,7 +53,27 @@ public class SolutionsTest {
     }
 
     @Test
+    @Timeout(value = 5000, unit = MILLISECONDS)
+    @Order(5)
     public void testWizard() {
+        for (int i = 24*4; i < 24*5; i++) {
+            test(ALL_CHALLENGES[i], ALL_CHALLENGES_SOLUTIONS[i]);
+        }
+    }
+
+    @Test
+    @Timeout(value = 1000, unit = MILLISECONDS)
+    @Order(6)
+    public void testMasterFast() {
+        for (int i = 24*3; i < 24*4; i++) {
+            test(ALL_CHALLENGES[i], ALL_CHALLENGES_SOLUTIONS[i]);
+        }
+    }
+
+    @Test
+    @Timeout(value = 1000, unit = MILLISECONDS)
+    @Order(7)
+    public void testWizardFast() {
         for (int i = 24*4; i < 24*5; i++) {
             test(ALL_CHALLENGES[i], ALL_CHALLENGES_SOLUTIONS[i]);
         }
