@@ -10,12 +10,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Board extends Application {
 
@@ -24,18 +27,20 @@ public class Board extends Application {
     private static final int MARGIN = 10;
     private static final int STAR_WIDTH = 85;
     private static final int STAR_HEIGHT = 75;
-    private double BLANK_BOARD_HEIGHT = BOARD_HEIGHT / 2;
+    private static double BLANK_BOARD_HEIGHT = BOARD_HEIGHT / 2;
     double BLANK_BOARD_WIDTH = BLANK_BOARD_HEIGHT * 1194 / 650;
     private static Set<GUIPiece> placedPiece = new HashSet<>();
-    private static String stateString = "W";
+    private static String boardStateString;
     private static Map<Integer, GUIPiece> GUIPieceMap = new HashMap<>();
+    private static GUIPiece hint;
+    private final AtomicBoolean checkShoot = new AtomicBoolean(true);
 
     private final Group root = new Group();
 
     // FIXME Task 8 (CR): Implement a basic playable IQ Stars game in JavaFX that only allows pieces to be placed in valid places
 
     // Shitong Xiao
-    class GUIPiece extends ImageView {
+    static class GUIPiece extends ImageView {
         private double mouseX;
         private double mouseY;
         private double homeX;
@@ -79,23 +84,22 @@ public class Board extends Application {
                 toFront();
             });
             this.setOnMouseReleased(event -> {
+
+                //if the player places the piece outside the board, the piece goes back to its original location (homeX and homeY)
+                // and the orientation is set back to 0
                 if (getLayoutX() < MARGIN || getLayoutX() > 4 * MARGIN + STAR_WIDTH * 7 || getLayoutY() < BOARD_HEIGHT/4 || getLayoutY() > BOARD_HEIGHT/4*3){
-                    setLayoutX(homeX);
-                    setLayoutY(homeY);
+                    remove();
                 }
+
                 else {
                 double[] star = findNearestStar(getLayoutX(), getLayoutY());
                 setLayoutX(star[0]);
                 setLayoutY(star[1]);
                 placedPiece.add(this);
 
-                // set back the orientation
-
                 // if the current state is not valid, the piece cannot be put on board
                 if (!isStateValid()) {
-                    this.setLayoutX(this.homeX);
-                    this.setLayoutY(this.homeY);
-                    placedPiece.remove(this);
+                    remove();
                 }
             }}
             );
@@ -105,10 +109,20 @@ public class Board extends Application {
                 if (event.getDeltaY() != 0.0) {
                     orientation += Math.abs((int) (event.getDeltaY())/40);
                     orientation = orientation % 6;
-                    rotate();
+                    rotate(0);
                 }
             });
 
+        }
+
+        public void remove() {
+            setLayoutX(homeX);
+            setLayoutY(homeY);
+            for (int i = 0; i < orientation; i++) {
+                rotate(-1);
+            }
+            orientation = 0;
+            placedPiece.remove(this);
         }
 
         public void setOrientation(int orientation){
@@ -125,9 +139,9 @@ public class Board extends Application {
          * @return true if the current state is valid, and false otherwise
          */
         private boolean isStateValid() {
+            String stateString = boardStateString;
             for (GUIPiece p : placedPiece) {
                 String pieceString = p.toString();
-                System.out.println("piece: "+pieceString);
                 if (stateString == "W") {
                     stateString = pieceString + "W";
                 } else {
@@ -144,6 +158,11 @@ public class Board extends Application {
                         stateString = test;
                     }
                 }
+            }
+            System.out.println("stateString: "+stateString);
+            System.out.println(IQStars.isGameStateValid(stateString));
+            if (boardStateString != "W") {
+                return IQStars.wizardCheck(stateString);
             }
             return IQStars.isGameStateValid(stateString);
         }
@@ -203,11 +222,15 @@ public class Board extends Application {
         /**
          * The method rotates the piece given its orientation number
          */
-        public void rotate() {
+        public void rotate(int i) {
             Rotate r = new Rotate();
             r.setPivotX(STAR_WIDTH / 2);
             r.setPivotY(STAR_HEIGHT / 2);
-            r.setAngle(60);
+            if (i == 0){
+            r.setAngle(60);}
+            if (i == -1) {
+                r.setAngle(300);
+            }
             this.getTransforms().add(r);
         }
 
@@ -441,6 +464,7 @@ public class Board extends Application {
 
             if(!(placedColourIndex.contains(i))){
                 GUIPiece piece = new GUIPiece(i, homeX, homeY);
+                GUIPieceMap.put(piece.colorIndex,piece);
                 root.getChildren().add(piece);
             }
         }
@@ -469,7 +493,7 @@ public class Board extends Application {
             for (GUIPiece p : placedPiece) {
                 p.orientation = 0;
             }
-            stateString = "";
+            boardStateString = "";
             placedPiece.clear();
             makeBoard();
             slider(root);
@@ -493,7 +517,7 @@ public class Board extends Application {
                 root.getChildren().add(guiPiece);
 
                 for(int o = 0; o < orientation; o++){
-                    guiPiece.rotate();
+                    guiPiece.rotate(0);
                 }
 
                 // Translate the pieces to the board
@@ -608,6 +632,7 @@ public class Board extends Application {
                 guiPiece.setLayoutY(star[1]);
 
                 placedPiece.add(guiPiece);
+                GUIPieceMap.put(guiPiece.colorIndex,guiPiece);
             }
 
             displayPiece();
@@ -639,8 +664,9 @@ public class Board extends Application {
                 image.toFront();
             }
 
-            stateString = pieceString+"W"+wizardString;
-            System.out.println("original statestring: " + stateString);
+            if (wizardString != ""){
+            boardStateString = "W"+wizardString;}
+            else boardStateString = "W";
             System.out.println("piece string: " + pieceString);
             System.out.println("wizard String: " + wizardString + "\n");
         }
@@ -689,11 +715,26 @@ public class Board extends Application {
      * "some pieces not in correct position. try something new!". If the player has successfully placed all pieces, print "you made it!"
      */
     public void hints() {
+        //hint = new GUIPiece(0,0,0);
+        String stateString = boardStateString;
+        for (GUIPiece p : placedPiece) {
+            String pieceString = p.toString();
+            if (stateString == "W") {
+                stateString = pieceString + "W";
+            } else {
+                String test = Piece.placePiece(pieceString, stateString);
+                if (test != "invalid input" && test != "WW") {
+                    stateString = test;
+                }
+            }
+        }
+        System.out.println("stateString: "+stateString);
+
         if (stateString != "W") {
             String solution = IQStars.getSolution(stateString);
-
+            System.out.println("solution: "+solution);
             // wrongly placed pieces exist on board
-            if (solution == null) {
+            if (solution.length() == 0) {
                 System.out.println("no solution found. try something new!");
             }
 
@@ -722,10 +763,13 @@ public class Board extends Application {
                 // show the hint piece
                 else {
                     Piece p = hintPieces.get(0);
-                    stateString = Piece.placePiece(p.toString(), stateString);
+                    System.out.println("hint piece: "+p);
+                    //stateString = Piece.placePiece(p.toString(), stateString);
                     int color = p.getColour().ordinal();
                     int orientation = Integer.parseInt(p.toString().substring(1, 2));
-                    GUIPiece hint = GUIPieceMap.get(color);
+                    //GUIPiece hint = GUIPieceMap.get(color);
+                    //GUIPiece piece = GUIPieceMap.get(color);
+                    hint = new GUIPiece(color,0,0);
                     hint.orientation = orientation;
                     int x = Integer.parseInt(p.toString().substring(2, 3));
                     int y = Integer.parseInt(p.toString().substring(3, 4));
@@ -887,7 +931,7 @@ public class Board extends Application {
                     hint.setLayoutX(setX);
                     hint.setLayoutY(setY);
                     hint.getTransforms().add(r);
-                    placedPiece.add(hint);
+                    //placedPiece.add(hint);
                 }
             }
         }
@@ -901,9 +945,32 @@ public class Board extends Application {
             Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
 
 
-            scene.setOnKeyPressed(keyEvent -> {
+            scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                    if (event.getCode() == KeyCode.SLASH && checkShoot.compareAndSet(true,false)) {
+                        hints();
+                        root.getChildren().add(hint);
+                    }
+                }
+            } );
+
+            /**scene.setOnKeyTyped(keyEvent -> {
                 if (keyEvent.getCharacter().equals("/")) {
+                    System.out.println("1");
                     hints();
+                    root.getChildren().add(hint);
+                }
+            });*/
+
+            scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent keyEvent) {
+                    if (keyEvent.getCode() == KeyCode.SLASH) {
+                        checkShoot.set(true);
+                        System.out.println("0");
+                        root.getChildren().remove(hint);
+                    }
                 }
             });
 
