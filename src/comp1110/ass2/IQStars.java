@@ -397,6 +397,7 @@ public class IQStars {
      * the challenge.
      */
     public static String getSolution(String challenge) {
+        Piece.finalSolution = new String();
        ArrayList<Piece> placedPiece = getPlacedPieces(challenge);
        Set<String> placedPieceString = new HashSet<>();
        Set<State> placedColor = new HashSet<>();
@@ -415,7 +416,13 @@ public class IQStars {
             Location location = new Location(i);
             Set<String> viableStrings = getViablePieceStrings(challenge, location.getX(), location.getY());
             if (viableStrings != null) {
-                candidates.addAll(viableStrings);
+                for (String s : viableStrings) {
+                    Piece p = new Piece(s);
+                    if (!placedColor.contains(p.getColour())) {
+                        candidates.add(s);
+                    }
+                }
+                //candidates.addAll(viableStrings);
             }
         }
 
@@ -428,8 +435,14 @@ public class IQStars {
                 if (isGameStateValid(addPiece)) {
                     challenge = addPiece;
                     placedPieceString.add(s);
-                    Piece.getRecursiveSolution(placedPieceString, challenge, candidates);
+                    placedColor.add(p.getColour());
+                    Piece.getRecursiveSolution(placedPieceString,placedColor, challenge, candidates);
+                    String[] strings = Piece.finalSolution.split("W");
+                    if (strings[0].length() == 28 && isGameStateValid(Piece.finalSolution)){
+                        break;
+                    }
                     challenge = currentChallenge;
+                    placedColor.remove(p.getColour());
                     placedPieceString.remove(s);
                 }
             }

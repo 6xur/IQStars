@@ -523,7 +523,7 @@ public class Piece {
      * @param challenge the string of current challenge state (i.e. the current state string)
      * @param candidates a set of strings containing strings of piece candidates
      */
-    public static void getRecursiveSolution(Set<String> placedPieceString, String challenge, Set<String> candidates) {
+    public static void getRecursiveSolution(Set<String> placedPieceString, Set<State> placedColor, String challenge, Set<String> candidates) {
 
         // if the challenge string is valid and the piece placement includes exactly 7 pieces, we find the solution and
         // store it in the field finalSolution.
@@ -533,14 +533,17 @@ public class Piece {
         }
 
         for (String s : candidates) {
-            if (!placedPieceString.contains(s)) {
+            Piece p = new Piece(s);
+            if (!placedPieceString.contains(s) && !placedColor.contains(p.getColour())) {
                 String addPiece = Piece.placePiece(s, challenge);
                 if (IQStars.isGameStateValid(addPiece)) {
                     String currentChallenge = challenge;
                     challenge = addPiece;
                     placedPieceString.add(s);
-                    getRecursiveSolution(placedPieceString, challenge, candidates);
+                    placedColor.add(p.colour);
+                    getRecursiveSolution(placedPieceString, placedColor,challenge, candidates);
                     challenge = currentChallenge;
+                    placedColor.remove(p.colour);
                     placedPieceString.remove(s);
                 }
             }
