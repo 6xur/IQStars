@@ -107,7 +107,9 @@ public class Board extends Application {
             // rotate the piece by scrolling the mouse
             setOnScroll(event -> {
                 if (event.getDeltaY() != 0.0) {
-                    orientation += Math.abs((int) (event.getDeltaY())/40);
+                    //System.out.println(event.getDeltaY());
+                    orientation += 1;
+                    //orientation += Math.abs((int) (event.getDeltaY())/40);
                     orientation = orientation % 6;
                     rotate(0);
                 }
@@ -145,9 +147,7 @@ public class Board extends Application {
                 if (stateString == "W") {
                     stateString = pieceString + "W";
                 } else {
-                    System.out.println("stateString: "+stateString);
                     String test = Piece.placePiece(pieceString, stateString);
-                    System.out.println("test: "+test);
                     if (test == "invalid input") {
                         return false;
                     }
@@ -160,7 +160,6 @@ public class Board extends Application {
                 }
             }
             System.out.println("stateString: "+stateString);
-            System.out.println(IQStars.isGameStateValid(stateString));
             if (boardStateString != "W") {
                 return IQStars.wizardCheck(stateString);
             }
@@ -930,6 +929,7 @@ public class Board extends Application {
                     }
                     hint.setLayoutX(setX);
                     hint.setLayoutY(setY);
+                    hint.setOpacity(0.5);
                     hint.getTransforms().add(r);
                     //placedPiece.add(hint);
                 }
@@ -955,27 +955,17 @@ public class Board extends Application {
                 }
             } );
 
-            /**scene.setOnKeyTyped(keyEvent -> {
-                if (keyEvent.getCharacter().equals("/")) {
-                    System.out.println("1");
-                    hints();
-                    root.getChildren().add(hint);
-                }
-            });*/
-
             scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent keyEvent) {
                     if (keyEvent.getCode() == KeyCode.SLASH) {
                         checkShoot.set(true);
-                        System.out.println("0");
                         root.getChildren().remove(hint);
                     }
                 }
             });
 
             makeBoard();
-            //displayPiece();
             primaryStage.setScene(scene);
             primaryStage.show();
 
