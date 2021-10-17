@@ -10,12 +10,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Board extends Application {
 
@@ -24,18 +27,20 @@ public class Board extends Application {
     private static final int MARGIN = 10;
     private static final int STAR_WIDTH = 85;
     private static final int STAR_HEIGHT = 75;
-    private double BLANK_BOARD_HEIGHT = BOARD_HEIGHT / 2;
+    private static double BLANK_BOARD_HEIGHT = BOARD_HEIGHT / 2;
     double BLANK_BOARD_WIDTH = BLANK_BOARD_HEIGHT * 1194 / 650;
     private static Set<GUIPiece> placedPiece = new HashSet<>();
-    private static String stateString = "W";
+    private static String boardStateString;
     private static Map<Integer, GUIPiece> GUIPieceMap = new HashMap<>();
+    private static GUIPiece hint;
+    private final AtomicBoolean checkShoot = new AtomicBoolean(true);
 
     private final Group root = new Group();
 
     // FIXME Task 8 (CR): Implement a basic playable IQ Stars game in JavaFX that only allows pieces to be placed in valid places
 
     // Shitong Xiao
-    class GUIPiece extends ImageView {
+    static class GUIPiece extends ImageView {
         private double mouseX;
         private double mouseY;
         private double homeX;
@@ -79,23 +84,22 @@ public class Board extends Application {
                 toFront();
             });
             this.setOnMouseReleased(event -> {
+
+                //if the player places the piece outside the board, the piece goes back to its original location (homeX and homeY)
+                // and the orientation is set back to 0
                 if (getLayoutX() < MARGIN || getLayoutX() > 4 * MARGIN + STAR_WIDTH * 7 || getLayoutY() < BOARD_HEIGHT/4 || getLayoutY() > BOARD_HEIGHT/4*3){
-                    setLayoutX(homeX);
-                    setLayoutY(homeY);
+                    remove();
                 }
+
                 else {
                 double[] star = findNearestStar(getLayoutX(), getLayoutY());
                 setLayoutX(star[0]);
                 setLayoutY(star[1]);
                 placedPiece.add(this);
 
-                // set back the orientation
-
                 // if the current state is not valid, the piece cannot be put on board
                 if (!isStateValid()) {
-                    this.setLayoutX(this.homeX);
-                    this.setLayoutY(this.homeY);
-                    placedPiece.remove(this);
+                    remove();
                 }
             }}
             );
@@ -103,12 +107,24 @@ public class Board extends Application {
             // rotate the piece by scrolling the mouse
             setOnScroll(event -> {
                 if (event.getDeltaY() != 0.0) {
-                    orientation += Math.abs((int) (event.getDeltaY())/40);
+                    //System.out.println(event.getDeltaY());
+                    orientation += 1;
+                    //orientation += Math.abs((int) (event.getDeltaY())/40);
                     orientation = orientation % 6;
-                    rotate();
+                    rotate(0);
                 }
             });
 
+        }
+
+        public void remove() {
+            setLayoutX(homeX);
+            setLayoutY(homeY);
+            for (int i = 0; i < orientation; i++) {
+                rotate(-1);
+            }
+            orientation = 0;
+            placedPiece.remove(this);
         }
 
         public void setOrientation(int orientation){
@@ -125,15 +141,13 @@ public class Board extends Application {
          * @return true if the current state is valid, and false otherwise
          */
         private boolean isStateValid() {
+            String stateString = boardStateString;
             for (GUIPiece p : placedPiece) {
                 String pieceString = p.toString();
-                System.out.println("piece: "+pieceString);
                 if (stateString == "W") {
                     stateString = pieceString + "W";
                 } else {
-                    System.out.println("stateString: "+stateString);
                     String test = Piece.placePiece(pieceString, stateString);
-                    System.out.println("test: "+test);
                     if (test == "invalid input") {
                         return false;
                     }
@@ -144,6 +158,10 @@ public class Board extends Application {
                         stateString = test;
                     }
                 }
+            }
+            System.out.println("stateString: "+stateString);
+            if (boardStateString != "W") {
+                return IQStars.wizardCheck(stateString);
             }
             return IQStars.isGameStateValid(stateString);
         }
@@ -203,11 +221,15 @@ public class Board extends Application {
         /**
          * The method rotates the piece given its orientation number
          */
-        public void rotate() {
+        public void rotate(int i) {
             Rotate r = new Rotate();
             r.setPivotX(STAR_WIDTH / 2);
             r.setPivotY(STAR_HEIGHT / 2);
-            r.setAngle(60);
+            if (i == 0){
+            r.setAngle(60);}
+            if (i == -1) {
+                r.setAngle(300);
+            }
             this.getTransforms().add(r);
         }
 
@@ -441,6 +463,7 @@ public class Board extends Application {
 
             if(!(placedColourIndex.contains(i))){
                 GUIPiece piece = new GUIPiece(i, homeX, homeY);
+                GUIPieceMap.put(piece.colorIndex,piece);
                 root.getChildren().add(piece);
             }
         }
@@ -463,196 +486,191 @@ public class Board extends Application {
             blankBoard.toBack();
             root.getChildren().add(board);
         }
+        // FIXME Task 9 (D): Implement challenges (you may use the set of challenges in the Games class)
+        public void makeGameState(String gameStateString){
+            root.getChildren().clear();
+            for (GUIPiece p : placedPiece) {
+                p.orientation = 0;
+            }
+            boardStateString = "";
+            placedPiece.clear();
+            makeBoard();
+            slider(root);
 
-    /**
-     * Robert Xu
-     *
-     * Translates all pieces to the board given a game state string
-     *
-     * @param gameStateString a valid game state string
-     */
-    public void makeGameState(String gameStateString){
-        root.getChildren().clear();
-        for (GUIPiece p : placedPiece) {
-            p.orientation = 0;
+            String pieceString = gameStateString.substring(0, gameStateString.indexOf('W'));
+            String wizardString = gameStateString.substring(gameStateString.indexOf('W') + 1);
+
+            String[] colorsLetter = {"r","o","y","g","b","i","p"};
+            List<String> colorList = new ArrayList<>(Arrays.asList(colorsLetter));
+            double startX = 12.5 + 320 / 14;
+            int startY = 180 + 320 / 14;
+
+            for(int i = 0; i < pieceString.length(); i += 4){
+                String piece = pieceString.substring(i, i + 4);
+                int colorIndex = colorList.indexOf(piece.substring(0, 1));
+                int orientation = Integer.parseInt(piece.substring(1, 2));
+                int pieceX = Integer.parseInt(piece.substring(2,3));
+                int pieceY = Integer.parseInt(piece.substring(3,4));
+                GUIPiece guiPiece = new GUIPiece(colorIndex, 70, 500);
+                guiPiece.setOrientation(orientation);
+                root.getChildren().add(guiPiece);
+
+                for(int o = 0; o < orientation; o++){
+                    guiPiece.rotate(0);
+                }
+
+                // Translate the pieces to the board
+                double boardX;
+                if (pieceY % 2 == 0) {
+                    boardX = startX + pieceX * STAR_WIDTH;
+                }
+                else {
+                    boardX = startX + (pieceX+0.5) * STAR_WIDTH;
+                }
+                double boardY = startY + pieceY * STAR_HEIGHT;
+                guiPiece.setLayoutX(boardX);
+                guiPiece.setLayoutY(boardY);
+
+                double setX = guiPiece.getLayoutX();
+                double setY = guiPiece.getLayoutY();
+                switch (colorIndex) {
+                    case 0:
+                        switch (orientation){
+                            case 2 -> {
+                                setX += STAR_WIDTH;
+                            }
+                        }
+                        break;
+                    case 1:
+                        switch (orientation) {
+                            case 3 -> {
+                                setX += STAR_WIDTH * 1.5;
+                                setY += STAR_HEIGHT;
+                            }
+                            case 4 -> setY += STAR_HEIGHT * 2;
+                            case 5 -> {
+                                setX -= STAR_WIDTH * 0.5;
+                                setY += STAR_HEIGHT;
+                            }
+                        }
+                        break;
+                    case 2:
+                        switch (orientation) {
+                            case 2 -> {
+                                setX += STAR_WIDTH;
+                            }
+
+                            case 3 -> {
+                                setX += STAR_WIDTH / 2;
+                                setY += STAR_HEIGHT;
+                            }
+                            case 4 -> {
+                                setX += STAR_WIDTH;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                            case 5 -> {
+                                setX -= STAR_WIDTH;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                        }
+                        break;
+                    case 3:
+                        switch (orientation) {
+                            case 3 -> {
+                                setX += STAR_WIDTH * 2;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                            case 4 -> {
+                                setX -= STAR_WIDTH / 2;
+                                setY += STAR_HEIGHT * 3;
+                            }
+                            case 5 -> {
+                                setX -= STAR_WIDTH / 2;
+                                setY += STAR_HEIGHT;
+                            }
+                        }
+                        break;
+                    case 4:
+                        switch (orientation) {
+                            case 3 -> {
+                                setX += STAR_WIDTH * 1.5;
+                                setY += STAR_HEIGHT;
+                            }
+                            case 4 -> {
+                                setX += STAR_WIDTH;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                            case 5 -> {
+                                setX -= STAR_WIDTH;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                        }
+                        break;
+                    case 6:
+                        switch (orientation) {
+                            case 2 -> {
+                                setX += STAR_WIDTH * 2;
+                            }
+                            case 3 -> {
+                                setX += STAR_WIDTH;
+                                setY += STAR_HEIGHT * 2;
+                            }
+                            case 4 -> setY += STAR_HEIGHT * 2;
+                            case 5 -> {
+                                setX -= STAR_WIDTH / 2;
+                                setY += STAR_HEIGHT;
+                            }
+                        }
+                        break;
+                }
+                guiPiece.setLayoutX(setX);
+                guiPiece.setLayoutY(setY);
+
+                double[] star = guiPiece.findNearestStar(guiPiece.getLayoutX(), guiPiece.getLayoutY());
+                guiPiece.setLayoutX(star[0]);
+                guiPiece.setLayoutY(star[1]);
+
+                placedPiece.add(guiPiece);
+                GUIPieceMap.put(guiPiece.colorIndex,guiPiece);
+            }
+
+            displayPiece();
+
+            // wizard string
+            for(int j = 0; j < wizardString.length(); j += 3){
+                String wizard = wizardString.substring(j, j + 3);
+                int colorIndex = colorList.indexOf(wizard.substring(0, 1));
+                int wizardX = Integer.parseInt(wizard.substring(1, 2));
+                int wizardY = Integer.parseInt(wizard.substring(2, 3));
+
+                ImageView image = new ImageView();
+                String[] colors = {"red", "orange", "yellow", "green", "blue", "indigo", "pink"};
+                image.setImage(new Image("file:assets/" + colors[colorIndex] + "Wizard.png"));
+                image.setFitHeight(STAR_HEIGHT);
+                image.setFitWidth(STAR_WIDTH);
+                image.setOpacity(0.25);
+
+                double boardX;
+                if(wizardY % 2 == 0){
+                    boardX = startX + wizardX * STAR_WIDTH;
+                } else{
+                    boardX = startX + (wizardX + 0.5) * STAR_WIDTH;
+                }
+                double boardY = startY + wizardY * STAR_HEIGHT;
+                image.setLayoutX(boardX);
+                image.setLayoutY(boardY);
+                root.getChildren().add(image);
+                image.toFront();
+            }
+
+            if (wizardString != ""){
+            boardStateString = "W"+wizardString;}
+            else boardStateString = "W";
+            System.out.println("piece string: " + pieceString);
+            System.out.println("wizard String: " + wizardString + "\n");
         }
-        stateString = "";
-        placedPiece.clear();
-        makeBoard();
-        slider(root);
 
-        String pieceString = gameStateString.substring(0, gameStateString.indexOf('W'));
-        String wizardString = gameStateString.substring(gameStateString.indexOf('W') + 1);
 
-        String[] colorsLetter = {"r","o","y","g","b","i","p"};
-        List<String> colorList = new ArrayList<>(Arrays.asList(colorsLetter));
-        double startX = 12.5 + 320 / 14;
-        int startY = 180 + 320 / 14;
-
-        for(int i = 0; i < pieceString.length(); i += 4){
-            String piece = pieceString.substring(i, i + 4);
-            int colorIndex = colorList.indexOf(piece.substring(0, 1));
-            int orientation = Integer.parseInt(piece.substring(1, 2));
-            int pieceX = Integer.parseInt(piece.substring(2,3));
-            int pieceY = Integer.parseInt(piece.substring(3,4));
-            GUIPiece guiPiece = new GUIPiece(colorIndex, 70, 500);
-            guiPiece.setOrientation(orientation);
-            root.getChildren().add(guiPiece);
-
-            for(int o = 0; o < orientation; o++){
-                guiPiece.rotate();
-            }
-
-            // Translate the pieces to the board
-            double boardX;
-            if (pieceY % 2 == 0) {
-                boardX = startX + pieceX * STAR_WIDTH;
-            }
-            else {
-                boardX = startX + (pieceX+0.5) * STAR_WIDTH;
-            }
-            double boardY = startY + pieceY * STAR_HEIGHT;
-            guiPiece.setLayoutX(boardX);
-            guiPiece.setLayoutY(boardY);
-
-            double setX = guiPiece.getLayoutX();
-            double setY = guiPiece.getLayoutY();
-            switch (colorIndex) {
-                case 0:
-                    switch (orientation){
-                        case 2 -> {
-                            setX += STAR_WIDTH;
-                        }
-                    }
-                    break;
-                case 1:
-                    switch (orientation) {
-                        case 3 -> {
-                            setX += STAR_WIDTH * 1.5;
-                            setY += STAR_HEIGHT;
-                        }
-                        case 4 -> setY += STAR_HEIGHT * 2;
-                        case 5 -> {
-                            setX -= STAR_WIDTH * 0.5;
-                            setY += STAR_HEIGHT;
-                        }
-                    }
-                    break;
-                case 2:
-                    switch (orientation) {
-                        case 2 -> {
-                            setX += STAR_WIDTH;
-                        }
-
-                        case 3 -> {
-                            setX += STAR_WIDTH / 2;
-                            setY += STAR_HEIGHT;
-                        }
-                        case 4 -> {
-                            setX += STAR_WIDTH;
-                            setY += STAR_HEIGHT * 2;
-                        }
-                        case 5 -> {
-                            setX -= STAR_WIDTH;
-                            setY += STAR_HEIGHT * 2;
-                        }
-                    }
-                    break;
-                case 3:
-                    switch (orientation) {
-                        case 3 -> {
-                            setX += STAR_WIDTH * 2;
-                            setY += STAR_HEIGHT * 2;
-                        }
-                        case 4 -> {
-                            setX -= STAR_WIDTH / 2;
-                            setY += STAR_HEIGHT * 3;
-                        }
-                        case 5 -> {
-                            setX -= STAR_WIDTH / 2;
-                            setY += STAR_HEIGHT;
-                        }
-                    }
-                    break;
-                case 4:
-                    switch (orientation) {
-                        case 3 -> {
-                            setX += STAR_WIDTH * 1.5;
-                            setY += STAR_HEIGHT;
-                        }
-                        case 4 -> {
-                            setX += STAR_WIDTH;
-                            setY += STAR_HEIGHT * 2;
-                        }
-                        case 5 -> {
-                            setX -= STAR_WIDTH;
-                            setY += STAR_HEIGHT * 2;
-                        }
-                    }
-                    break;
-                case 6:
-                    switch (orientation) {
-                        case 2 -> {
-                            setX += STAR_WIDTH * 2;
-                        }
-                        case 3 -> {
-                            setX += STAR_WIDTH;
-                            setY += STAR_HEIGHT * 2;
-                        }
-                        case 4 -> setY += STAR_HEIGHT * 2;
-                        case 5 -> {
-                            setX -= STAR_WIDTH / 2;
-                            setY += STAR_HEIGHT;
-                        }
-                    }
-                    break;
-            }
-            guiPiece.setLayoutX(setX);
-            guiPiece.setLayoutY(setY);
-
-            double[] star = guiPiece.findNearestStar(guiPiece.getLayoutX(), guiPiece.getLayoutY());
-            guiPiece.setLayoutX(star[0]);
-            guiPiece.setLayoutY(star[1]);
-
-            placedPiece.add(guiPiece);
-        }
-
-        displayPiece();
-
-        // wizard string
-        for(int j = 0; j < wizardString.length(); j += 3){
-            String wizard = wizardString.substring(j, j + 3);
-            int colorIndex = colorList.indexOf(wizard.substring(0, 1));
-            int wizardX = Integer.parseInt(wizard.substring(1, 2));
-            int wizardY = Integer.parseInt(wizard.substring(2, 3));
-
-            ImageView image = new ImageView();
-            String[] colors = {"red", "orange", "yellow", "green", "blue", "indigo", "pink"};
-            image.setImage(new Image("file:assets/" + colors[colorIndex] + "Wizard.png"));
-            image.setFitHeight(STAR_HEIGHT);
-            image.setFitWidth(STAR_WIDTH);
-            image.setOpacity(0.25);
-
-            double boardX;
-            if(wizardY % 2 == 0){
-                boardX = startX + wizardX * STAR_WIDTH;
-            } else{
-                boardX = startX + (wizardX + 0.5) * STAR_WIDTH;
-            }
-            double boardY = startY + wizardY * STAR_HEIGHT;
-            image.setLayoutX(boardX);
-            image.setLayoutY(boardY);
-            root.getChildren().add(image);
-            image.toFront();
-        }
-
-        stateString = pieceString+"W"+wizardString;
-        System.out.println("original statestring: " + stateString);
-        System.out.println("piece string: " + pieceString);
-        System.out.println("wizard String: " + wizardString + "\n");
-    }
-
-    // Robert Xu
     public void slider(Group group){
         Text text = new Text("Difficulty");
         TextField textField = new TextField();
@@ -696,11 +714,26 @@ public class Board extends Application {
      * "some pieces not in correct position. try something new!". If the player has successfully placed all pieces, print "you made it!"
      */
     public void hints() {
+        //hint = new GUIPiece(0,0,0);
+        String stateString = boardStateString;
+        for (GUIPiece p : placedPiece) {
+            String pieceString = p.toString();
+            if (stateString == "W") {
+                stateString = pieceString + "W";
+            } else {
+                String test = Piece.placePiece(pieceString, stateString);
+                if (test != "invalid input" && test != "WW") {
+                    stateString = test;
+                }
+            }
+        }
+        System.out.println("stateString: "+stateString);
+
         if (stateString != "W") {
             String solution = IQStars.getSolution(stateString);
-
+            System.out.println("solution: "+solution);
             // wrongly placed pieces exist on board
-            if (solution == null) {
+            if (solution.length() == 0) {
                 System.out.println("no solution found. try something new!");
             }
 
@@ -729,10 +762,13 @@ public class Board extends Application {
                 // show the hint piece
                 else {
                     Piece p = hintPieces.get(0);
-                    stateString = Piece.placePiece(p.toString(), stateString);
+                    System.out.println("hint piece: "+p);
+                    //stateString = Piece.placePiece(p.toString(), stateString);
                     int color = p.getColour().ordinal();
                     int orientation = Integer.parseInt(p.toString().substring(1, 2));
-                    GUIPiece hint = GUIPieceMap.get(color);
+                    //GUIPiece hint = GUIPieceMap.get(color);
+                    //GUIPiece piece = GUIPieceMap.get(color);
+                    hint = new GUIPiece(color,0,0);
                     hint.orientation = orientation;
                     int x = Integer.parseInt(p.toString().substring(2, 3));
                     int y = Integer.parseInt(p.toString().substring(3, 4));
@@ -893,8 +929,9 @@ public class Board extends Application {
                     }
                     hint.setLayoutX(setX);
                     hint.setLayoutY(setY);
+                    hint.setOpacity(0.5);
                     hint.getTransforms().add(r);
-                    placedPiece.add(hint);
+                    //placedPiece.add(hint);
                 }
             }
         }
@@ -908,14 +945,27 @@ public class Board extends Application {
             Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
 
 
-            scene.setOnKeyPressed(keyEvent -> {
-                if (keyEvent.getCharacter().equals("/")) {
-                    hints();
+            scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                    if (event.getCode() == KeyCode.SLASH && checkShoot.compareAndSet(true,false)) {
+                        hints();
+                        root.getChildren().add(hint);
+                    }
+                }
+            } );
+
+            scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent keyEvent) {
+                    if (keyEvent.getCode() == KeyCode.SLASH) {
+                        checkShoot.set(true);
+                        root.getChildren().remove(hint);
+                    }
                 }
             });
 
             makeBoard();
-            //displayPiece();
             primaryStage.setScene(scene);
             primaryStage.show();
 

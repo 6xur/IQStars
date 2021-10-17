@@ -397,6 +397,7 @@ public class IQStars {
      * the challenge.
      */
     public static String getSolution(String challenge) {
+        Piece.finalSolution = new String();
        ArrayList<Piece> placedPiece = getPlacedPieces(challenge);
        Set<String> placedPieceString = new HashSet<>();
        Set<State> placedColor = new HashSet<>();
@@ -415,7 +416,13 @@ public class IQStars {
             Location location = new Location(i);
             Set<String> viableStrings = getViablePieceStrings(challenge, location.getX(), location.getY());
             if (viableStrings != null) {
-                candidates.addAll(viableStrings);
+                for (String s : viableStrings) {
+                    Piece p = new Piece(s);
+                    if (!placedColor.contains(p.getColour())) {
+                        candidates.add(s);
+                    }
+                }
+                //candidates.addAll(viableStrings);
             }
         }
 
@@ -428,8 +435,14 @@ public class IQStars {
                 if (isGameStateValid(addPiece)) {
                     challenge = addPiece;
                     placedPieceString.add(s);
-                    Piece.getRecursiveSolution(placedPieceString, challenge, candidates);
+                    placedColor.add(p.getColour());
+                    Piece.getRecursiveSolution(placedPieceString,placedColor, challenge, candidates);
+                    String[] strings = Piece.finalSolution.split("W");
+                    if (strings[0].length() == 28 && isGameStateValid(Piece.finalSolution)){
+                        break;
+                    }
                     challenge = currentChallenge;
+                    placedColor.remove(p.getColour());
                     placedPieceString.remove(s);
                 }
             }
@@ -438,4 +451,84 @@ public class IQStars {
         return Piece.finalSolution;  // FIXME Task 10 (CR): determine the solution to the game, given a particular challenge
     }
 
+    public static boolean wizardCheck(String gameStateString) {
+        if (!(isGameStateStringWellFormed(gameStateString))) {
+            return false;
+        }
+
+        String[] strings = gameStateString.split("W");
+        String piecePlacement = "";
+        if (strings.length > 0) {
+            piecePlacement = strings[0];
+        }
+
+        ArrayList<Piece> placedPieces = getPlacedPieces(gameStateString);
+        for (Piece placedPiece : placedPieces) {
+            if (!(placedPiece.onBoard())) {
+                return false;
+            }
+        }
+
+        // checks for piece overlap
+        for (int i = 0; i < placedPieces.size(); i++) {
+            for (int j = i + 1; j < placedPieces.size(); j++) {
+                if ((placedPieces.get(i).overlaps(placedPieces.get(j)))) {
+                    return false;
+                }
+            }
+        }
+
+
+        // Code for wizard
+        String wizardPlacement = "";
+        if (strings.length == 2) {
+            wizardPlacement = strings[1];
+        }
+
+        ArrayList<Location> placedWizards = new ArrayList<>();
+        for (int i = 0; i < wizardPlacement.length(); i += 3) {
+            String wizardString = wizardPlacement.substring(i, i + 3);
+            Location wizardLoc = new Location(wizardString.charAt(1) - '0', wizardString.charAt(2) - '0');
+
+            if (wizardLoc.offBoard()) {
+                return false;
+            }
+
+            // checks if wizard-covering piece has the same color as the wizard
+            for (Piece placedPiece : placedPieces) {
+                ArrayList<Character> colorChars = new ArrayList<>(Arrays.asList('r', 'o', 'y', 'g', 'b', 'i', 'p'));
+                ArrayList<State> colorStates = new ArrayList<>(Arrays.asList(State.RED, State.ORANGE, State.YELLOW, State.GREEN, State.BLUE, State.INDIGO, State.PINK));
+                if (colorStates.indexOf(placedPiece.getColour()) != colorChars.indexOf(wizardString.charAt(0))) {
+                    if (placedPiece.overlaps(wizardLoc)) {
+                        return false;
+                    }
+                }
+                else {if (!placedPiece.overlaps(wizardLoc)) {
+                    return false;
+                }
+                }
+            }
+            placedWizards.add(wizardLoc);
+        }
+
+        // checks for wizard overlap
+        for (int i = 0; i < placedWizards.size(); i++) {
+            for (int j = i + 1; j < placedWizards.size(); j++) {
+                if ((placedWizards.get(i).equals(placedWizards.get(j)))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+        String s = "r001";
+        String a = "b121";
+        String state = "r001o302y040g330b121i000p151Wr22o13b21";
+        String updateState = Piece.placePiece(s,state);
+        System.out.println(updateState);
+        System.out.println(wizardCheck(state));
+    }
 }
