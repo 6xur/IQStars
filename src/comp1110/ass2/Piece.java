@@ -65,6 +65,8 @@ public class Piece {
     }
 
     /**
+     * Robert Xu
+     *
      * Returns whether the current piece overlaps with another piece
      */
     public boolean overlaps(Piece other){
@@ -82,6 +84,8 @@ public class Piece {
     }
 
     /**
+     * Robert Xu
+     *
      * Returns whether the current piece overlaps with another location
      */
     public boolean overlaps(Location location){
@@ -94,6 +98,8 @@ public class Piece {
     }
 
     /**
+     * Robert Xu
+     *
      * set the location of a piece by setting the location of its top-left star
      */
     public void setPiece(Location newPiece) {
@@ -446,6 +452,8 @@ public class Piece {
 
 
     /**
+     * Robert Xu
+     *
      * @return True if all the stars of the current piece are placed on board locations,
      * and False otherwise
      */
