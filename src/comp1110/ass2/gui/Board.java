@@ -7,7 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -501,7 +501,7 @@ public class Board extends Application {
         boardStateString = "";
         placedPiece.clear();
         makeBoard();
-        slider(root);
+        dropDown(root);
 
         String pieceString = gameStateString.substring(0, gameStateString.indexOf('W'));
         String wizardString = gameStateString.substring(gameStateString.indexOf('W') + 1);
@@ -677,19 +677,27 @@ public class Board extends Application {
     }
 
     // Robert Xu
-    public void slider(Group group){
+    public void dropDown(Group group){
         Text text = new Text("Difficulty");
-        TextField textField = new TextField();
-        textField.setPrefWidth(50);
-        textField.setFocusTraversable(false);
+
+        ChoiceBox<String> choiceBox = new ChoiceBox<>();
+        choiceBox.getItems().addAll("Starter", "Junior", "Expert", "Master", "Wizard");
+        choiceBox.setFocusTraversable(false);
+
         Button button = new Button("Click me");
+        button.setFocusTraversable(false);
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 int difficulty;
                 String challenge = "";
                 try{
-                    difficulty = Integer.parseInt(textField.getText());
+                    Map<String, Integer> difficultyPairs = Map.of("Starter",0,
+                                                                  "Junior", 1,
+                                                                  "Expert", 2,
+                                                                  "Master", 3,
+                                                                  "Wizard", 4);
+                    difficulty = difficultyPairs.get(choiceBox.getValue());
                     challenge = Games.newGame(difficulty);
                 } catch(Exception a){
                     System.out.println("Difficulty not valid");
@@ -698,13 +706,11 @@ public class Board extends Application {
                 if(!(challenge.equals(""))){
                     makeGameState(challenge);
                 }
-
-                textField.clear();
             }
         });
 
         HBox hb = new HBox();
-        hb.getChildren().addAll(text, textField, button);
+        hb.getChildren().addAll(text, choiceBox, button);
         hb.setSpacing(10);
         hb.setLayoutX(50);
         hb.setLayoutY(125);
@@ -975,7 +981,7 @@ public class Board extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
 
-            slider(root);
+            dropDown(root);
         }
 
     }
