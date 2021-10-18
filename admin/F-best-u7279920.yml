@@ -43,7 +43,7 @@ declaration: >-
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
 method:
-   - [dropDown](https://gitlab.cecs.anu.edu.au/u4147512/comp1110-ass2-tue09c/-/blob/master/src/comp1110/ass2/gui/Board.java#680-719)
+   - dropDown (https://gitlab.cecs.anu.edu.au/u4147512/comp1110-ass2-tue09c/-/blob/master/src/comp1110/ass2/gui/Board.java#680-719)
    -
 
 # sign *your* name and uid here
