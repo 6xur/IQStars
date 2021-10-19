@@ -451,7 +451,22 @@ public class IQStars {
         return Piece.finalSolution;  // FIXME Task 10 (CR): determine the solution to the game, given a particular challenge
     }
 
-    public static boolean wizardCheck(String gameStateString) {
+    /** Robert Xu & Shitong Xiao (
+     *
+     * Determine whether a game state with wizards is valid. Note that it is allowed that
+     * some wizards are not covered by any piece.
+     *
+     * To be valid, the game state must satisfy the following requirements:
+     * - string must be well-formed
+     * - pieces must be entirely on the board
+     * - pieces must not overlap each other
+     * - each piece must cover all wizards of the same colour
+     * - each piece must not cover any wizards of a different colour
+     *
+     * @param gameStateString A game state string
+     * @return True if the game state with wizards represented by the string is valid
+     */
+    public static boolean wizardStateCheck(String gameStateString) {
         if (!(isGameStateStringWellFormed(gameStateString))) {
             return false;
         }
@@ -477,7 +492,6 @@ public class IQStars {
                 }
             }
         }
-
 
         // Code for wizard
         String wizardPlacement = "";
@@ -523,12 +537,4 @@ public class IQStars {
         return true;
     }
 
-    public static void main(String[] args) {
-        String s = "r001";
-        String a = "b121";
-        String state = "r001o302y040g330b121i000p151Wr22o13b21";
-        String updateState = Piece.placePiece(s,state);
-        System.out.println(updateState);
-        System.out.println(wizardCheck(state));
-    }
 }

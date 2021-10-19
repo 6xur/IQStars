@@ -40,6 +40,7 @@ public class Board extends Application {
     // FIXME Task 8 (CR): Implement a basic playable IQ Stars game in JavaFX that only allows pieces to be placed in valid places
 
     // Shitong Xiao
+
     static class GUIPiece extends ImageView {
         private double mouseX;
         private double mouseY;
@@ -107,9 +108,7 @@ public class Board extends Application {
             // rotate the piece by scrolling the mouse
             setOnScroll(event -> {
                 if (event.getDeltaY() != 0.0) {
-                    //System.out.println(event.getDeltaY());
                     orientation += 1;
-                    //orientation += Math.abs((int) (event.getDeltaY())/40);
                     orientation = orientation % 6;
                     rotate(0);
                 }
@@ -159,9 +158,8 @@ public class Board extends Application {
                     }
                 }
             }
-            System.out.println("stateString: "+stateString);
             if (boardStateString != "W") {
-                return IQStars.wizardCheck(stateString);
+                return IQStars.wizardStateCheck(stateString);
             }
             return IQStars.isGameStateValid(stateString);
         }
@@ -220,6 +218,8 @@ public class Board extends Application {
 
         /**
          * The method rotates the piece given its orientation number
+         *
+         * @param i 0 to rotate clockwise by 60 degrees; -1 to rotate anticlockwise by 60 degrees
          */
         public void rotate(int i) {
             Rotate r = new Rotate();
@@ -240,13 +240,8 @@ public class Board extends Application {
             switch (colorIndex) {
                 case 0:
                     switch (orientation) {
-                        case 1 -> {
-                            //setX -= STAR_WIDTH;
-                            break;
-                        }
                         case 2 -> {
                             setX -= STAR_WIDTH;
-                            //setY += STAR_HEIGHT;
                             break;
                         }
                         case 3 -> {
@@ -287,11 +282,9 @@ public class Board extends Application {
                     switch (orientation) {
                         case 2 -> {
                             setX -= STAR_WIDTH;
-                            //setY += STAR_HEIGHT;
                             break;
                         }
                         case 3 -> {
-                            //setX += 0.5 * STAR_WIDTH;
                             setY -= STAR_HEIGHT;
                             break;
                         }
@@ -347,7 +340,6 @@ public class Board extends Application {
                     switch (orientation) {
                         case 3 -> {
                             setX -= 2 * STAR_WIDTH;
-                            //setY += STAR_HEIGHT;
                         }
                         case 4 -> {
                             setX -= STAR_WIDTH;
@@ -370,7 +362,6 @@ public class Board extends Application {
                         setY -= 2 * STAR_HEIGHT;
                     }
                     case 4 -> {
-                        //setX += STAR_WIDTH;
                         setY -= 2 * STAR_HEIGHT;
                     }
                     case 5 -> {
@@ -418,7 +409,8 @@ public class Board extends Application {
         }
 }
 
-    /**
+    /** Shitong Xiao
+     *
      * Display all the pieces
      */
     public void displayPiece() {
@@ -469,7 +461,8 @@ public class Board extends Application {
         }
     }
 
-    /**
+    /** Shitong Xiao
+     *
      * Display the blank board
      */
     public void makeBoard() {
@@ -672,8 +665,6 @@ public class Board extends Application {
         if (wizardString != ""){
             boardStateString = "W"+wizardString;}
         else boardStateString = "W";
-        System.out.println("piece string: " + pieceString);
-        System.out.println("wizard String: " + wizardString + "\n");
     }
 
     // Robert Xu
@@ -726,7 +717,6 @@ public class Board extends Application {
      * "some pieces not in correct position. try something new!". If the player has successfully placed all pieces, print "you made it!"
      */
     public void hints() {
-        //hint = new GUIPiece(0,0,0);
         String stateString = boardStateString;
         for (GUIPiece p : placedPiece) {
             String pieceString = p.toString();
@@ -739,12 +729,11 @@ public class Board extends Application {
                 }
             }
         }
-        System.out.println("stateString: "+stateString);
 
         if (stateString != "W") {
             String solution = IQStars.getSolution(stateString);
-            System.out.println("solution: "+solution);
-            // wrongly placed pieces exist on board
+
+            // wrongly placed pieces exist on board, then the player fails
             if (solution.length() == 0) {
                 System.out.println("no solution found. try something new!");
             }
@@ -774,12 +763,8 @@ public class Board extends Application {
                 // show the hint piece
                 else {
                     Piece p = hintPieces.get(0);
-                    System.out.println("hint piece: "+p);
-                    //stateString = Piece.placePiece(p.toString(), stateString);
                     int color = p.getColour().ordinal();
                     int orientation = Integer.parseInt(p.toString().substring(1, 2));
-                    //GUIPiece hint = GUIPieceMap.get(color);
-                    //GUIPiece piece = GUIPieceMap.get(color);
                     hint = new GUIPiece(color,0,0);
                     hint.orientation = orientation;
                     int x = Integer.parseInt(p.toString().substring(2, 3));
@@ -804,7 +789,6 @@ public class Board extends Application {
                             switch (orientation) {
                                 case 2 -> {
                                     setX += STAR_WIDTH;
-                                    //setY += STAR_HEIGHT;
                                     break;
                                 }
                                 case 3 -> {
@@ -845,11 +829,10 @@ public class Board extends Application {
                             switch (orientation) {
                                 case 2 -> {
                                     setX += STAR_WIDTH;
-                                    //setY += STAR_HEIGHT;
                                     break;
                                 }
                                 case 3 -> {
-                                    //setX += 0.5 * STAR_WIDTH;
+                                    setX += 0.5 * STAR_WIDTH;
                                     setY += STAR_HEIGHT;
                                     break;
                                 }
@@ -859,8 +842,8 @@ public class Board extends Application {
                                     break;
                                 }
                                 case 5 -> {
-                                    setX += STAR_WIDTH;
-                                    setY -= 2 * STAR_HEIGHT;
+                                    setX -= STAR_WIDTH;
+                                    setY += 2 * STAR_HEIGHT;
                                     break;
                                 }
                             }
@@ -905,7 +888,6 @@ public class Board extends Application {
                             switch (orientation) {
                                 case 3 -> {
                                     setX += 2 * STAR_WIDTH;
-                                    //setY += STAR_HEIGHT;
                                 }
                                 case 4 -> {
                                     setX += STAR_WIDTH;
@@ -928,7 +910,6 @@ public class Board extends Application {
                                     setY += 2 * STAR_HEIGHT;
                                 }
                                 case 4 -> {
-                                    //setX += STAR_WIDTH;
                                     setY += 2 * STAR_HEIGHT;
                                 }
                                 case 5 -> {
@@ -943,7 +924,6 @@ public class Board extends Application {
                     hint.setLayoutY(setY);
                     hint.setOpacity(0.5);
                     hint.getTransforms().add(r);
-                    //placedPiece.add(hint);
                 }
             }
         }
