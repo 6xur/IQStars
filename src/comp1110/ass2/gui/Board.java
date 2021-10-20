@@ -67,8 +67,11 @@ public class Board extends Application {
             File file = new File("assets");
             path = file.getAbsolutePath().split("assets")[0];
             System.out.println(path);
-            Image image = new Image("file:"+path+"IdeaProjects/comp1110-ass2-tue09c/assets/"+color+"Piece.png");
-            System.out.println("file:"+path+"IdeaProjects/comp1110-ass2-tue09c/assets/"+color+"Piece.png");
+            String imagePath;
+            if (path.split("comp1110").length != 1) {imagePath = "file:"+path+"assets/"+color+"Piece.png";}
+            else {imagePath = "file:"+path+"IdeaProjects/comp1110-ass2-tue09c/assets/"+color+"Piece.png";}
+            Image image = new Image(imagePath);
+            System.out.println(imagePath);
             setImage(image);
             setFitHeight(STAR_HEIGHT * starNumber[colorIndex][0]);
             setFitWidth(STAR_WIDTH * starNumber[colorIndex][1]);
@@ -477,8 +480,12 @@ public class Board extends Application {
             // Display the blank board
             ImageView blankBoard = new ImageView();
             File file = new File("assets");
-            path = file.getAbsolutePath();
-            blankBoard.setImage(new Image("file:"+path+"/blankBoard.png"));
+            path = file.getAbsolutePath().split("assets")[0];
+            System.out.println(path);
+            String imagePath;
+            if (path.split("comp1110").length != 1) {imagePath = "file:"+path+"assets/blankBoard.png";}
+            else {imagePath = "file:"+path+"IdeaProjects/comp1110-ass2-tue09c/assets/blankBoard.png";}
+            blankBoard.setImage(new Image(imagePath));
             blankBoard.setFitWidth(BLANK_BOARD_WIDTH);
             blankBoard.setFitHeight(BLANK_BOARD_HEIGHT);
             blankBoard.setLayoutX(MARGIN);
@@ -653,8 +660,12 @@ public class Board extends Application {
             ImageView image = new ImageView();
             String[] colors = {"red", "orange", "yellow", "green", "blue", "indigo", "pink"};
             File file = new File("assets");
-            path = file.getAbsolutePath();
-            image.setImage(new Image("file:"+path+"/"+ colors[colorIndex] + "Wizard.png"));
+            path = file.getAbsolutePath().split("assets")[0];
+            System.out.println(path);
+            String imagePath;
+            if (path.split("comp1110").length != 1) {imagePath = "file:"+path+"assets/"+ colors[colorIndex] + "Wizard.png";}
+            else {imagePath = "file:"+path+"IdeaProjects/comp1110-ass2-tue09c/assets/"+ colors[colorIndex] + "Wizard.png";}
+            image.setImage(new Image(imagePath));
             image.setFitHeight(STAR_HEIGHT);
             image.setFitWidth(STAR_WIDTH);
             image.setOpacity(0.25);
