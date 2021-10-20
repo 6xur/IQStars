@@ -65,10 +65,10 @@ public class Board extends Application {
 
             // set the piece image
             File file = new File("assets");
-            path = file.getAbsolutePath();
+            path = file.getAbsolutePath().split("assets")[0];
             System.out.println(path);
-            Image image = new Image("file:"+path+"/"+color+"Piece.png");
-            System.out.println("file:"+path+"/"+color+"Piece.png");
+            Image image = new Image("file:"+path+"IdeaProjects/comp1110-ass2-tue09c/assets/"+color+"Piece.png");
+            System.out.println("file:"+path+"IdeaProjects/comp1110-ass2-tue09c/assets/"+color+"Piece.png");
             setImage(image);
             setFitHeight(STAR_HEIGHT * starNumber[colorIndex][0]);
             setFitWidth(STAR_WIDTH * starNumber[colorIndex][1]);
