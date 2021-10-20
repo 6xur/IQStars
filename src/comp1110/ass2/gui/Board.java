@@ -482,7 +482,7 @@ public class Board extends Application {
 
 
     /**
-     * Robert Xu
+     * Robert Xu, Shitong Xiao
      *
      * Given a game state string, transition the pieces to the board
      */
