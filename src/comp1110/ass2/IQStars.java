@@ -1,5 +1,6 @@
 package comp1110.ass2;
 
+import java.io.File;
 import java.util.*;
 
 
@@ -535,6 +536,12 @@ public class IQStars {
         }
 
         return true;
+    }
+
+    public static void main(String[] args) {
+        File file = new File("bluePiece.png");
+        String path = file.getAbsolutePath();
+        System.out.println(path);
     }
 
 }

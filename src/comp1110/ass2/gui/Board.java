@@ -62,7 +62,8 @@ public class Board extends Application {
             String color = colors[colorIndex];
 
             // set the piece image
-            Image image = new Image("file:assets/" + color + "Piece.png");
+            //Image image = new Image("file:assets/" + color + "Piece.png");
+            Image image = new Image("file:/students/u7080308/IdeaProjects/comp1110-ass2-tue09c/assets/"+color+"Piece.png");
             setImage(image);
             setFitHeight(STAR_HEIGHT * starNumber[colorIndex][0]);
             setFitWidth(STAR_WIDTH * starNumber[colorIndex][1]);
@@ -470,7 +471,7 @@ public class Board extends Application {
             board.getChildren().clear();
             // Display the blank board
             ImageView blankBoard = new ImageView();
-            blankBoard.setImage(new Image("file:assets/blankBoard.png"));
+            blankBoard.setImage(new Image("file:/students/u7080308/IdeaProjects/comp1110-ass2-tue09c/assets/blankBoard.png"));
             blankBoard.setFitWidth(BLANK_BOARD_WIDTH);
             blankBoard.setFitHeight(BLANK_BOARD_HEIGHT);
             blankBoard.setLayoutX(MARGIN);
@@ -644,7 +645,7 @@ public class Board extends Application {
 
             ImageView image = new ImageView();
             String[] colors = {"red", "orange", "yellow", "green", "blue", "indigo", "pink"};
-            image.setImage(new Image("file:assets/" + colors[colorIndex] + "Wizard.png"));
+            image.setImage(new Image("file:/students/u7080308/IdeaProjects/comp1110-ass2-tue09c/assets/" + colors[colorIndex] + "Wizard.png"));
             image.setFitHeight(STAR_HEIGHT);
             image.setFitWidth(STAR_WIDTH);
             image.setOpacity(0.25);
