@@ -44,7 +44,7 @@ declaration: >-
 # you want to just submit classes):
 method:
    - isGameStateStringWellFormed (  https://gitlab.cecs.anu.edu.au/u4147512/comp1110-ass2-tue09c/-/blob/master/src/comp1110/ass2/IQStars.java#L79-144 ) 
-   - 
+   
 
 # sign *your* name and uid here
 name: Hoa Nguyen
