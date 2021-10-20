@@ -537,6 +537,6 @@ public class IQStars {
 
         return true;
     }
-    
+
 
 }
