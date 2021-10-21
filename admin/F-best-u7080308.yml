@@ -37,14 +37,12 @@ code:
 # I wish to submit the following classes as entirely my own (remove this if
 # you want to just submit methods):
 class:
-   - GUIPiece Class
+   - GUIPiece Class (https://gitlab.cecs.anu.edu.au/u4147512/comp1110-ass2-tue09c/-/blob/master/src/comp1110/ass2/gui/Board.java#L46-417)
 
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
 method:
-   - displayPiece in Board class
-   - makeBoard in Board class
-   - hints in Board class
+   - hints() in Board class (https://gitlab.cecs.anu.edu.au/u4147512/comp1110-ass2-tue09c/-/blob/master/src/comp1110/ass2/gui/Board.java#L730-947)
 
 # sign *your* name and uid here
 name: Shitong Xiao
