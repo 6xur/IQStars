@@ -30,7 +30,7 @@ declaration: >-
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external code)
 code:
-  - comment: part of my code in the "start" method in Board class is inspired by some code from StackOverFolow
+  - comment: part of my code in the "start" method in Board class is inspired by some code from StackOverFlow
     url: "https://stackoverflow.com/a/31678410"
     licence: CC BY-SA 3.0
 

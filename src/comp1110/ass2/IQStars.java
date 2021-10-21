@@ -423,7 +423,6 @@ public class IQStars {
                         candidates.add(s);
                     }
                 }
-                //candidates.addAll(viableStrings);
             }
         }
 
@@ -452,7 +451,7 @@ public class IQStars {
         return Piece.finalSolution;  // FIXME Task 10 (CR): determine the solution to the game, given a particular challenge
     }
 
-    /** Robert Xu & Shitong Xiao (
+    /** Shitong Xiao (part of the work based on code for task 6, authored by Robert Xu)
      *
      * Determine whether a game state with wizards is valid. Note that it is allowed that
      * some wizards are not covered by any piece.
