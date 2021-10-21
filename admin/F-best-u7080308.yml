@@ -30,21 +30,19 @@ declaration: >-
 # Add as many "url+licence+comment" entries as necessary
 # (or remove it altogether if you haven't used any external code)
 code:
-  - comment: part of my code in the "start" method in Board class is inspired by some code from StackOverFolow
+  - comment: part of my code in the "start" method in Board class is inspired by some code from StackOverFlow
     url: "https://stackoverflow.com/a/31678410"
     licence: CC BY-SA 3.0
 
 # I wish to submit the following classes as entirely my own (remove this if
 # you want to just submit methods):
 class:
-   - GUIPiece Class
+   - GUIPiece Class (https://gitlab.cecs.anu.edu.au/u4147512/comp1110-ass2-tue09c/-/blob/master/src/comp1110/ass2/gui/Board.java#L46-417)
 
 # I wish to submit the following methods as entirely my own (remove this if
 # you want to just submit classes):
 method:
-   - displayPiece in Board class
-   - makeBoard in Board class
-   - hints in Board class
+   - hints() in Board class (https://gitlab.cecs.anu.edu.au/u4147512/comp1110-ass2-tue09c/-/blob/master/src/comp1110/ass2/gui/Board.java#L730-947)
 
 # sign *your* name and uid here
 name: Shitong Xiao

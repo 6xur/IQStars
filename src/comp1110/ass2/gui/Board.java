@@ -66,12 +66,10 @@ public class Board extends Application {
             // set the piece image
             File file = new File("assets");
             path = file.getAbsolutePath().split("assets")[0];
-            System.out.println(path);
             String imagePath;
             if (path.split("comp1110").length != 1) {imagePath = "file:"+path+"assets/"+color+"Piece.png";}
             else {imagePath = "file:"+path+"IdeaProjects/comp1110-ass2-tue09c/assets/"+color+"Piece.png";}
             Image image = new Image(imagePath);
-            System.out.println(imagePath);
             setImage(image);
             setFitHeight(STAR_HEIGHT * starNumber[colorIndex][0]);
             setFitWidth(STAR_WIDTH * starNumber[colorIndex][1]);
@@ -481,7 +479,6 @@ public class Board extends Application {
             ImageView blankBoard = new ImageView();
             File file = new File("assets");
             path = file.getAbsolutePath().split("assets")[0];
-            System.out.println(path);
             String imagePath;
             if (path.split("comp1110").length != 1) {imagePath = "file:"+path+"assets/blankBoard.png";}
             else {imagePath = "file:"+path+"IdeaProjects/comp1110-ass2-tue09c/assets/blankBoard.png";}
@@ -661,7 +658,6 @@ public class Board extends Application {
             String[] colors = {"red", "orange", "yellow", "green", "blue", "indigo", "pink"};
             File file = new File("assets");
             path = file.getAbsolutePath().split("assets")[0];
-            System.out.println(path);
             String imagePath;
             if (path.split("comp1110").length != 1) {imagePath = "file:"+path+"assets/"+ colors[colorIndex] + "Wizard.png";}
             else {imagePath = "file:"+path+"IdeaProjects/comp1110-ass2-tue09c/assets/"+ colors[colorIndex] + "Wizard.png";}
@@ -958,6 +954,7 @@ public class Board extends Application {
             Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
 
 
+            // partially inspired by StackOverFlow
             scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent event) {
